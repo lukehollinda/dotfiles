@@ -156,7 +156,8 @@ require('lazy').setup({
 }, {})
 
 -- [[ Configure LSP ]]
---  This function gets run when an LSP connects to a particular buffer. local on_attach = function(_, bufnr)
+--  This function gets run when an LSP connects to a particular buffer. 
+local on_attach = function(_, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
   -- to define small helper and utility functions so you don't have to repeat yourself
   -- many times.
@@ -197,7 +198,7 @@ require('lazy').setup({
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
-
+end
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
 --
