@@ -1,0 +1,60 @@
+# Kubectl 
+alias kl="kubectl logs"
+alias klog="kubectl log"
+
+alias kn="kubens" 
+alias wk="watch kubectl "
+alias kapi="kubectl api-resources | fzf"
+
+alias kg="kubectl get"
+alias kgo="kubectl get -oyaml"
+alias kd="kubectl describe"
+
+
+
+alias ksys1="kubectl --kubeconfig ~/.kube/configs/kubeconfig-sys1.yaml"
+alias kqa1="kubectl --kubeconfig ~/.kube/configs/kubeconfig-qa1.yaml"
+alias ki1="kubectl --kubeconfig ~/.kube/configs/kubeconfig-i1.yaml"
+alias kp1="kubectl --kubeconfig ~/.kube/configs/kubeconfig-p1.yaml"
+alias kp3="kubectl --kubeconfig ~/.kube/configs/kubeconfig-p3.yaml"
+alias kp6="kubectl --kubeconfig ~/.kube/configs/kubeconfig-p6.yaml"
+alias kp7="kubectl --kubeconfig ~/.kube/configs/kubeconfig-p7.yaml"
+alias ks1="kubectl --kubeconfig ~/.kube/configs/kubeconfig-s1.yaml"
+
+# Set safe default context for new terminals 
+export KUBECONFIG="$HOME/.kube/configs/kubeconfig-qa1.yaml"
+
+
+kc() { 
+
+	local KUBECONFIGS=~/.kube/configs
+	local config=$1
+	# fzf select filename 
+	if [ -z "$1" ] ; then 
+		local config=$(ls -1 ${KUBECONFIGS} | grep 'kube' | sed 's/\.yaml//' | fzf)
+	
+		# Do nothing if fzf is exited
+		if [ -z "$config" ]; then
+			echo "No context selected"
+			return 
+		fi
+	fi
+
+	# Use previous config
+	if [ "$1" = "-" ] ; then 
+		local config=$(ls -1t ${KUBECONFIGS} | head -n2 | tail -n1 | sed 's/\.yaml//' )
+	fi
+
+	export KUBECONFIG=${KUBECONFIGS}/${config}.yaml
+	# Touching the file makes list by last modify timestamp useful
+	touch $KUBECONFIG
+}
+
+kgetpodsonnode () {
+        kubectl get pods -A --field-selector spec.nodeName=$1
+}
+
+kgetnotrunningpods () {
+        kubectl get pods | grep -v Runnning | grep -v Completed 
+}
+

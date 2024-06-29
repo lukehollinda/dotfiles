@@ -1,0 +1,48 @@
+# Util
+alias weather='curl http://wttr.in'
+
+# NVim
+alias vim="nvim"
+alias v="nvim"
+# Directories
+alias dev="cd ~/dev"
+
+# Git
+alias gs="git status"
+alias gmcp="git log -1 --pretty=%B | pbcopy"
+alias gca='git commit --amend'
+alias grim='git rebase -i master'
+alias gdiff='git diff'
+alias gp='git pull'
+alias glog='git log --name-only'
+
+alias cdg='cd "$(git rev-parse --show-toplevel || echo .)"'
+
+# Paging
+alias ybat="bat -l yaml"
+alias yvim="vim -c 'set syntax=yaml'"
+alias manzsh="man zshbuiltins"
+
+# Terminal navigation
+alias c='clear'
+alias l='exa'
+alias ll='exa -lhF'
+
+# Shipwright
+alias s='shipwright'
+
+
+install-kubectl () {
+	local version=$1
+	if curl -sS -L -o /tmp/kubectl "https://dl.k8s.io/release/v${version}/bin/darwin/arm64/kubectl"
+	then
+		chmod +x /tmp/kubectl
+		sudo mv /tmp/kubectl /usr/local/bin/kubectl
+	fi
+}
+
+# capture the output of a command so it can be retrieved with ret
+cap () { tee /tmp/capture.out; }
+
+# return the output of the most recent command that was captured by cap
+ret () { cat /tmp/capture.out; }
