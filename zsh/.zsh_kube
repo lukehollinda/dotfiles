@@ -1,4 +1,9 @@
-# Kubectl 
+# Auto Complete
+alias k=kubectl
+autoload -U +X compinit && compinit
+[[ /usr/local/bin/kubectl ]] && source <(kubectl completion zsh)
+
+# Alias 
 alias kl="kubectl logs"
 alias klog="kubectl log"
 
@@ -9,8 +14,6 @@ alias kapi="kubectl api-resources | fzf"
 alias kg="kubectl get"
 alias kgo="kubectl get -oyaml"
 alias kd="kubectl describe"
-
-
 
 alias ksys1="kubectl --kubeconfig ~/.kube/configs/kubeconfig-sys1.yaml"
 alias kqa1="kubectl --kubeconfig ~/.kube/configs/kubeconfig-qa1.yaml"
@@ -23,8 +26,6 @@ alias ks1="kubectl --kubeconfig ~/.kube/configs/kubeconfig-s1.yaml"
 
 # Set safe default context for new terminals 
 export KUBECONFIG="$HOME/.kube/configs/kubeconfig-qa1.yaml"
-
-
 kc() { 
 
 	local KUBECONFIGS=~/.kube/configs
