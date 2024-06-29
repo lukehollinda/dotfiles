@@ -28,9 +28,6 @@ source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 export ZVM_VI_EDITOR=nvim
 
-# Set up krew plugin support
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-
 # VI Mode, potentially needs to be called after atuin init
 bindkey -v
 

@@ -3,6 +3,9 @@ alias k=kubectl
 autoload -U +X compinit && compinit
 [[ /usr/local/bin/kubectl ]] && source <(kubectl completion zsh)
 
+# Set up krew plugin support
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
 # Alias 
 alias kl="kubectl logs"
 alias klog="kubectl log"
