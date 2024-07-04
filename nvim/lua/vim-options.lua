@@ -1,4 +1,13 @@
 
+-- Todo move elsewhere
+-- Enable GBrowse to open git link
+vim.api.nvim_create_user_command(
+  'Browse',
+  function (opts)
+    vim.fn.system { 'open', opts.fargs[1] }
+  end,
+  { nargs = 1 }
+)
 
 vim.cmd([[set number relativenumber]])
 vim.cmd([[setlocal scrolloff=999]])
