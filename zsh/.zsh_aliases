@@ -34,6 +34,12 @@ alias ll='exa -lhF'
 # Shipwright
 alias s='shipwright'
 
+# Solution to issue where mac flashes a visual bell on errors 
+# https://apple.stackexchange.com/questions/25605/how-can-i-stop-my-whole-screen-from-flashing-white-on-errors
+# May have to go into System Settings > Accessibility > Audio and re-disable option
+killvisualbell () {
+	sudo killall coreaudiod
+} 
 
 install-kubectl () {
 	local version=$1
