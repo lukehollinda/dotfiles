@@ -1,0 +1,22 @@
+# Solution to issue where mac flashes a visual bell on errors 
+# https://apple.stackexchange.com/questions/25605/how-can-i-stop-my-whole-screen-from-flashing-white-on-errors
+# May have to go into System Settings > Accessibility > Audio and re-disable option
+killvisualbell () {
+	sudo killall coreaudiod
+} 
+
+install-kubectl () {
+	local version=$1
+	if curl -sS -L -o /tmp/kubectl "https://dl.k8s.io/release/v${version}/bin/darwin/arm64/kubectl"
+	then
+		chmod +x /tmp/kubectl
+		sudo mv /tmp/kubectl /usr/local/bin/kubectl
+	fi
+}
+
+# capture the output of a command so it can be retrieved with ret
+cap () { tee /tmp/capture.out; }
+
+# return the output of the most recent command that was captured by cap
+ret () { cat /tmp/capture.out; }
+
