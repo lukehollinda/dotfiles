@@ -37,6 +37,7 @@ setopt HIST_IGNORE_DUPS
 
 
 
-source .zsh_aliases
-source .zsh_functions
-source .zsh_kube
+SCRIPT_DIR="$(dirname "$0")"
+source "$SCRIPT_DIR/.zsh_aliases"
+source "$SCRIPT_DIR/.zsh_functions"
+source "$SCRIPT_DIR/.zsh_kube"
