@@ -1,9 +1,12 @@
+alias refresh='source ~/.zshrc'
+
 # Util
 alias weather='curl http://wttr.in'
 
 # NVim
 alias vim="nvim"
 alias v="nvim"
+
 # Directories
 alias dev="cd ~/dev"
 
