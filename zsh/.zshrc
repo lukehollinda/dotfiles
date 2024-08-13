@@ -1,7 +1,7 @@
 # OH-MY-ZSH
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="robbyrussell"
-plugins=()
+plugins=(vi-mode)
 source $ZSH/oh-my-zsh.sh
 
 
