@@ -35,6 +35,8 @@ export HISTSIZE=10000000
 export SAVEHIST=10000000
 setopt HIST_IGNORE_DUPS
 
+#Autocomplete
+autoload -U +X compinit && compinit
 
 
 SCRIPT_DIR="$(dirname "$0")"
