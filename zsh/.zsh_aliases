@@ -15,13 +15,14 @@ alias g="git"
 alias gs="git status"
 alias gmcp="git log -1 --pretty=%B | pbcopy"
 alias gaa="git add --all"
-alias gc="git commit"
-alias gca='git commit --amend'
+alias gc="git commit --verbose"
+alias gca='git commit --amend --verbose'
 alias ga='git add'
 alias gco='git checkout'
 alias grim='git rebase -i master'
 alias gr='git rebase'
 alias gdiff='git diff'
+alias gdiffs='git diff --staged .'
 alias gp='git pull'
 alias glog='git log --name-only'
 
