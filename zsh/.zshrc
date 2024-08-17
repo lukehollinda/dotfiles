@@ -41,7 +41,9 @@ autoload -U +X compinit && compinit
 # Set up zoxide with autocomplete
 eval "$(zoxide init zsh)"
 
-SCRIPT_DIR="$(dirname "$0")"
-source "$SCRIPT_DIR/.zsh_aliases"
-source "$SCRIPT_DIR/.zsh_functions"
-source "$SCRIPT_DIR/.zsh_kube"
+# Source all other zsh files
+script_dir="$(dirname "$0")"
+find "${script_dir}" -maxdepth 1 -type f ! -name '.zshrc' -print0 | while IFS= read -r -d '' file
+do
+  source "${file}"
+done
