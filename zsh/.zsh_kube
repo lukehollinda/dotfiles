@@ -30,11 +30,11 @@ alias ks1="kubectl --kubeconfig ~/.kube/configs/kubeconfig-s1.yaml"
 export KUBECONFIG="$HOME/.kube/configs/kubeconfig-qa1.yaml"
 kc() { 
 
-	local KUBECONFIGS=~/.kube/configs
-	local config=$1
+	local kubeconfigs=~/.kube/configs
+	local config
 	# fzf select filename 
 	if [ -z "$1" ] ; then 
-		local config=$(ls -1 ${KUBECONFIGS} | grep 'kube' | sed 's/\.yaml//' | fzf)
+		config=$(ls -1 ${kubeconfigs} | grep 'kube' | fzf)
 	
 		# Do nothing if fzf is exited
 		if [ -z "$config" ]; then
@@ -45,12 +45,17 @@ kc() {
 
 	# Use previous config
 	if [ "$1" = "-" ] ; then 
-		local config=$(ls -1t ${KUBECONFIGS} | head -n2 | tail -n1 | sed 's/\.yaml//' )
+		config=$(ls -1t ${kubeconfigs} | head -n2 | tail -n1 )
+	fi
+	
+	# Support selecting as an argument 
+	if [[ -f "${kubeconfigs}/kubeconfig-${1}.yaml" ]]; then 
+		config="kubeconfig-${1}.yaml"
 	fi
 
-	export KUBECONFIG=${KUBECONFIGS}/${config}.yaml
+	export KUBECONFIG=${kubeconfigs}/${config}
 	# Touching the file makes list by last modify timestamp useful
-	touch $KUBECONFIG
+	touch "${KUBECONFIG}"
 }
 
 kgetpodsonnode () {
