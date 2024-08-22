@@ -29,6 +29,17 @@ gitrecent () {
 	printf '%s\n' "${BRANCHES[@]}"
 }
 
+# Capture pane with tmux, remove trailing whitespace only lines, pipe to vim, and add colour highlighting
+tmuxtovim () {
+	tmux capture-pane -e -pS -1000000 \
+	| awk '{ if (NF || !trailing) print $0; if (NF) trailing = 0; else trailing = 1 }' \
+	| vim -R "+norm G" "+ColorHighlight"
+}
+
+# Bind the above function to Ctr-v
+zle -N tmuxtovim{,}
+bindkey ^v tmuxtovim
+
 # capture the output of a command so it can be retrieved with ret
 cap () { tee /tmp/capture.out; }
 
