@@ -237,7 +237,7 @@ local servers = {
   -- rust_analyzer = {},
   -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
-
+  helm_ls = {}, 
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
