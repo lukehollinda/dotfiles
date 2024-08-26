@@ -31,7 +31,7 @@ gitrecent () {
 
 # Capture pane with tmux, remove trailing whitespace only lines, pipe to vim, and add colour highlighting
 tmuxtovim () {
-	tmux capture-pane -e -pS -1000000 \
+	tmux capture-pane -ep -S -5000 \
 	| awk '{ if (NF || !trailing) print $0; if (NF) trailing = 0; else trailing = 1 }' \
 	| vim -R "+norm G" "+ColorHighlight"
 }
