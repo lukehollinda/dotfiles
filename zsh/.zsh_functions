@@ -1,9 +1,9 @@
-# Solution to issue where mac flashes a visual bell on errors 
+# Solution to issue where mac flashes a visual bell on errors
 # https://apple.stackexchange.com/questions/25605/how-can-i-stop-my-whole-screen-from-flashing-white-on-errors
 # May have to go into System Settings > Accessibility > Audio and re-disable option
 killvisualbell () {
 	sudo killall coreaudiod
-} 
+}
 
 install-kubectl () {
 	local version=$1
@@ -15,7 +15,7 @@ install-kubectl () {
 }
 
 # Adapted from https://gist.github.com/jordan-brough/48e2803c0ffa6dc2e0bd
-gitrecent () { 
+gitrecent () {
 
 	BRANCHES=(
 	  $(git reflog |
@@ -29,7 +29,7 @@ gitrecent () {
 	printf '%s\n' "${BRANCHES[@]}"
 }
 
-#TODO make this highlight/bold the command run. Or something else to more easily scan output 
+#TODO make this highlight/bold the command run. Or something else to more easily scan output
 # Capture pane with tmux, remove trailing whitespace only lines, pipe to vim
 tmuxtovim () {
 	tmux capture-pane -p -S -5000 \
@@ -43,7 +43,15 @@ bindkey ^v tmuxtovim
 
 # capture the output of a command so it can be retrieved with ret
 cap () { tee /tmp/capture.out; }
+cap0 () { tee /tmp/capture.out; }
+cap1 () { tee /tmp/capture1.out; }
+cap2 () { tee /tmp/capture2.out; }
+cap3 () { tee /tmp/capture3.out; }
 
 # return the output of the most recent command that was captured by cap
 ret () { cat /tmp/capture.out; }
+ret0 () { cat /tmp/capture.out; }
+ret1 () { cat /tmp/capture1.out; }
+ret2 () { cat /tmp/capture2.out; }
+ret3 () { cat /tmp/capture3.out; }
 
