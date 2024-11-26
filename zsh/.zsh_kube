@@ -65,6 +65,6 @@ kgetpodsonnode () {
 }
 
 kgetnotrunningpods () {
-        kubectl get pods | grep -v Runnning | grep -v Completed
+        kubectl get pods | grep -v Running | grep -v Completed
 }
 
