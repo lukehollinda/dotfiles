@@ -68,3 +68,26 @@ kgetnotrunningpods () {
         kubectl get pods | grep -v Running | grep -v Completed
 }
 
+# Get all resources by greping k api-resource output
+kgetallbyname () {
+	if [ -z "$1" ]; then
+		# echo "Usage: $0 <resource-group>"
+		# echo "Example: $0 apps"
+		exit 1
+	fi
+
+	SEARCH_TERM=$1
+	# List of possible resource kinds in the specified group
+	# Note: Adjust this list for specific Kubernetes resource groups
+	RESOURCES=$(kubectl api-resources --no-headers | grep "$1" | awk '{print $1}')
+
+	if [ -z "$RESOURCES" ]; then
+		echo "No resources found: $RESOURCES"
+		exit 1
+	fi
+
+	echo "$RESOURCES" | while IFS= read -r RESOURCE; do
+		echo ~~~~Getting "$RESOURCE"~~~~
+		k get "$RESOURCE" -owide
+	done
+}
