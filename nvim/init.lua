@@ -5,10 +5,10 @@ vim.g.maplocalleader = ' '
 
 -- Install package manager
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then 
-	vim.fn.system { 
-		'git', 
-		'clone', 
+if not vim.loop.fs_stat(lazypath) then
+	vim.fn.system {
+		'git',
+		'clone',
 		'--filter=blob:none',
 		'https://github.com/folke/lazy.nvim.git',
 		'--branch=stable', -- latest stable release
@@ -181,7 +181,7 @@ vim.api.nvim_set_keymap("n", "<Leader>E", ":Oil<CR>", { noremap = true, silent =
 
 
 -- [[ Configure LSP ]]
---  This function gets run when an LSP connects to a particular buffer. 
+--  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
   -- to define small helper and utility functions so you don't have to repeat yourself
@@ -239,7 +239,7 @@ local servers = {
   -- rust_analyzer = {},
   -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
-  helm_ls = {}, 
+  helm_ls = {},
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
