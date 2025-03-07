@@ -36,6 +36,7 @@ alias klt4="kubectl --kubeconfig ~/.kube/configs/kubeconfig-lt4.yaml"
 alias klt5="kubectl --kubeconfig ~/.kube/configs/kubeconfig-lt5.yaml"
 
 alias kdebugpod="kubectl run -i --tty --rm debug --image=nicolaka/netshoot --restart=Never"
+alias kgetevents="kubectl get events --sort-by='.lastTimestamp'"
 
 # Set safe default context for new terminals
 export KUBECONFIG="$HOME/.kube/configs/kubeconfig-qa1.yaml"
