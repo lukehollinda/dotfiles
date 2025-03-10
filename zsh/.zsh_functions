@@ -51,15 +51,14 @@ tmuxtovim () {
 	| vim -R "+norm G" "+set nowrap"
 }
 
+# Bind the above function to Ctr-v
+zle -N tmuxtovim{,}
+bindkey ^v tmuxtovim
+
 yqget () {
 	: "${1:?Must specify a key to get}"
 	yq '.. | select(has("'"$1"'")) | .'"$1"
 }
-
-
-# Bind the above function to Ctr-v
-zle -N tmuxtovim{,}
-bindkey ^v tmuxtovim
 
 # capture the output of a command so it can be retrieved with ret
 cap () { tee /tmp/capture.out; }
