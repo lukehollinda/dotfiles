@@ -3,7 +3,7 @@ alias refresh='source ~/.zshrc'
 # Util
 alias weather='curl http://wttr.in'
 
-# NVim
+# nvim
 alias vim="nvim"
 alias v="nvim"
 
