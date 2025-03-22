@@ -9,6 +9,7 @@ alias v="nvim"
 
 # Directories
 alias dev="cd ~/dev"
+alias dotfiles="cd ~/person/dotfiles"
 
 # Git
 alias g="git"
