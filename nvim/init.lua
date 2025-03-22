@@ -158,8 +158,26 @@ require('lazy').setup({
     build = ':TSUpdate',
   },
 
+  {
+    'stevearc/oil.nvim',
+    opts = {},
+    -- Optional dependencies
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+  },
+
 
 }, {})
+
+-- [[ Configure LSP ]]
+require("oil").setup({
+  default_file_explorer = true,
+  use_default_keymaps = true,
+  view_options = {
+    show_hidden = true,
+  },
+})
+vim.api.nvim_set_keymap("n", "<Leader>E", ":Oil<CR>", { noremap = true, silent = true })
+
 
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer. 
