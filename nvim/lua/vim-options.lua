@@ -16,7 +16,6 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 })
 
 vim.cmd([[set number relativenumber]])
-vim.cmd([[setlocal scrolloff=999]])
 
 local map = vim.api.nvim_set_keymap
 
@@ -64,8 +63,8 @@ vim.o.termguicolors = true
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
 -- Remap for dealing with word wrap
-vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+vim.keymap.set('n', 'k', "v:count == 0 ? 'gkzz' : 'kzz'", { expr = true, silent = true })
+vim.keymap.set('n', 'j', "v:count == 0 ? 'gjzz' : 'jzz'", { expr = true, silent = true })
 
 
 -- Set highlight on search
