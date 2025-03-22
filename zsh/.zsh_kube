@@ -26,7 +26,7 @@ alias kp6="kubectl --kubeconfig ~/.kube/configs/kubeconfig-p6.yaml"
 alias kp7="kubectl --kubeconfig ~/.kube/configs/kubeconfig-p7.yaml"
 alias ks1="kubectl --kubeconfig ~/.kube/configs/kubeconfig-s1.yaml"
 
-alias kdebugpod="kubectl run -i --tty --rm debug --image=nicolaka/netshoot --restart=Never -- sh"
+alias kdebugpod="kubectl run -i --tty --rm debug --image=nicolaka/netshoot --restart=Never"
 
 # Set safe default context for new terminals
 export KUBECONFIG="$HOME/.kube/configs/kubeconfig-qa1.yaml"
