@@ -52,8 +52,8 @@ tmuxtovim () {
 }
 
 yqget () {
-	# yq '.. | select(has("'idp-issuer-url'")) | .'idp-issuer-url''
-	yq '.. | select(has("'$1'")) | .'$1
+	: "${1:?Must specify a key to get}"
+	yq '.. | select(has("'"$1"'")) | .'"$1"
 }
 
 
