@@ -32,7 +32,16 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 
-
 -- Sync clipboard between OS and Neovim.
 vim.o.clipboard = 'unnamedplus'
+
+
+
+require('lazy').setup({
+
+  -- Git related plugins
+  'tpope/vim-fugitive',
+  'tpope/vim-rhubarb',
+
+}, {})
 
