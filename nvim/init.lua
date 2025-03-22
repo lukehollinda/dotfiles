@@ -128,6 +128,9 @@ require('lazy').setup({
     },
   },
 
+    -- "gc" to comment visual regions/lines
+  { 'numToStr/Comment.nvim', opts = {} },
+
 
 }, {})
 
