@@ -29,6 +29,15 @@ gitrecent () {
 	printf '%s\n' "${BRANCHES[@]}"
 }
 
+# Git checkout PR Branches
+gcopr () {
+	FZF_SELECTION=$(gh pr list | awk -F '\t' '{print $3}' | fzf)
+
+	if [[ $FZF_SELECTION ]]; then
+		git checkout -b "$FZF_SELECTION"
+	fi
+}
+
 #TODO make this highlight/bold the command run. Or something else to more easily scan output
 # Capture pane with tmux, remove trailing whitespace only lines, pipe to vim
 tmuxtovim () {
