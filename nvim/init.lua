@@ -31,6 +31,8 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 require('lazy').setup({
 
+  'chrisbra/Colorizer',
+
   -- Git related plugins
   'tpope/vim-fugitive',
 
