@@ -9,6 +9,12 @@ vim.api.nvim_create_user_command(
   { nargs = 1 }
 )
 
+-- Clear trailing whitespace when saving buffer to file
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+  pattern = { "*" },
+  command = [[%s/\s\+$//e]],
+})
+
 vim.cmd([[set number relativenumber]])
 vim.cmd([[setlocal scrolloff=999]])
 
