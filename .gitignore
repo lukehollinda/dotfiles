@@ -1,2 +1,5 @@
 **/dw_*
 **/.dw*
+
+brew/Brewfile.lock.json
+
