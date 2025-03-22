@@ -33,8 +33,13 @@ require('lazy').setup({
 
   -- Git related plugins
   'tpope/vim-fugitive',
-  'tpope/vim-rhubarb',
 
+  {
+    'tpope/vim-rhubarb',
+    init = function ()
+      vim.g.github_enterprise_urls = {'https://github.ihs.demonware.net'}
+    end
+  },
 
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
