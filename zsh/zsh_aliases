@@ -28,6 +28,9 @@ alias gp='git pull'
 alias glog='git log --name-only'
 alias gitupstream='git config --get remote.origin.url'
 
+alias git-ssh='git remote set-url origin "$(git remote get-url origin | sed -E '\''s,^https://([^/]*)/(.*)$,git@\1:\2,'\'')"'
+alias git-https='git remote set-url origin "$(git remote get-url origin | sed -E '\''s,^git@([^:]*):/*(.*)$,https://\1/\2,'\'')"'
+
 alias cdg='cd "$(git rev-parse --show-toplevel || echo .)"'
 
 # Paging
