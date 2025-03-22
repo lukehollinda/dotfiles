@@ -1,0 +1,13 @@
+#TODO make this highlight/bold the command run. Or something else to more easily scan output
+# Capture pane with tmux, remove trailing whitespace only lines, pipe to vim
+tmuxtovim () {
+	tmux capture-pane -p -S -5000 \
+	| awk '{ if (NF || !trailing) print $0; if (NF) trailing = 0; else trailing = 1 }' \
+	| vim -R "+norm G" "+set nowrap"
+}
+
+# Bind the above function to Ctr-v
+zle -N tmuxtovim{,}
+bindkey ^v tmuxtovim
+
+
