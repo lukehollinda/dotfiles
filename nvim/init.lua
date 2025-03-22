@@ -32,5 +32,5 @@ require('vim-options')
 require('lazy').setup('plugins')
 
 -- Import shipwright gx functionality
-require('shipwright')
+-- require('shipwright')
 
