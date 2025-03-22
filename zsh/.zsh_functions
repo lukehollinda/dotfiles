@@ -43,7 +43,7 @@ gcopr () {
 tmuxtovim () {
 	tmux capture-pane -p -S -5000 \
 	| awk '{ if (NF || !trailing) print $0; if (NF) trailing = 0; else trailing = 1 }' \
-	| vim -R "+norm G"
+	| vim -R "+norm G" "+set nowrap"
 }
 
 # Bind the above function to Ctr-v
