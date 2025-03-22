@@ -38,6 +38,8 @@ setopt HIST_IGNORE_DUPS
 #Autocomplete
 autoload -U +X compinit && compinit
 
+# Set up zoxide with autocomplete
+eval "$(zoxide init zsh)"
 
 SCRIPT_DIR="$(dirname "$0")"
 source "$SCRIPT_DIR/.zsh_aliases"
