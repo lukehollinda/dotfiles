@@ -12,6 +12,7 @@ alias klog="kubectl log"
 alias kn="kubens"
 alias wk="watch kubectl "
 alias kapi="kubectl api-resources | fzf"
+alias kapim="kubectl api-resources | fzf -m"
 
 alias kg="kubectl get"
 alias kgo="kubectl get -oyaml"
