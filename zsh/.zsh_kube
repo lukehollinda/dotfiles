@@ -35,7 +35,7 @@ kc() {
 	local kubeconfigs=~/.kube/configs
 	local config
 	# fzf select filename
-	if [ -z "$1" ] ; then
+	if [[ -z "$1" ]] ; then
 		config=$(ls -1 ${kubeconfigs} | grep 'kube' | fzf)
 
 		# Do nothing if fzf is exited
@@ -46,7 +46,7 @@ kc() {
 	fi
 
 	# Use previous config
-	if [ "$1" = "-" ] ; then
+	if [[ "$1" = "-" ]] ; then
 		config=$(ls -1t ${kubeconfigs} | head -n2 | tail -n1 )
 	fi
 
@@ -71,8 +71,8 @@ kgetnotrunningpods () {
 # Get all resources by greping k api-resource output
 kgetallbyname () {
 	if [ -z "$1" ]; then
-		# echo "Usage: $0 <resource-group>"
-		# echo "Example: $0 apps"
+		echo "Usage: $0 <resource-group>"
+		echo "Example: $0 apps"
 		exit 1
 	fi
 
