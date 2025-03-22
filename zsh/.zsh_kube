@@ -5,11 +5,11 @@ alias k=kubectl
 # Set up krew plugin support
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
-# Alias 
+# Alias
 alias kl="kubectl logs"
 alias klog="kubectl log"
 
-alias kn="kubens" 
+alias kn="kubens"
 alias wk="watch kubectl "
 alias kapi="kubectl api-resources | fzf"
 
@@ -26,30 +26,30 @@ alias kp6="kubectl --kubeconfig ~/.kube/configs/kubeconfig-p6.yaml"
 alias kp7="kubectl --kubeconfig ~/.kube/configs/kubeconfig-p7.yaml"
 alias ks1="kubectl --kubeconfig ~/.kube/configs/kubeconfig-s1.yaml"
 
-# Set safe default context for new terminals 
+# Set safe default context for new terminals
 export KUBECONFIG="$HOME/.kube/configs/kubeconfig-qa1.yaml"
-kc() { 
+kc() {
 
 	local kubeconfigs=~/.kube/configs
 	local config
-	# fzf select filename 
-	if [ -z "$1" ] ; then 
+	# fzf select filename
+	if [ -z "$1" ] ; then
 		config=$(ls -1 ${kubeconfigs} | grep 'kube' | fzf)
-	
+
 		# Do nothing if fzf is exited
 		if [ -z "$config" ]; then
 			echo "No context selected"
-			return 
+			return
 		fi
 	fi
 
 	# Use previous config
-	if [ "$1" = "-" ] ; then 
+	if [ "$1" = "-" ] ; then
 		config=$(ls -1t ${kubeconfigs} | head -n2 | tail -n1 )
 	fi
-	
-	# Support selecting as an argument 
-	if [[ -f "${kubeconfigs}/kubeconfig-${1}.yaml" ]]; then 
+
+	# Support selecting as an argument
+	if [[ -f "${kubeconfigs}/kubeconfig-${1}.yaml" ]]; then
 		config="kubeconfig-${1}.yaml"
 	fi
 
@@ -63,6 +63,6 @@ kgetpodsonnode () {
 }
 
 kgetnotrunningpods () {
-        kubectl get pods | grep -v Runnning | grep -v Completed 
+        kubectl get pods | grep -v Runnning | grep -v Completed
 }
 
