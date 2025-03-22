@@ -1,6 +1,5 @@
 # Auto Complete
 alias k=kubectl
-autoload -U +X compinit && compinit
 [[ /usr/local/bin/kubectl ]] && source <(kubectl completion zsh)
 
 # Set up krew plugin support
