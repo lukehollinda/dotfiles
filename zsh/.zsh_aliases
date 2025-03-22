@@ -25,6 +25,7 @@ alias gdiff='git diff'
 alias gdiffs='git diff --staged .'
 alias gp='git pull'
 alias glog='git log --name-only'
+alias gitupstream='git config --get remote.origin.url'
 
 alias cdg='cd "$(git rev-parse --show-toplevel || echo .)"'
 
