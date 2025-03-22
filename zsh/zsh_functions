@@ -43,6 +43,10 @@ gcopr () {
 	fi
 }
 
+gfixup () {
+	git commit --fixup $(git log --oneline | tac | fzf | awk '{print $1}')
+}
+
 yqget () {
 	: "${1:?Must specify a key to get}"
 	yq '.. | select(has("'"$1"'")) | .'"$1"
