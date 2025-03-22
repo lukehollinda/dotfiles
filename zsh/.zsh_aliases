@@ -14,6 +14,8 @@ alias gmcp="git log -1 --pretty=%B | pbcopy"
 alias gaa="git add --all"
 alias gc="git commit"
 alias gca='git commit --amend'
+alias ga='git add'
+alias gco='git checkout'
 alias grim='git rebase -i master'
 alias gdiff='git diff'
 alias gp='git pull'
