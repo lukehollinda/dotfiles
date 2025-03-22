@@ -19,34 +19,6 @@ install-kubectl () {
 	fi
 }
 
-# Adapted from https://gist.github.com/jordan-brough/48e2803c0ffa6dc2e0bd
-gitrecent () {
-
-	BRANCHES=(
-	  $(git reflog |
-	    egrep -io "moving from ([^[:space:]]+)" |
-	    awk '{ print $3 }' | # extract 3rd column
-	    awk ' !x[$0]++' | # Removes duplicates.  See http://stackoverflow.com/questions/11532157
-	    egrep -v '^[a-f0-9]{40}$' | # remove hash results
-	    head -n 10
-	  )
-	)
-	printf '%s\n' "${BRANCHES[@]}"
-}
-
-# Git checkout PR Branches
-gcopr () {
-	FZF_SELECTION=$(gh pr list | awk -F '\t' '{print $3}' | fzf)
-
-	if [[ $FZF_SELECTION ]]; then
-		git checkout -b "$FZF_SELECTION"
-	fi
-}
-
-gfixup () {
-	git commit --fixup $(git log --oneline | tac | fzf | awk '{print $1}')
-}
-
 yqget () {
 	: "${1:?Must specify a key to get}"
 	yq '.. | select(has("'"$1"'")) | .'"$1"

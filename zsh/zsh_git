@@ -1,0 +1,64 @@
+alias g="git"
+alias gs="git status"
+alias ga='git add'
+alias gaa="git add --all"
+
+# Because I forget the config option
+alias gitupstream='git config --get remote.origin.url'
+
+alias gco='git checkout'
+alias gp='git pull'
+
+alias gc="git commit --verbose"
+alias gca='git commit --amend --verbose'
+alias gr='git rebase'
+alias grim='git rebase -i master'
+
+# Copy message from previous commit
+# (Super useful when creating multiple commits with similar messages)
+alias gmcp="git log -1 --pretty=%B | pbcopy"
+
+# Log with files changed
+alias glog='git log --name-only'
+
+# Quick diffing
+alias gdiff='git diff'
+alias gdiffs='git diff --staged .'
+
+# Switch git repo between ssh and https
+alias git-ssh='git remote set-url origin "$(git remote get-url origin | sed -E '\''s,^https://([^/]*)/(.*)$,git@\1:\2,'\'')"'
+alias git-https='git remote set-url origin "$(git remote get-url origin | sed -E '\''s,^git@([^:]*):/*(.*)$,https://\1/\2,'\'')"'
+
+# Change cwd to top of git repo
+alias cdg='cd "$(git rev-parse --show-toplevel || echo .)"'
+
+
+
+# Create a git fixup commit, selecting sha from fzf. To be used with rebase.autoSquash = true
+gfixup () {
+	git commit --fixup $(git log --oneline | tac | fzf | awk '{print $1}')
+}
+
+# Print recent branches - Adapted from https://gist.github.com/jordan-brough/48e2803c0ffa6dc2e0bd
+gitrecent () {
+
+	BRANCHES=(
+	  $(git reflog |
+	    egrep -io "moving from ([^[:space:]]+)" |
+	    awk '{ print $3 }' | # extract 3rd column
+	    awk ' !x[$0]++' | # Removes duplicates.  See http://stackoverflow.com/questions/11532157
+	    egrep -v '^[a-f0-9]{40}$' | # remove hash results
+	    head -n 10
+	  )
+	)
+	printf '%s\n' "${BRANCHES[@]}"
+}
+
+# Git checkout PR Branches
+gcopr () {
+	FZF_SELECTION=$(gh pr list | awk -F '\t' '{print $3}' | fzf)
+
+	if [[ $FZF_SELECTION ]]; then
+		git checkout -b "$FZF_SELECTION"
+	fi
+}
