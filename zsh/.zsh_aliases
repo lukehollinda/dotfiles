@@ -35,8 +35,8 @@ alias manzsh="man zshbuiltins"
 
 # Terminal navigation
 alias c='clear'
-alias l='exa'
-alias ll='exa -lhF'
+alias l='eza'
+alias ll='eza -lhF'
 
 # Shipwright
 alias s='shipwright'
