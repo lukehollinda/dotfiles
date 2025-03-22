@@ -5,6 +5,11 @@ killvisualbell () {
 	sudo killall coreaudiod
 }
 
+# List hardware and interface info
+machardwarelist () {
+	networksetup -listallhardwareports
+}
+
 install-kubectl () {
 	local version=$1
 	if curl -sS -L -o /tmp/kubectl "https://dl.k8s.io/release/v${version}/bin/darwin/arm64/kubectl"
@@ -45,6 +50,12 @@ tmuxtovim () {
 	| awk '{ if (NF || !trailing) print $0; if (NF) trailing = 0; else trailing = 1 }' \
 	| vim -R "+norm G" "+set nowrap"
 }
+
+yqget () {
+	# yq '.. | select(has("'idp-issuer-url'")) | .'idp-issuer-url''
+	yq '.. | select(has("'$1'")) | .'$1
+}
+
 
 # Bind the above function to Ctr-v
 zle -N tmuxtovim{,}
