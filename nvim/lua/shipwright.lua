@@ -30,6 +30,7 @@ local function get_chart_version_from_draft()
   return string.match(bufferContent, 'chartVersion:%s*([%d.]+)')
 end
 
+-- Removes 'repo/' in 'repo/chartname' format
 local function chartNameWithoutRepo(chartName)
   return string.match(chartName, '%S*/(%S*)')
 end
@@ -37,15 +38,14 @@ end
 -- Check for 'useHelmV3: true' in current buffer
 local function is_helmv3()
   local buffer = get_buffer_content()
-  local helmV3 = string.match(buffer, 'useHelmV3:%s*(%S*),')
+  -- Tricky comma at end of regex due to commas in get_buffer_content()
+  local helmV3 = string.match(buffer, 'useHelmV3:%s*(%S*),?')
   return helmV3 == 'true'
 end
 
 local function get_default_helm_v2_version()
-  local handle = io.popen('shipwright helm version  2>/dev/null')
-  local output = handle:read("*a")
-  local semVer = output:match('SemVer:"v([%d%.]+)"')
-  return semVer
+ -- Shipwright's current v2 default
+  return '2.16.4'
 end
 
 local function get_default_helm_v3_version()
