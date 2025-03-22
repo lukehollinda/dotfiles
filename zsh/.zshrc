@@ -19,7 +19,7 @@ fi
 # Add starship to terminal. (PS1 prompt for K8s)
 eval "$(starship init zsh)"
 
-# Google cloud autocomplete and path 
+# Google cloud autocomplete and path
 source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
 source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 
@@ -40,6 +40,9 @@ autoload -U +X compinit && compinit
 
 # Set up zoxide with autocomplete
 eval "$(zoxide init zsh)"
+
+# Added by LM Studio CLI tool (lms)
+export PATH="$PATH:/Users/lhollinda/.cache/lm-studio/bin"
 
 # Source all other zsh files
 script_dir="$(dirname "$0")"
