@@ -71,8 +71,8 @@ kgetnotrunningpods () {
 # Get all resources by greping k api-resource output
 kgetallbyname () {
 	if [ -z "$1" ]; then
-		# echo "Usage: $0 <resource-group>"
-		# echo "Example: $0 apps"
+		echo "Usage: $0 <resource-group>"
+		echo "Example: $0 apps"
 		exit 1
 	fi
 
