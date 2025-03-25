@@ -1,3 +1,13 @@
+# Grab a field from given input
+# Stolen from https://github.com/bahamas10/bash-analysis
+#
+# $ echo -e '  three    different\tcolumns ' | field 2
+# different
+field() {
+	awk -F "${2:- }" "{ print \$${1:-1} }"
+}
+
+
 # Solution to issue where mac flashes a visual bell on errors
 # https://apple.stackexchange.com/questions/25605/how-can-i-stop-my-whole-screen-from-flashing-white-on-errors
 # May have to go into System Settings > Accessibility > Audio and re-disable option
