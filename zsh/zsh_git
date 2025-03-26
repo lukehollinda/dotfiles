@@ -36,7 +36,7 @@ alias cdg='cd "$(git rev-parse --show-toplevel || echo .)"'
 
 # Create a git fixup commit, selecting sha from fzf. To be used with rebase.autoSquash = true
 gfixup () {
-	git commit --fixup $(git log --oneline | tac | fzf | awk '{print $1}')
+	git commit --fixup $(git log --oneline | fzf | awk '{print $1}')
 }
 
 # Print recent branches - Adapted from https://gist.github.com/jordan-brough/48e2803c0ffa6dc2e0bd
