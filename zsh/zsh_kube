@@ -106,6 +106,12 @@ kgetallbyname () {
 	done
 }
 
+# Get all resources in namespace by api-resources available
+kgetallforreal() {
+  namespaceName=$1
+  kubectl api-resources --namespaced=true --verbs=list -o name | grep -v '^events\.events\.k8s\.io$' | grep -v '^events$' | xargs echo | tr ' ' ',' | xargs kubectl get -n "${namespaceName}"
+}
+
 # FZF select an ingress host to open
 kopeningress () {
 	# Grab names, split on comma, fuzzy find, and add protocol
