@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
 select-project() {
-    find ~/dev ~/person -mindepth 2 -maxdepth 2 -type d -name ".git" \
+    find ~/work/dev ~/work/upstream \
+    ~/person ~/person/dev ~/person/upstream \
+    -mindepth 2 -maxdepth 2 -type d -name ".git" \
         | sed 's|/\.git$||' \
         | fzf
 }
