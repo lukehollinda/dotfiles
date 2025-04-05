@@ -17,7 +17,7 @@ return {
       search = true,
       url = true,
       -- go = true,
-      -- Additional optinos for markdown, commit??
+      -- Additional options for markdown, commit??
       jira = { -- custom handler to open Jira tickets (these have higher precedence than builtin handlers)
         name = "jira", -- set name of handler
         handle = function(mode, line, _)
