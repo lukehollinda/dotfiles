@@ -18,29 +18,15 @@ alias kg="kubectl get"
 alias kgo="kubectl get -oyaml"
 alias kd="kubectl describe"
 
-alias ksys1="kubectl --kubeconfig ~/.kube/configs/kubeconfig-sys1.yaml"
-alias ksys2="kubectl --kubeconfig ~/.kube/configs/kubeconfig-sys2.yaml"
-alias kqa1="kubectl --kubeconfig ~/.kube/configs/kubeconfig-qa1.yaml"
-alias kqa2="kubectl --kubeconfig ~/.kube/configs/kubeconfig-qa2.yaml"
-alias ki1="kubectl --kubeconfig ~/.kube/configs/kubeconfig-i1.yaml"
-alias ki2="kubectl --kubeconfig ~/.kube/configs/kubeconfig-i2.yaml"
-alias kp1="kubectl --kubeconfig ~/.kube/configs/kubeconfig-p1.yaml"
-alias kp3="kubectl --kubeconfig ~/.kube/configs/kubeconfig-p3.yaml"
-alias kp6="kubectl --kubeconfig ~/.kube/configs/kubeconfig-p6.yaml"
-alias kp7="kubectl --kubeconfig ~/.kube/configs/kubeconfig-p7.yaml"
-alias ks1="kubectl --kubeconfig ~/.kube/configs/kubeconfig-s1.yaml"
-alias ks3="kubectl --kubeconfig ~/.kube/configs/kubeconfig-s3.yaml"
-alias klt1="kubectl --kubeconfig ~/.kube/configs/kubeconfig-lt1.yaml"
-alias klt2="kubectl --kubeconfig ~/.kube/configs/kubeconfig-lt2.yaml"
-alias klt3="kubectl --kubeconfig ~/.kube/configs/kubeconfig-lt3.yaml"
-alias klt4="kubectl --kubeconfig ~/.kube/configs/kubeconfig-lt4.yaml"
-alias klt5="kubectl --kubeconfig ~/.kube/configs/kubeconfig-lt5.yaml"
-
 alias kdebugpod="kubectl run -i --tty --rm debug --image=nicolaka/netshoot --restart=Never"
 alias kgetevents="kubectl get events --sort-by='.lastTimestamp'"
 
-# Set safe default context for new terminals
-export KUBECONFIG="$HOME/.kube/configs/kubeconfig-qa1.yaml"
+# Smart switcher for k8s context.
+# Place configs in ~/kube/configs/ with names in form kubeconfig-{{name}}.yaml
+#
+# With no arguments, will fuzzy find through your configs.
+# kc [name] will select by name. (Ex. kc qa -> selects kubeconfig-qa.yaml)
+# kc - Will jump back to your most recently visited cluster
 kc() {
 
 	local kubeconfigs=~/.kube/configs

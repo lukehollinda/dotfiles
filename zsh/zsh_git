@@ -32,8 +32,6 @@ alias git-https='git remote set-url origin "$(git remote get-url origin | sed -E
 # Change cwd to top of git repo
 alias cdg='cd "$(git rev-parse --show-toplevel || echo .)"'
 
-
-
 # Create a git fixup commit, selecting sha from fzf. To be used with rebase.autoSquash = true
 gfixup () {
 	git commit --fixup $(git log --oneline | fzf | awk '{print $1}')
@@ -42,7 +40,7 @@ gfixup () {
 # Print recent branches - Adapted from https://gist.github.com/jordan-brough/48e2803c0ffa6dc2e0bd
 gitrecent () {
 
-	BRANCHES=(
+	local branches=(
 	  $(git reflog |
 	    egrep -io "moving from ([^[:space:]]+)" |
 	    awk '{ print $3 }' | # extract 3rd column
@@ -51,14 +49,14 @@ gitrecent () {
 	    head -n 10
 	  )
 	)
-	printf '%s\n' "${BRANCHES[@]}"
+	printf '%s\n' "${branches[@]}"
 }
 
 # Git checkout PR Branches
 gcopr () {
-	FZF_SELECTION=$(gh pr list | awk -F '\t' '{print $3}' | fzf)
+	local selection=$(gh pr list | awk -F '\t' '{print $3}' | fzf)
 
-	if [[ $FZF_SELECTION ]]; then
-		git checkout -b "$FZF_SELECTION"
+	if [[ $selection ]]; then
+		git checkout -b "$selection"
 	fi
 }
