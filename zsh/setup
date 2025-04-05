@@ -41,12 +41,12 @@ autoload -U +X compinit && compinit
 # Set up zoxide with autocomplete
 eval "$(zoxide init zsh)"
 
-# Added by LM Studio CLI tool (lms)
-export PATH="$PATH:/Users/lhollinda/.cache/lm-studio/bin"
-
-# Source all other zsh files
 script_dir="$(dirname "$0")"
 
+export PATH="$PATH:$HOME/.cache/lm-studio/bin"
+export PATH="$PATH:$HOME/person/dotfiles/bin/scripts"
+
+# Source all other zsh files
 for file in $(find "${script_dir}" -type f ! -name 'setup' ! -name 'README.md')
 do
   source "${file}"
