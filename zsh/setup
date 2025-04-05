@@ -47,7 +47,7 @@ export PATH="$PATH:/Users/lhollinda/.cache/lm-studio/bin"
 # Source all other zsh files
 script_dir="$(dirname "$0")"
 
-for file in $(find "${script_dir}" -type f ! -name 'zshrc' ! -name 'README.md')
+for file in $(find "${script_dir}" -type f ! -name 'setup' ! -name 'README.md')
 do
   source "${file}"
 done
