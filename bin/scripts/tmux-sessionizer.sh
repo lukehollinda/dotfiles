@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-
-
 select-project() {
-    find ~/dev ~/person -mindepth 1 -maxdepth 1 -exec test -e '{}/.git' ';' -type d -print \
+    find ~/dev ~/person -mindepth 2 -maxdepth 2 -type d -name ".git" \
+        | sed 's|/\.git$||' \
         | fzf
 }
 
