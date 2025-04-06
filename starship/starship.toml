@@ -1,0 +1,69 @@
+format = '¬$all'
+
+# Displays current directory.
+[directory]
+format = "[$path]($style) "
+style = "bright-yellow"
+truncate_to_repo = false
+truncation_length = 3 # parent directories to show; default is 3
+truncation_symbol = "…/"
+
+[character]
+success_symbol = "[>](bold bright-green)" # normal prompt
+error_symbol = "[>](bold bright-red)" # used if previous command failed
+
+
+[kubernetes]
+format = '\[[$symbol$context( \($namespace\))]($style)\] '
+style = 'bold bright-blue'
+disabled = false
+contexts = [
+	{context_pattern=".*qa1.*", context_alias="qa1"},
+	{context_pattern=".*qa2.*", context_alias="qa2"},
+	{context_pattern=".*i1.*", context_alias="i1"},
+	{context_pattern=".*i2.*", context_alias="i2"},
+	{context_pattern=".*sys1.*", context_alias="sys1"},
+	{context_pattern=".*sys2.*", context_alias="sys2"},
+	{context_pattern=".*s1.*", context_alias="s1"},
+	{context_pattern=".*s3.*", context_alias="s3"},
+	{context_pattern=".*p1.*", context_alias="p1"},
+	{context_pattern=".*p3.*", context_alias="p3"},
+	{context_pattern=".*p4.*", context_alias="p4"},
+	{context_pattern=".*p6.*", context_alias="p6"},
+	{context_pattern=".*p7.*", context_alias="p7"},
+	{context_pattern=".*lt1.*", context_alias="lt1"},
+	{context_pattern=".*lt2.*", context_alias="lt2"},
+	{context_pattern=".*lt3.*", context_alias="lt3"},
+	{context_pattern=".*lt4.*", context_alias="lt4"},
+	{context_pattern=".*lt5.*", context_alias="lt5"},
+]
+
+[cmd_duration]
+min_time = 500
+format = 'took [$duration](bold yellow)'
+
+[time]
+disabled = false
+format = '[\[$time\]]($style) '
+time_format = '%T'
+utc_time_offset = '-7'
+style = 'bright-yellow'
+
+[git_branch]
+style="bright-blue"
+
+[git_status]
+style="bright-purple"
+
+
+[docker_context]
+disabled = true
+
+[gcloud]
+disabled = true
+
+[golang]
+disabled = true
+
+[python]
+disabled = true
