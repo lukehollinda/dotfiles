@@ -1,0 +1,44 @@
+[includeIf "gitdir:~/work/"]
+	path = ~/.gitconfig_work
+
+[includeIf "gitdir:~/person/"]
+	path = ~/.gitconfig_person
+[core]
+	pager = delta
+	editor = nvim
+	excludesFile = ~/.gitignore
+[diff]
+        algorithm = histogram
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true  # use n and N to move between diff sections
+	dark = true
+[push]
+	autoSetupRemote = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[credential]
+	helper = cache --timeout=2592000
+[commit]
+	verbose = true
+[merge]
+	conflictstyle = zdiff3
+[column]
+	ui = auto
+[tag]
+	sort = version:refname
+[fetch]
+	prune = true
+	pruneTags = true
+[rerere]
+	enabled = true
+	autoupdate = true
+[rebase]
+	autoSquash = true
+	autoStash = true
+[init]
+	defaultBranch = master
