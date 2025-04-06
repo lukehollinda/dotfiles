@@ -1,0 +1,20 @@
+"" Much of this is replicating the default bindings from Vimium
+
+" Keep accidentally closing tab while attempting to move down
+" unbind d
+
+" Love this binding
+bind yt tabduplicate
+
+bind x tabclose
+bind X undo
+
+" Reduce scroll distance (default 10)
+bind j scrollline 5
+bind k scrollline -5
+
+colourscheme shydactyl
+
+" Broken, but will congfigure opening text in nvim
+set editorcmd open /Applications/Alacritty.app/Contents/MacOS/alacritty --title "tridactyl-editor" -e nvim
+" set editorcmd alacritty -e nvim %f
