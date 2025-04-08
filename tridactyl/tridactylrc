@@ -6,6 +6,8 @@
 " Love this binding
 bind yt tabduplicate
 
+bind <C-w> tabdetach
+
 bind x tabclose
 bind X undo
 
