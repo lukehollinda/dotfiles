@@ -20,6 +20,7 @@ alias kd="kubectl describe"
 
 alias kdebugpod="kubectl run -i --tty --rm debug --image=nicolaka/netshoot --restart=Never"
 alias kgetevents="kubectl get events --sort-by='.lastTimestamp'"
+alias kgeteventsall="kubectl get events -A --sort-by='.lastTimestamp'"
 
 # Smart switcher for k8s context.
 # Place configs in ~/kube/configs/ with names in form kubeconfig-{{name}}.yaml
