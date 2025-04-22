@@ -93,6 +93,41 @@ kgetallbyname () {
 	done
 }
 
+kgetnotreadyparents() {
+
+	echo ~~~~~~~Deployments~~~~~~~
+	kubectl get deploy \
+	| awk	'
+		NR==1 { print; next }
+		{
+			split($2, r, "/");
+			if (r[1] != r[2]) print;
+		}
+		'
+
+	echo
+	echo ~~~~~~~StatefulSets~~~~~~~
+	kubectl get sts \
+	| awk	'
+		NR==1 { print; next }
+		{
+			split($2, r, "/");
+			if (r[1] != r[2]) print;
+		}
+		'
+
+
+	echo
+	echo ~~~~~~~DaemonSet~~~~~~~
+	kubectl get ds \
+	| awk	'
+		NR==1 { print; next }
+		{
+			if ($2 != $4) print;
+		}
+		'
+}
+
 # Get all resources in namespace by api-resources available
 kgetallforreal() {
   namespaceName=$1
