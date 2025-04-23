@@ -1,8 +1,8 @@
 "" Much of this is replicating the default bindings from Vimium
 
 " Keep accidentally closing/opening tab while attempting to move up/down
-" unbind d
-" unbind u
+unbind d
+unbind u
 
 " Love this binding
 bind yt tabduplicate
