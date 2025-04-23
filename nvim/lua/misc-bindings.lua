@@ -6,4 +6,4 @@ vim.keymap.set('n', 'k', "v:count == 0 ? 'gkzz' : 'kzz'", { expr = true, silent 
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gjzz' : 'jzz'", { expr = true, silent = true })
 
 -- Unhighlight search term
-vim.keymap.set('n', '<LEADER>H', ':noh<CR>')
+vim.keymap.set('n', '<ESC>', ':noh<CR>')
