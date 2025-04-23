@@ -48,3 +48,4 @@ ret1 () { cat /tmp/capture1.out; }
 ret2 () { cat /tmp/capture2.out; }
 ret3 () { cat /tmp/capture3.out; }
 
+todo () { nvim "$HOME/person/docs/todo.md" }
