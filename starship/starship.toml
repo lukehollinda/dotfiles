@@ -24,6 +24,7 @@ contexts = [
 	{context_pattern=".*i2.*", context_alias="i2"},
 	{context_pattern=".*sys1.*", context_alias="sys1"},
 	{context_pattern=".*sys2.*", context_alias="sys2"},
+	{context_pattern=".*sys3.*", context_alias="sys3"},
 	{context_pattern=".*s1.*", context_alias="s1"},
 	{context_pattern=".*s3.*", context_alias="s3"},
 	{context_pattern=".*p1.*", context_alias="p1"},
