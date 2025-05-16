@@ -51,3 +51,6 @@ for file in $(find "${script_dir}" -type f ! -name 'setup' ! -name 'README.md')
 do
   source "${file}"
 done
+
+#ZSH syntax highlighting. Must be sourced after anything else that adds ZLE hooks
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
