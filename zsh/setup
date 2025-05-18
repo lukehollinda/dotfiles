@@ -4,14 +4,12 @@ ZSH_THEME="robbyrussell"
 plugins=(vi-mode)
 source $ZSH/oh-my-zsh.sh
 
-
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
   export EDITOR='nvim'
 fi
-
 
 # Set up fuzzy finding
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -45,6 +43,7 @@ script_dir="$(dirname "$0")"
 
 export PATH="$PATH:$HOME/.cache/lm-studio/bin"
 export PATH="$PATH:$HOME/person/dotfiles/bin/scripts"
+export PATH="$PATH:$HOME/go/bin/"
 
 # Source all other zsh files
 for file in $(find "${script_dir}" -type f ! -name 'setup' ! -name 'README.md')
