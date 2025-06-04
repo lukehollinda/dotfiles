@@ -33,6 +33,19 @@ yqget () {
 	: "${1:?Must specify a key to get}"
 	yq '.. | select(has("'"$1"'")) | .'"$1"
 }
+openssl.cert() {
+	tmpfile=$(mktemp)
+	cat > ${tmpfile} # put stdin into temp file
+	openssl crl2pkcs7 -nocrl -certfile "$tmpfile" | openssl pkcs7 -print_certs -text -noout
+	rm ${tmpfile}
+}
+
+openssl.summary() {
+	tmpfile=$(mktemp)
+	cat > ${tmpfile} # put stdin into temp file
+	openssl crl2pkcs7 -nocrl -certfile "$tmpfile" | openssl pkcs7 -print_certs -noout
+	rm ${tmpfile}
+}
 
 # capture the output of a command so it can be retrieved with ret
 cap () { tee /tmp/capture.out; }
