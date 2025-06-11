@@ -17,11 +17,6 @@ fi
 # Add starship to terminal. (PS1 prompt for K8s)
 eval "$(starship init zsh)"
 
-# Google cloud autocomplete and path
-source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
-source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
-
-
 # ZSH Vim Mode plugin
 source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 export ZVM_VI_EDITOR=nvim
@@ -39,13 +34,16 @@ autoload -U +X compinit && compinit
 # Set up zoxide with autocomplete
 eval "$(zoxide init zsh)"
 
-script_dir="$(dirname "$0")"
+# Google cloud autocomplete and path
+source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
+source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 
 export PATH="$PATH:$HOME/.cache/lm-studio/bin"
-export PATH="$PATH:$HOME/person/dotfiles/bin/scripts"
 export PATH="$PATH:$HOME/go/bin/"
+export PATH="$PATH:$HOME/person/dotfiles/bin/scripts"
 
 # Source all other zsh files
+script_dir="$(dirname "$0")"
 for file in $(find "${script_dir}" -type f ! -name 'setup' ! -name 'README.md')
 do
   source "${file}"
