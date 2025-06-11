@@ -29,5 +29,8 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 require('vim-options')
 require('misc-bindings')
 
+-- Import work specific options
+require('dw-options')
+
 -- Import all plugins
 require('lazy').setup('plugins')
