@@ -139,5 +139,19 @@ kopeningress () {
 	# Grab names, split on comma, fuzzy find, and add protocol
 	kubectl get ingress --no-headers | awk '{print $3}' | sed 's/,/\
 /g' | fzf | awk '{print "http://"$0}' | xargs open
+}
 
+kdecode_secret() {
+  local secret="$1"
+  if [[ -z "$secret" ]]; then
+    echo "Usage: kdecode_secret <secret-name> [namespace]"
+    return 1
+  fi
+  local ns_flag=""
+  if [[ -n "$2" ]]; then
+    ns_flag="--namespace $2"
+  fi
+  kubectl get secret "$secret" $ns_flag -o yaml | \
+    yq '.data // {}' | \
+    yq 'to_entries | .[] | "\(.key): \(.value | @base64d)"' -r
 }
