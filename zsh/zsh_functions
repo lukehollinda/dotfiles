@@ -48,6 +48,10 @@ openssl.summary() {
 	rm ${tmpfile}
 }
 
+highlight() {
+	grep --color=always -e "^" -e "$1"
+}
+
 # capture the output of a command so it can be retrieved with ret
 cap () { tee /tmp/capture.out; }
 cap0 () { tee /tmp/capture.out; }
