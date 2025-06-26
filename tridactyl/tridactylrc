@@ -1,5 +1,8 @@
 "" Much of this is replicating the default bindings from Vimium
 
+"" Set blank page on new tab
+set newtab about:blank
+
 " Keep accidentally closing/opening tab while attempting to move up/down
 unbind d
 unbind u
