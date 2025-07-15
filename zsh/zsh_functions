@@ -65,3 +65,30 @@ ret0 () { cat /tmp/capture.out; }
 ret1 () { cat /tmp/capture1.out; }
 ret2 () { cat /tmp/capture2.out; }
 ret3 () { cat /tmp/capture3.out; }
+
+# Sort input by age (ex: 1d, 2h, 3m, 4s)
+# Very helpful with kubectl output
+sort_by_age() {
+    local col="$1"
+    if [[ -z "$col" ]]; then
+        echo "Usage: sort_by_age <column_number>" >&2
+        return 1
+    fi
+
+    awk -v col="$col" '
+    function to_sec(val) {
+        n = substr(val, 1, length(val)-1)
+        u = substr(val, length(val), 1)
+        if (u == "d") return n * 86400
+        if (u == "h") return n * 3600
+        if (u == "m") return n * 60
+        if (u == "s") return n
+        return 0
+    }
+
+    {
+        age = $col
+        print to_sec(age), $0
+    }
+    ' | sort -n | cut -d' ' -f2-
+}
