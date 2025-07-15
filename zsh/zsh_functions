@@ -48,7 +48,7 @@ openssl.summary() {
 	rm ${tmpfile}
 }
 
-highlight() {
+hl() {
 	grep --color=always -e "^" -e "$1"
 }
 
