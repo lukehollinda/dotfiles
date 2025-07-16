@@ -40,6 +40,7 @@ source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 
 export PATH="$PATH:$HOME/.cache/lm-studio/bin"
 export PATH="$PATH:$HOME/go/bin/"
+export PATH="$PATH:$HOME/person/dotfiles/bin"
 export PATH="$PATH:$HOME/person/dotfiles/bin/scripts"
 
 # Source all other zsh files
