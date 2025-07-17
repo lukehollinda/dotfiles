@@ -18,7 +18,7 @@ alias kg="kubectl get"
 alias kgo="kubectl get -oyaml"
 alias kd="kubectl describe"
 
-alias kdebugpod="kubectl run -i --tty --rm debug --image=nicolaka/netshoot --restart=Never"
+alias kdebugpod='kubectl run -i --tty --rm debug --image="$DW_DEBUG_POD_IMAGE" --restart=Never'
 alias kgetevents="kubectl get events --sort-by='.lastTimestamp'"
 alias kgeteventsall="kubectl get events -A --sort-by='.lastTimestamp'"
 
