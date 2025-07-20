@@ -44,6 +44,8 @@ return {
             vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
 
+          map('<leader>cd', '<cmd>lua vim.diagnostic.open_float()<CR>', 'Show [C]urrent [D]iagnostics')
+
           -- Jump to the definition of the word under your cursor.
           --  This is where a variable was first declared, or where a function is defined, etc.
           --  To jump back, press <C-t>.
