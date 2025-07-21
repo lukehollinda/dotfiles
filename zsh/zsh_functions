@@ -68,6 +68,7 @@ ret3 () { cat /tmp/capture3.out; }
 
 # Sort input by age (ex: 1d, 2h, 3m, 4s)
 # Very helpful with kubectl output
+# TODO: Does not properly handle mixed units (ex: 3h12m)
 sort_by_age() {
     local col="$1"
     if [[ -z "$col" ]]; then
