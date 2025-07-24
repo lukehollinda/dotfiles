@@ -11,8 +11,7 @@ return {
     {
     --- Markdown Preview
     'davidgranstrom/nvim-markdown-preview',
-    config = {},
+    config = function ()
+    end,
     }
-
-
 }
