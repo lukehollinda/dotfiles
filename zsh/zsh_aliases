@@ -23,8 +23,3 @@ alias ll='eza -lhF'
 
 # Shipwright
 alias s='shipwright'
-
-# Tailscale
-alias tsup="tailscale up --accept-routes"
-alias tsra="tailscale up --force-reauth --accept-routes"
-alias tsdown="tailscale down"
