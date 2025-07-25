@@ -45,8 +45,12 @@ export PATH="$PATH:$HOME/go/bin/"
 export PATH="$PATH:$HOME/person/dotfiles/bin"
 export PATH="$PATH:$HOME/person/dotfiles/bin/scripts"
 
+
+# Get script path (Must use this method as the file is sourced through a symlink)
+script_path=$(readlink -f "${(%):-%x}")
+script_dir=$(dirname "$script_path")
+
 # Source all other zsh files
-script_dir="$(dirname "$0")"
 for file in $(find "${script_dir}" -type f ! -name 'setup' ! -name 'README.md')
 do
   source "${file}"
