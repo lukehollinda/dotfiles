@@ -51,7 +51,7 @@ script_path=$(readlink -f "${(%):-%x}")
 script_dir=$(dirname "$script_path")
 
 # Source all other zsh files
-for file in $(find "${script_dir}" -type f ! -name 'setup' ! -name 'README.md')
+for file in $(find "${script_dir}" -type f ! -name 'setup' ! -name 'README.md' | sort)
 do
   source "${file}"
 done
