@@ -1,7 +1,5 @@
-alias tsup="tailscale up --accept-routes"
-alias tsra="tailscale up --force-reauth --accept-routes"
+# alias tsup="tailscale up --accept-routes"
 alias tsdown="tailscale down"
-
 
 tsstatus() {
     ts_status=$(tailscale status --json)
@@ -13,5 +11,15 @@ tsstatus() {
     hours=$((remaining_time / 3600))
     minutes=$(((remaining_time % 3600) / 60))
     seconds=$((remaining_time % 60))
-    echo "${hours}h ${minutes}m ${seconds}s"
+    echo Device Key Expires in: "${hours}h ${minutes}m ${seconds}s"
+}
+
+tsup() {
+    tailscale up --accept-routes
+    tsstatus
+}
+
+tsra() {
+    tailscale up --force-reauth --accept-routes
+    echo Device Key Expires in: "24h 0m 0s"
 }
