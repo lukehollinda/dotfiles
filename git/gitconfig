@@ -3,8 +3,10 @@
 
 [includeIf "gitdir:~/person/"]
 	path = ~/.gitconfig_person
+[color]
+	pager=no
 [core]
-	pager = delta
+	pager=nvim
 	editor = nvim
 	excludesFile = ~/.gitignore
 [diff]

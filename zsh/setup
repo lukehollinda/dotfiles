@@ -1,4 +1,4 @@
-PAGER=nvim
+# PAGER=nvim
 
 # OH-MY-ZSH
 export ZSH="$HOME/.oh-my-zsh"
