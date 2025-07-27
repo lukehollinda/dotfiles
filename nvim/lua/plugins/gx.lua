@@ -12,6 +12,10 @@ return {
   config = function() require("gx").setup {
     open_browser_app = "open",
     open_browser_args = {},
+    open_callback = function()
+    end,
+    -- Manually select the url from prompt
+    select_prompt = true,
     handlers = {
       github = true,
       search = true,
