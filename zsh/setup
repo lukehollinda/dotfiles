@@ -33,9 +33,6 @@ setopt HIST_IGNORE_DUPS
 #Autocomplete
 autoload -U +X compinit && compinit
 
-# Set up zoxide with autocomplete
-eval "$(zoxide init zsh)"
-
 # Google cloud autocomplete and path
 source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
 source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
