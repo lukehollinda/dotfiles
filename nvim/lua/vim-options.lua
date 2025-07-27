@@ -1,4 +1,3 @@
-
 -- Todo move elsewhere
 -- Enable GBrowse to open git link
 vim.api.nvim_create_user_command(
@@ -16,9 +15,6 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 })
 
 vim.cmd([[set number relativenumber]])
-
--- Mystical line to provide relative line numbers in netrw
-vim.g.netrw_bufsettings = 'noma nomod nu rnu nobl nowrap ro'
 
 -- Set highlight on search
 vim.o.hlsearch = true
