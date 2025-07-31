@@ -41,7 +41,7 @@ switch-session() {
     # Switch to new session, creating if necessary
     selected_name=$(basename "$1" | tr . _)
     if ! tmux has-session -t="$selected_name" 2> /dev/null; then
-        create-new-session "$selected_name" "$selected"
+        create-new-session "$selected_name" "$1"
     fi
     tmux switch-client -t "$selected_name"
 }
