@@ -32,6 +32,7 @@ select-project() {
         | fzf
 }
 
+# TODO: save specific window along with path
 # $1 = full path
 switch-session() {
     # Update saved paths
