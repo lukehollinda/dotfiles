@@ -26,6 +26,7 @@ TMUX_CURRENT_SESSION="$HOME/.tmux/current_session"
 select-project() {
     find "${SESSION_PICKER_DIRECTORIES[@]}" -mindepth 2 -maxdepth 2 -type d -name ".git" \
         | sed 's|/\.git$||' \
+        | sed "s|^$HOME/||" \
         | fzf
 }
 
@@ -49,7 +50,7 @@ if [[ -z "$1" ]]; then
     if [[ -z $selected ]]; then
         exit 0
     fi
-    switch-session "$selected"
+    switch-session "${HOME}${selected}"
 elif [[ "$1" == "previous" ]]; then
     # Switch to previous session
     previous=$(cat "$TMUX_PREVIOUS_SESSION")
