@@ -28,17 +28,17 @@ if command -v brew &>/dev/null; then
   source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 fi
 
-
-export PATH="$PATH:$HOME/go/bin/"
-export PATH="$PATH:$HOME/person/dotfiles/bin"
-export PATH="$PATH:$HOME/person/dotfiles/bin/scripts"
-
 # Get script path (Must use this method as the file is sourced through a symlink)
 script_path=$(readlink -f "${(%):-%x}")
 script_dir=$(dirname "$script_path")
+git_root=$(cd "$script_dir" && git rev-parse --show-toplevel 2>/dev/null)
+
+export PATH="$PATH:$HOME/go/bin/"
+export PATH="$PATH:$git_root/bin"
+export PATH="$PATH:$git_root/bin/scripts"
 
 # Source all other zsh files
-for file in $(find "${script_dir}" -type f ! -name 'setup' ! -name 'README.md' | sort)
+for file in $(find "${git_root}/zsh" -type f ! -name 'setup' ! -name 'README.md' | sort)
 do
   source "${file}"
 done
