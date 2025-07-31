@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 
+SESSION_PICKER_DIRECTORIES=(
+  "$HOME/work/dev"
+  "$HOME/work/upstream"
+  "$HOME/person"
+  "$HOME/person/dev"
+  "$HOME/person/upstream"
+)
 select-project() {
-    find ~/work/dev ~/work/upstream \
-    ~/person ~/person/dev ~/person/upstream \
-    -mindepth 2 -maxdepth 2 -type d -name ".git" \
+    find "${SESSION_PICKER_DIRECTORIES[@]}" -mindepth 2 -maxdepth 2 -type d -name ".git" \
         | sed 's|/\.git$||' \
         | fzf
 }
