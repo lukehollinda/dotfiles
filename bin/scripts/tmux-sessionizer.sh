@@ -41,9 +41,15 @@ switch-session() {
     # Switch to new session, creating if necessary
     selected_name=$(basename "$1" | tr . _)
     if ! tmux has-session -t="$selected_name" 2> /dev/null; then
-        tmux new-session -ds "$selected_name" -c "$selected"  'nvim .'
+        create-new-session "$selected_name" "$selected"
     fi
     tmux switch-client -t "$selected_name"
+}
+
+# $1 = name, $2 = full path
+create-new-session() {
+    tmux new-session -ds "$1" -c "$2"  'nvim .'
+    tmux new-window -dt "$1" -n term -c "$2"
 }
 
 if [[ -z "$1" ]]; then
