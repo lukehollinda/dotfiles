@@ -3,7 +3,7 @@
 # OH-MY-ZSH
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="robbyrussell"
-plugins=(vi-mode)
+plugins=(zsh-vi-mode)
 source $ZSH/oh-my-zsh.sh
 
 export EDITOR='nvim'
@@ -13,10 +13,6 @@ export EDITOR='nvim'
 
 # Add starship to terminal. (PS1 prompt for K8s)
 eval "$(starship init zsh)"
-
-# ZSH Vim Mode plugin
-source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-export ZVM_VI_EDITOR=nvim
 
 # VI Mode, potentially needs to be called after atuin init
 bindkey -v
