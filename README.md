@@ -7,6 +7,9 @@ Many of the tools I use are specifically choosen to minimize having to use the m
 ## Requirements
 - [fzf](https://github.com/junegunn/fzf) - Fuzzy finder
 - [oh-my-zsh](https://ohmyz.sh/) - Zsh configuration manager
+    - Manually download the following plugins:
+        - [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting/)
+        - [zsh-vi-mode](https://github.com/zsh-users/zsh-syntax-highlighting/)
 - [starship](https://starship.rs/) - Shell prompt
 
 ## Installation
