@@ -13,11 +13,13 @@ if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
 fi
 
 SESSION_PICKER_DIRECTORIES=(
-  "$HOME/work/dev"
-  "$HOME/work/upstream"
-  "$HOME/person"
-  "$HOME/person/dev"
-  "$HOME/person/upstream"
+    "$HOME/work"
+    "$HOME/work/dev"
+    "$HOME/work/upstream"
+    "$HOME/person"
+    "$HOME/person/dev"
+    "$HOME/person/upstream"
+    "$HOME"
 )
 
 TMUX_PREVIOUS_SESSION="$HOME/.tmux/last_session"
@@ -50,7 +52,7 @@ if [[ -z "$1" ]]; then
     if [[ -z $selected ]]; then
         exit 0
     fi
-    switch-session "${HOME}${selected}"
+    switch-session "${HOME}/${selected}"
 elif [[ "$1" == "previous" ]]; then
     # Switch to previous session
     previous=$(cat "$TMUX_PREVIOUS_SESSION")
