@@ -4,6 +4,11 @@ Currently this is only set up for MacOS, but I plan on adding some Linux support
 
 Many of the tools I use are specifically choosen to minimize having to use the mouse. I'm a big fan of keyboard driven workflows and I'm always open to people sharing their own tips and tricks.
 
+## Requirements
+- [fzf](https://github.com/junegunn/fzf) - Fuzzy finder
+- [oh-my-zsh](https://ohmyz.sh/) - Zsh configuration manager
+- [starship](https://starship.rs/) - Shell prompt
+
 ## Installation
 
 Clone the repo wherever you'd like to keep it.
