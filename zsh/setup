@@ -8,8 +8,8 @@ source $ZSH/oh-my-zsh.sh
 
 export EDITOR='nvim'
 
-# Set up fuzzy finding
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# fzf completion and keybindings
+source <(fzf --zsh)
 
 # Add starship to terminal. (PS1 prompt for K8s)
 eval "$(starship init zsh)"
