@@ -38,7 +38,7 @@ gfixup () {
 }
 
 # Print recent branches - Adapted from https://gist.github.com/jordan-brough/48e2803c0ffa6dc2e0bd
-gitrecent () {
+grecent () {
 
 	local branches=(
 	  $(git reflog |
@@ -49,7 +49,7 @@ gitrecent () {
 	    head -n 10
 	  )
 	)
-	printf '%s\n' "${branches[@]}"
+	printf '%s\n' "${branches[@]}" | fzf | tee >(pbcopy)
 }
 
 # Git checkout PR Branches
