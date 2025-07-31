@@ -101,3 +101,5 @@ vim.o.termguicolors = true
 
 -- Extended session save list
 vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+
+vim.o.colorcolumn = "81"
