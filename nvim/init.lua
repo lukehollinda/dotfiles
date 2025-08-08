@@ -16,8 +16,9 @@ end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
 -- Import vim options and bindings
-require('vim-options')
+require('options')
 require('misc-bindings')
+require('commands')
 
 -- Import work specific options
 require('dw-options')
