@@ -11,7 +11,17 @@ vim.api.nvim_create_user_command(
 -- Clear trailing whitespace when saving buffer to file
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   pattern = { "*" },
-  command = [[%s/\s\+$//e]],
+  callback = function()
+    -- First elemenet in getpos(".") result is unneeded buffer number
+    local position = vim.fn.getpos(".")
+    table.remove(position, 1)
+
+    -- Strip trailing whitespace
+    vim.cmd([[%s/\s\+$//e]])
+
+    vim.fn.cursor(position)
+  end,
+  -- command = [[%s/\s\+$//e]],
 })
 
 -- Highlight on Yank
