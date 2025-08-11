@@ -6,6 +6,8 @@ alias k=kubectl
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 # Alias
+alias ky="kubectl -oyaml"
+
 alias kl="kubectl logs"
 alias klog="kubectl log"
 
@@ -21,6 +23,24 @@ alias kd="kubectl describe"
 alias kdebugpod='kubectl run -i --tty --rm debug --image="$DW_DEBUG_POD_IMAGE" --restart=Never'
 alias kgetevents="kubectl get events --sort-by='.lastTimestamp'"
 alias kgeteventsall="kubectl get events -A --sort-by='.lastTimestamp'"
+
+
+# Add -oyaml to kubectl command and pipe to nvim
+kvim() {
+	local kubectl_response=$(kubectl -oyaml "$@")
+
+	if [[ $? -ne 0 ]]; then
+		echo "kubectl command failed: $kubectl_response"
+		return 1
+	fi
+
+	if [[ -z "$kubectl_response" ]]; then
+		echo "No output from kubectl command."
+		return 0
+	fi
+
+	echo "$kubectl_response" | nvim -c 'set syntax=yaml'
+}
 
 # Smart switcher for k8s context.
 # Place configs in ~/kube/configs/ with names in form kubeconfig-{{name}}.yaml
