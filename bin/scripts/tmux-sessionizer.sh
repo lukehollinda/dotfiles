@@ -35,7 +35,8 @@ select-project() {
         | fzf
 }
 
-# TODO: save specific window along with path
+# TODO: Find a way to save previous session when swiching sessions without using
+#       this script
 # $1 = full path
 switch-session() {
     # Update saved paths
