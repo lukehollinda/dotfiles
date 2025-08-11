@@ -13,13 +13,16 @@ if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
 fi
 
 SESSION_PICKER_DIRECTORIES=(
+    "$HOME"
     "$HOME/work"
     "$HOME/work/dev"
     "$HOME/work/upstream"
     "$HOME/person"
     "$HOME/person/dev"
     "$HOME/person/upstream"
-    "$HOME"
+    "$HOME/person/upstream/golang-resources"
+    "$HOME/person/upstream/system-design-resources"
+    "$HOME/person/upstream/leetcode-resources"
 )
 
 TMUX_PREVIOUS_SESSION="$HOME/.tmux/last_session"
