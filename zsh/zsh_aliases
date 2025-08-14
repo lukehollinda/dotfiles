@@ -13,7 +13,7 @@ alias dotfiles="cd ~/person/dotfiles"
 
 # Paging
 alias ybat="bat -l yaml"
-alias yvim="vim -c 'set syntax=yaml'"
+alias yvim="vim -R -c 'set syntax=yaml'"
 alias manzsh="man zshbuiltins"
 
 # Terminal navigation
