@@ -49,7 +49,10 @@ grecent () {
 	    head -n 10
 	  )
 	)
-	printf '%s\n' "${branches[@]}" | fzf | tee >(pbcopy)
+	local result=$(printf '%s\n' "${branches[@]}" | fzf)
+	if [[ -n $result ]]; then
+		git switch $result
+	fi
 }
 
 # Git checkout PR Branches
