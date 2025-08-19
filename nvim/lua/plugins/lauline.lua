@@ -5,7 +5,7 @@ return {
     require('lualine').setup {
       -- Default config here: https://github.com/nvim-lualine/lualine.nvim?tab=readme-ov-file#default-configuration
       options = {
-        theme = "ayu_dark",
+        theme = "auto",
         lualine_z = {
           -- Custom location. line number : total lines
           function ()
