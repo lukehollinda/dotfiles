@@ -1,7 +1,18 @@
+palette = "rose-pine-dawn"
+
+[palettes.rose-pine-dawn]
+overlay = '#393552'
+love = '#eb6f92'
+gold = '#f6c177'
+rose = '#ea9a97'
+pine = '#3e8fb0'
+foam = '#9ccfd8'
+iris = '#c4a7e7'
+
 # Displays current directory.
 [directory]
 format = "[$path]($style) "
-style = "bright-yellow"
+style =  "fg:foam"
 truncate_to_repo = false
 truncation_length = 3 # parent directories to show; default is 3
 truncation_symbol = "…/"
@@ -44,6 +55,7 @@ format = 'took [$duration](bold yellow)'
 [time]
 disabled = false
 format = '[\[$time\]]($style) '
+# style = "fg:gold"
 time_format = '%T'
 utc_time_offset = '-7'
 style = 'bright-yellow'
@@ -53,7 +65,6 @@ style="bright-blue"
 
 [git_status]
 style="bright-purple"
-
 
 [docker_context]
 disabled = true
