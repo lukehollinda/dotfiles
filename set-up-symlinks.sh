@@ -8,7 +8,7 @@ repo_root=$(git rev-parse --show-toplevel)
 # "Source Relative to Repo Root|Absolute Path of Destination Link"
 links=(
   "tridactyl/tridactylrc|$HOME/.tridactylrc"
-  "tmux/tmux.comf|$HOME/.tmux.conf"
+  "tmux/tmux.conf|$HOME/.tmux.conf"
   "git/gitconfig|$HOME/.gitconfig"
   "nvim|$HOME/.config/nvim"
   "starship/starship.toml|$HOME/.config/starship.toml"
