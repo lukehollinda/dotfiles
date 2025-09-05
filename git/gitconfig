@@ -1,6 +1,9 @@
 [includeIf "gitdir:~/work/"]
 	path = ~/.gitconfig_work
 
+[includeIf "gitdir:~/scratch/"]
+	path = ~/.gitconfig_work
+
 [includeIf "gitdir:~/person/"]
 	path = ~/.gitconfig_person
 [color]
