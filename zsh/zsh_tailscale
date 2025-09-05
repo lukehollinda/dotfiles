@@ -1,7 +1,7 @@
 # alias tsup="tailscale up --accept-routes"
 alias tsdown="tailscale down"
 
-tsstatus() {
+tstime() {
     ts_status=$(tailscale status --json)
     expiry_time=$(echo "$ts_status" | jq '.Self.KeyExpiry' | tr -d '"')
     expiry_time_utc=$(date -ujf '%Y-%m-%dT%H:%M:%SZ' "$expiry_time" "+%s" )
@@ -16,7 +16,7 @@ tsstatus() {
 
 tsup() {
     tailscale up --accept-routes
-    tsstatus
+    tstime
 }
 
 tsra() {
