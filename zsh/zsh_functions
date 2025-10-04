@@ -7,6 +7,13 @@ field() {
 	awk -F "${2:- }" "{ print \$${1:-1} }"
 }
 
+docker.delete.containers () {
+	docker rm -vf $(docker ps -aq)
+}
+
+docker.delete.images () {
+	docker rmi -f $(docker images -aq)
+}
 
 # Solution to issue where mac flashes a visual bell on errors
 # https://apple.stackexchange.com/questions/25605/how-can-i-stop-my-whole-screen-from-flashing-white-on-errors
