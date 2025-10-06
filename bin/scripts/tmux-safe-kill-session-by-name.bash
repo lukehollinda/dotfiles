@@ -1,30 +1,27 @@
 #! /usr/bin/env bash
 
-# Safely close tmux session when neovim instances are running.
+
+# Safely close tmux session by session name.
+
 # This was written because closing tmux sessions or windows with nvim running
-# was leading to build up of zombie LSP processes.
+# was leading to build up of orphaned LSP processes.
 
-
-SESSION=$(tmux display-message -p '#S')
-
-tmux display-popup -E "
-	echo 'Would you like to close the tmux session $SESSION?'
-	echo
-	read -p '[y/n]'  ans
-	case \"\$ans\" in
-		[Yy]* ) exit 0 ;;
-		* ) exit 1 ;;
-	esac
-	"
-
-CONTINUE_EXIT_CODE=$?
-if [[ $CONTINUE_EXIT_CODE -ne 0 ]]; then
-	echo "Aborting close of session $SESSION"
+# $1 = session name
+if [[ -z "$1" ]]; then
+	echo "Expected session name as script argument"
 	exit 1
 fi
 
-## nvim panes in current session
-nvim_panes=$(tmux list-panes -s -F "#{window_id} #{pane_id} #{pane_current_command}" | grep nvim)
+SESSION="$1"
+
+## Check if session exists
+if ! tmux has-session -t="$SESSION" 2> /dev/null; then
+	echo "Session '$SESSION' does not exist."
+	exit 1
+fi
+
+## nvim panes session
+nvim_panes=$(tmux list-panes -s -t "$SESSION" -F "#{window_id} #{pane_id} #{pane_current_command}" | grep nvim)
 
 ## Check if any nvim instances have unsaved changes
 while read -r pane; do
@@ -61,5 +58,3 @@ done <<< "$nvim_panes"
 tmux kill-session -t "$SESSION"
 
 exit 0
-# tmux display-popup "echo Were running in session $SESSION"
-
