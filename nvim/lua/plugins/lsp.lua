@@ -204,7 +204,11 @@ return {
             -- by the server configuration above. Useful when disabling
             -- certain features of an LSP (for example, turning off formatting for ts_ls)
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
+
+            -- If you want to override the default command used to start the server
+            vim.lsp.config[server_name].settings = server.settings
+            vim.lsp.config[server_name].capabilities = server.capabilities
+            -- require('lspconfig')[server_name].setup(server)
           end,
         },
       }
