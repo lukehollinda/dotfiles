@@ -38,11 +38,11 @@ brew bundle --file=./brew/Brewfile
 
 - Neovim is my editor of choice. A couple cool plugins:
     - [gx.nvim](https://github.com/chrishrb/gx.nvim) - Allows you to open links in your browser with `gx`. Can also set up custom handlers for just about anything. (Jira, Github, etc)
-    - [oil.nvim](https://github.com/stevearc/oil.nvim) - Replaces netrw with an explorer that lets you edit your silesystem like a normal Neovim buffer.
+    - [oil.nvim](https://github.com/stevearc/oil.nvim) - Replaces netrw with an explorer that lets you edit your filesystem like a regular buffer.
     - [vim-fugitive](https://github.com/tpope/vim-fugitive) - Almost exclusively use this `:Gblame` which shows git blame in line with your code.
     - [stay-centered.nvim](https://github.com/arnamak/stay-centered.nvim) - Avoids edge cases with remaps like `jzz` and `nzzzv`
 
-- As a multipler I'm using tmux:
+- Tmux is my terminal multiplexer of choice. A couple cool plugins:
     - [tmux-fzf](https://github.com/sainnhe/tmux-fzf) - Adds a pleasant menu for things managing panes, windows, sessions. Useful for when I can't be bothered to remember a tmux command.
     - Some [very cool scripts](https://github.com/lukehollinda/dotfiles/blob/c28e734c027f9432dce32ada52e096f8e4d19d78/tmux/tmux.conf#L64-L66) for jumping between different Git repos / sessions. Inspired by ThePrimeagen.
 
