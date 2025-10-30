@@ -3,6 +3,9 @@ vim.cmd([[set number relativenumber]])
 -- Set highlight on search
 vim.o.hlsearch = true
 
+-- Set cursor row highlight
+vim.o.cursorline = true
+
 -- Make line numbers default
 vim.wo.number = true
 
