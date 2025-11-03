@@ -15,6 +15,9 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
+-- Import all plugins
+require('lazy').setup('plugins')
+
 -- Import vim options and bindings
 require('options')
 require('misc-bindings')
@@ -22,6 +25,3 @@ require('commands')
 
 -- Import work specific options
 require('dw-options')
-
--- Import all plugins
-require('lazy').setup('plugins')
