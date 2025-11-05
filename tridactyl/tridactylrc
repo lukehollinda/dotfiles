@@ -24,7 +24,3 @@ colourscheme shydactyl
 " Bookmark searching
 bind --mode=normal b fillcmdline bmarks
 bind --mode=normal B fillcmdline bmarks -t
-
-" Broken, but will congfigure opening text in nvim
-set editorcmd open /Applications/Alacritty.app/Contents/MacOS/alacritty --title "tridactyl-editor" -e nvim
-" set editorcmd alacritty -e nvim %f
