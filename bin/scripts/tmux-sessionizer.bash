@@ -47,7 +47,8 @@ switch-session() {
 
 # $1 = name, $2 = full path
 create-new-session() {
-    tmux new-session -ds "$1" -c "$2"  'nvim .'
+    tmux new-session -ds "$1" -c "$2"
+    tmux send-keys -t "$1" 'nvim .' C-m
     tmux new-window -dt "$1" -n term -c "$2"
 }
 
