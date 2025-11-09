@@ -25,9 +25,7 @@ SESSION_PICKER_DIRECTORIES=(
     "$HOME/person/upstream/leetcode-resources"
 )
 
-TMUX_PREVIOUS_SESSION="$HOME/.tmux/last_session"
-TMUX_CURRENT_SESSION="$HOME/.tmux/current_session"
-
+TMUX_SESSION_HISTORY="$HOME/.tmux/session_history"
 select-project() {
     find "${SESSION_PICKER_DIRECTORIES[@]}" -mindepth 2 -maxdepth 2 -type d -name ".git" \
         | sed 's|/\.git$||' \
@@ -39,10 +37,6 @@ select-project() {
 #       this script
 # $1 = full path
 switch-session() {
-    # Update saved paths
-    mv "$TMUX_CURRENT_SESSION" "$TMUX_PREVIOUS_SESSION"
-    echo "$1" > "$TMUX_CURRENT_SESSION"
-
     # Switch to new session, creating if necessary
     selected_name=$(basename "$1" | tr . _)
     if ! tmux has-session -t="$selected_name" 2> /dev/null; then
@@ -65,9 +59,14 @@ if [[ -z "$1" ]]; then
     fi
     switch-session "${HOME}/${selected}"
 elif [[ "$1" == "previous" ]]; then
+
     # Switch to previous session
-    previous=$(cat "$TMUX_PREVIOUS_SESSION")
-    switch-session "$previous"
+    previous_session=$(head -n 2 "$TMUX_SESSION_HISTORY" | tail -n 1)
+    if [[ -z $previous_session ]]; then
+        exit 1
+    fi
+    tmux switch-client -t "$previous_session"
+
 elif [[ -d "$1" ]]; then
     # Switch to session by name
     switch-session "$1"
