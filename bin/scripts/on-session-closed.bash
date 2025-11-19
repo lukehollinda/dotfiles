@@ -11,7 +11,7 @@ TMUX_SESSION_HISTORY="$HOME/.tmux/session_history"
 current_session="$1"
 
 # Remove from session history
-sed -i '' "/^$current_session/d" "$TMUX_SESSION_HISTORY"
+sed -i '' "/^$current_session$/d" "$TMUX_SESSION_HISTORY"
 
 # Switch to previous session
 previous_session=$(head -n 1 "$TMUX_SESSION_HISTORY")
