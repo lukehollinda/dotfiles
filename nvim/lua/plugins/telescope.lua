@@ -44,6 +44,10 @@ return {
         --
         defaults = {
           mappings = {
+            n = {
+				["l"] = require('telescope.actions').cycle_history_next,
+				["h"] = require('telescope.actions').cycle_history_prev,
+            },
             -- i = { ['<c-enter>'] = 'to_fuzzy_refine' },
             --
           },
