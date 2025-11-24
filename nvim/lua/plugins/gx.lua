@@ -20,7 +20,7 @@ return {
       github = true,
       search = true,
       url = true,
-      -- go = true,
+      go = true,
       -- Additional options for markdown, commit??
       jira = { -- custom handler to open Jira tickets (these have higher precedence than builtin handlers)
         name = "jira", -- set name of handler
