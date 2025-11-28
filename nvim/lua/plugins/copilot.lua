@@ -2,12 +2,22 @@ return {
   {
     'github/copilot.vim',
     init = function()
-      -- -- disable by default
-      -- vim.g.copilot_filetypes = {
-      --   ["*"] = false,
-      -- }
-      -- -- explicitly request for copilot suggestions on Ctrl-C
-      -- vim.keymap.set('i', '<C-C>', '<Plug>(copilot-suggest)')
+      -- Disable Copilot by default
+      vim.g.copilot_enabled = false
+
+      -- Toggle copilot with <leader>cc
+      function Toggle_copilot()
+        if vim.g.copilot_enabled then
+          vim.g.copilot_enabled = false
+          print("Copilot disabled")
+        else
+          vim.g.copilot_enabled = true
+          print("Copilot enabled")
+        end
+      end
+
+      vim.api.nvim_set_keymap('n', '<leader>cc', ':lua Toggle_copilot()<CR>', { noremap = true, silent = true })
+
     end,
   },
   {
