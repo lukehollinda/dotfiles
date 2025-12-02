@@ -3,8 +3,8 @@
 # Interactive tmux session picker for quickly switching between project directories.
 
 # Uses fzf to show you all git directories within a defined list of directories.
-# Switches you to the selected session, creating it if necessary.
-# Keeps track of your last sessiong allowing you to quickly switch back to it.
+# Switches you to the selected session, creating if necessary.
+# Session history is tracked by tmux hook scripts in this same folder
 
 tmux_running=$(pgrep tmux)
 if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
@@ -33,8 +33,6 @@ select-project() {
         | fzf
 }
 
-# TODO: Find a way to save previous session when swiching sessions without using
-#       this script
 # $1 = full path
 switch-session() {
     # Switch to new session, creating if necessary
@@ -47,28 +45,30 @@ switch-session() {
 
 # $1 = name, $2 = full path
 create-new-session() {
+    # Only open terminal for scratch session
+    if [[ $1 == "scratch" ]]; then
+        tmux new-session -ds "$1" -c "$2"
+        return
+    fi
     tmux new-session -ds "$1" -c "$2"
     tmux send-keys -t "$1" 'nvim .' C-m
     tmux new-window -dt "$1" -n term -c "$2"
 }
 
-if [[ -z "$1" ]]; then
-    # Use picker
+if [[ -z "$1" ]]; then # Use picker
     selected=$(select-project)
     if [[ -z $selected ]]; then
         exit 0
     fi
     switch-session "${HOME}/${selected}"
-elif [[ "$1" == "previous" ]]; then
-
-    # Switch to previous session
+elif [[ "$1" == "previous" ]]; then # Switch to previous session
     previous_session=$(head -n 2 "$TMUX_SESSION_HISTORY" | tail -n 1)
     if [[ -z $previous_session ]]; then
         exit 1
     fi
     tmux switch-client -t "$previous_session"
 
-elif [[ -d "$1" ]]; then
-    # Switch to session by name
+elif [[ -d "$1" ]]; then # Switch to session by name
+
     switch-session "$1"
 fi
