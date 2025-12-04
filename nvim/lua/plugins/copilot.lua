@@ -4,7 +4,9 @@ return {
     init = function()
       -- Disable Copilot by default
       vim.g.copilot_enabled = false
+    end,
 
+    config = function()
       -- Toggle copilot with <leader>cc
       function Toggle_copilot()
         if vim.g.copilot_enabled then
@@ -17,8 +19,8 @@ return {
       end
 
       vim.api.nvim_set_keymap('n', '<leader>cc', ':lua Toggle_copilot()<CR>', { noremap = true, silent = true })
-
     end,
+
   },
   {
     "CopilotC-Nvim/CopilotChat.nvim",
