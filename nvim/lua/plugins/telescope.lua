@@ -25,16 +25,9 @@ return {
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
     config = function()
-      -- type in the prompt window. You'll see a list of `help_tags` options and
-      -- a corresponding preview of the help.
-      --
-      -- Two important keymaps to use while in Telescope are:
+      -- Key maps for opening help window:
       --  - Insert mode: <c-/>
       --  - Normal mode: ?
-      --
-      -- This opens a window that shows you all of the keymaps for the current
-      -- Telescope picker. This is really useful to discover what Telescope can
-      -- do as well as how to actually do it!
 
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
@@ -43,13 +36,12 @@ return {
         --  All the info you're looking for is in `:help telescope.setup()`
         --
         defaults = {
+          path_display = 'truncate',
           mappings = {
             n = {
-				["l"] = require('telescope.actions').cycle_history_next,
-				["h"] = require('telescope.actions').cycle_history_prev,
+              ["l"] = require('telescope.actions').cycle_history_next,
+              ["h"] = require('telescope.actions').cycle_history_prev,
             },
-            -- i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-            --
           },
         },
         -- pickers = {}
