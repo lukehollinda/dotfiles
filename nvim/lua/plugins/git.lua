@@ -1,6 +1,11 @@
 return {
 
-  'tpope/vim-fugitive',
+  {
+    'tpope/vim-fugitive',
+    config = function()
+      vim.keymap.set('n', '<leader>gb', ':G blame<CR>', { desc = '[G]it [B]lame' })
+    end
+  },
   {
     'tpope/vim-rhubarb',
     -- Corperate Github URL defined elsewhere
