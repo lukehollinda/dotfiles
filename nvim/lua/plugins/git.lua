@@ -1,12 +1,9 @@
 return {
 
   'tpope/vim-fugitive',
-
   {
     'tpope/vim-rhubarb',
-    init = function ()
-      vim.g.github_enterprise_urls = {'https://github.ihs.demonware.net'}
-    end
+    -- Corperate Github URL defined elsewhere
   },
 
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
