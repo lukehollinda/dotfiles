@@ -1,10 +1,11 @@
 return {
-
   {
     'stevearc/oil.nvim',
     opts = {
       default_file_explorer = true,
       use_default_keymaps = true,
+      delete_to_trash = true,
+      skip_confirm_for_simple_edits = true,
       view_options = {
         show_hidden = true,
       },
@@ -13,8 +14,8 @@ return {
         ["<C-s>"] = { "actions.select", opts = { horizontal = true } },
         ['<C-p>'] = {
            function()
-            local oil = require 'oil'
-            local util = require 'oil.util'
+            local oil = require('oil')
+            local util = require('oil.util')
 
             local entry = oil.get_cursor_entry()
             if not entry then
@@ -39,9 +40,9 @@ return {
         },
       },
     },
-    -- Optional dependencies
+    -- Optional
     dependencies = { "nvim-tree/nvim-web-devicons" },
+    -- Open Oil
     vim.api.nvim_set_keymap("n", "<leader>E", ":Oil<cr>", { noremap = true, silent = true })
-
   },
 }
