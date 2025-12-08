@@ -9,12 +9,13 @@ export EDITOR='nvim'
 # Set up fuzzy finding
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# Add starship to terminal. (PS1 prompt for K8s)
+# Terminal Prompt configuration (See starship/starship.toml)
 eval "$(starship init zsh)"
 
-# VI Mode, potentially needs to be called after atuin init
+# VI Mode
 bindkey -v
 
+# History
 export HISTSIZE=10000000
 export SAVEHIST=10000000
 setopt HIST_IGNORE_DUPS
@@ -22,7 +23,7 @@ setopt HIST_IGNORE_DUPS
 #Autocomplete
 autoload -U +X compinit && compinit
 
-# Google cloud autocomplete and path
+# Google cloud autocomplete
 if command -v brew &>/dev/null; then
   source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
   source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
@@ -33,6 +34,7 @@ script_path=$(readlink -f "${(%):-%x}")
 script_dir=$(dirname "$script_path")
 git_root=$(cd "$script_dir" && git rev-parse --show-toplevel 2>/dev/null)
 
+# Dotfile executables
 export PATH="$PATH:$HOME/go/bin/"
 export PATH="$PATH:$git_root/bin"
 export PATH="$PATH:$git_root/bin/scripts"

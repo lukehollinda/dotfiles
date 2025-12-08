@@ -36,6 +36,7 @@ install-kubectl () {
 	fi
 }
 
+# Useful little function to grab the value for key $1, from a yaml input
 yqget () {
 	: "${1:?Must specify a key to get}"
 	yq '.. | select(has("'"$1"'")) | .'"$1"
@@ -55,18 +56,19 @@ openssl.summary() {
 	rm ${tmpfile}
 }
 
+# Colour highlight occurrences of $1 in input
 hl() {
 	grep --color=always -e "^" -e "$1"
 }
 
-# capture the output of a command so it can be retrieved with ret
+# Capture the output of a command, to be retrieved with ret
 cap () { tee /tmp/capture.out; }
 cap0 () { tee /tmp/capture.out; }
 cap1 () { tee /tmp/capture1.out; }
 cap2 () { tee /tmp/capture2.out; }
 cap3 () { tee /tmp/capture3.out; }
 
-# return the output of the most recent command that was captured by cap
+# Return the output of the most recent command captured by cap
 ret () { cat /tmp/capture.out; }
 ret0 () { cat /tmp/capture.out; }
 ret1 () { cat /tmp/capture1.out; }

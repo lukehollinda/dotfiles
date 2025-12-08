@@ -14,8 +14,7 @@ alias gca='git commit --amend --verbose'
 alias gr='git rebase'
 alias grim='git rebase -i master'
 
-# Copy message from previous commit
-# (Super useful when creating multiple commits with similar messages)
+# Copy message from previous commit to clipboard
 alias gmcp="git log -1 --pretty=%B | pbcopy"
 
 # Log with files changed
@@ -39,7 +38,6 @@ gfixup () {
 
 # Print recent branches - Adapted from https://gist.github.com/jordan-brough/48e2803c0ffa6dc2e0bd
 grecent () {
-
 	local branches=(
 	  $(git reflog |
 	    egrep -io "moving from ([^[:space:]]+)" |
