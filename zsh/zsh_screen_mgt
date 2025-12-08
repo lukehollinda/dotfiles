@@ -4,13 +4,9 @@ tmuxcapturepane () {
 
 }
 
-#TODO make this highlight/bold the command run. Or something else to more easily scan output
-# Capture pane with tmux, remove trailing whitespace only lines, pipe to vim
 tmuxtovim () {
-	# tmux capture-pane -p -S -5000 \
-	# | awk '{ if (NF || !trailing) print $0; if (NF) trailing = 0; else trailing = 1 }' \
 	tmuxcapturepane \
-	| vim -R "+set nowrap" "+norm G"
+	| NVIM_APPNAME="nvim-pager" vim -R "+set nowrap" "+norm G"
 }
 
 # Bind the above function to Ctr-v

@@ -11,6 +11,7 @@ links=(
   "tmux/tmux.conf|$HOME/.tmux.conf"
   "git/gitconfig|$HOME/.gitconfig"
   "nvim|$HOME/.config/nvim"
+  "nvim-pager|$HOME/.config/nvim-pager"
   "starship/starship.toml|$HOME/.config/starship.toml"
 )
 

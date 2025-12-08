@@ -9,7 +9,7 @@
 [color]
 	pager=no
 [core]
-	pager=nvim -R
+	pager="NVIM_APPNAME=nvim-pager nvim -R"
 	editor = nvim
 	excludesFile = ~/.gitignore
 [diff]
