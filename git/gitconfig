@@ -10,7 +10,7 @@
 	pager=no
 [core]
 	pager="NVIM_APPNAME=nvim-pager nvim -R"
-	editor = nvim
+	editor="NVIM_APPNAME=nvim-pager nvim"
 	excludesFile = ~/.gitignore
 [diff]
         algorithm = histogram
