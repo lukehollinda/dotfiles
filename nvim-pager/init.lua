@@ -21,3 +21,6 @@ require('lazy').setup('plugins')
 require('options')
 require('misc-bindings')
 require('commands')
+
+-- Pager Specific configuration
+require('pager')
