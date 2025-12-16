@@ -4,6 +4,5 @@ return {
     ---@module "ibl"
     ---@type ibl.config
     opts = {},
-
     -- Config options can be viewed at :help ibl.config
 }

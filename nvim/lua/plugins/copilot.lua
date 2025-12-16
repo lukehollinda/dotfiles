@@ -1,8 +1,8 @@
 return {
   {
     'github/copilot.vim',
+    -- Disable Copilot by default
     init = function()
-      -- Disable Copilot by default
       vim.g.copilot_enabled = false
     end,
 

@@ -22,7 +22,9 @@ return {
       github = true,
       search = true,
       url = true,
+      -- Handle go imports
       go = true,
+      -- Search corperate Jira by '{PROJECT}-{TICKET_ID}'
       jira = {
         name = "jira",
         handle = function(mode, line, _)
