@@ -2,10 +2,6 @@ local map = vim.keymap.set
 
 map({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
--- Remap for dealing with word wrap
-map('n', 'k', "v:count == 0 ? 'gkzz' : 'kzz'", { expr = true, silent = true })
-map('n', 'j', "v:count == 0 ? 'gjzz' : 'jzz'", { expr = true, silent = true })
-
 -- Unhighlight search term
 map('n', '<ESC>', ':noh<CR>')
 
