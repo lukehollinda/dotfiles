@@ -20,7 +20,6 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 
     vim.fn.cursor(position)
   end,
-  -- command = [[%s/\s\+$//e]],
 })
 
 -- Highlight on Yank
