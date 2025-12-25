@@ -32,4 +32,8 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Common Typos
+vim.api.nvim_command('command Wq wq')
+vim.api.nvim_command('command Q q')
+vim.api.nvim_command('command W w')
 
