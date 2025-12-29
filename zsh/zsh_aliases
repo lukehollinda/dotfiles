@@ -13,6 +13,7 @@ alias dotfiles="cd ~/person/dotfiles"
 
 # Paging
 alias ybat="bat -l yaml"
+## TODO: use pager config
 alias yvim="vim -R -c 'set syntax=yaml' -c 'set nowrap'"
 alias manzsh="man zshbuiltins"
 
@@ -26,3 +27,6 @@ alias s='shipwright'
 
 # ArgoCD
 alias argocd='argocd --grpc-web'
+
+# Apps
+alias obsidian='open /Applications/Obsidian.app'
