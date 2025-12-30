@@ -9,8 +9,8 @@
 [color]
 	pager=no
 [core]
-	pager="NVIM_APPNAME=nvim-pager nvim -R"
-	editor="NVIM_APPNAME=nvim-pager nvim"
+	pager="nvim-pager -R"
+	editor="nvim-pager"
 	excludesFile = ~/.gitignore
 [diff]
         algorithm = histogram

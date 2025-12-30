@@ -6,7 +6,7 @@ tmuxcapturepane () {
 
 tmuxtovim () {
 	tmuxcapturepane \
-	| NVIM_APPNAME="nvim-pager" vim -R "+set nowrap" "+norm G"
+	| nvim-pager -R "+set nowrap" "+norm G"
 }
 
 # Bind the above function to Ctr-v

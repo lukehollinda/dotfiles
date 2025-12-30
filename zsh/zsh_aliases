@@ -13,8 +13,7 @@ alias dotfiles="cd ~/person/dotfiles"
 
 # Paging
 alias ybat="bat -l yaml"
-## TODO: use pager config
-alias yvim="vim -R -c 'set syntax=yaml' -c 'set nowrap'"
+alias yvim="nvim-pager -R -c 'set syntax=yaml' -c 'set nowrap'"
 alias manzsh="man zshbuiltins"
 
 # Terminal navigation
