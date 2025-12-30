@@ -5,6 +5,7 @@ plugins=(zsh-vi-mode zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
 
 export EDITOR='nvim'
+export ZVM_VI_EDITOR="NVIM_APPNAME=nvim-pager nvim"
 
 # Set up fuzzy finding
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
