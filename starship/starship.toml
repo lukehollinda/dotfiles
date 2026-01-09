@@ -41,11 +41,17 @@ contexts = [
 	{context_pattern=".*p4.*", context_alias="p4"},
 	{context_pattern=".*p6.*", context_alias="p6"},
 	{context_pattern=".*p7.*", context_alias="p7"},
-	{context_pattern=".*lt1.*", context_alias="lt1"},
-	{context_pattern=".*lt2.*", context_alias="lt2"},
-	{context_pattern=".*lt3.*", context_alias="lt3"},
-	{context_pattern=".*lt4.*", context_alias="lt4"},
+	{context_pattern=".*lt11.*", context_alias="lt11"},
+	{context_pattern=".*lt10.*", context_alias="lt10"},
+	{context_pattern=".*lt9.*", context_alias="lt9"},
+	{context_pattern=".*lt8.*", context_alias="lt8"},
+	{context_pattern=".*lt7.*", context_alias="lt7"},
+	{context_pattern=".*lt6.*", context_alias="lt6"},
 	{context_pattern=".*lt5.*", context_alias="lt5"},
+	{context_pattern=".*lt4.*", context_alias="lt4"},
+	{context_pattern=".*lt3.*", context_alias="lt3"},
+	{context_pattern=".*lt2.*", context_alias="lt2"},
+	{context_pattern=".*lt1.*", context_alias="lt1"},
 ]
 
 [cmd_duration]
