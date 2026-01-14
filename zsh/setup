@@ -30,6 +30,9 @@ if command -v brew &>/dev/null; then
   source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 fi
 
+# ArgoCD autocomplete
+source <(argocd completion zsh)
+
 # Get script path (Must use this method as the file is sourced through a symlink)
 script_path=$(readlink -f "${(%):-%x}")
 script_dir=$(dirname "$script_path")
