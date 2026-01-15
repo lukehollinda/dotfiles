@@ -13,8 +13,8 @@ alias klog="kubectl log"
 
 alias kn="kubens"
 alias wk="watch kubectl "
-alias kapi="kubectl api-resources | fzf"
-alias kapim="kubectl api-resources | fzf -m"
+alias kapi="kubectl api-resources | fzf --tmux"
+alias kapim="kubectl api-resources | fzf -m --tmux"
 
 alias kg="kubectl get"
 alias kgo="kubectl get -oyaml"
@@ -54,7 +54,7 @@ kc() {
 	local config
 	# fzf select filename
 	if [[ -z "$1" ]] ; then
-		config=$(ls -1 ${kubeconfigs} | grep 'kube' | fzf)
+		config=$(ls -1 ${kubeconfigs} | grep 'kube' | fzf --tmux)
 
 		# Do nothing if fzf is exited
 		if [ -z "$config" ]; then
@@ -158,7 +158,7 @@ kgetallforreal() {
 kopeningress () {
 	# Grab names, split on comma, fuzzy find, and add protocol
 	kubectl get ingress --no-headers | awk '{print $3}' | sed 's/,/\
-/g' | fzf | awk '{print "http://"$0}' | xargs open
+/g' | fzf --tmux | awk '{print "http://"$0}' | xargs open
 }
 
 kdecode_secret() {

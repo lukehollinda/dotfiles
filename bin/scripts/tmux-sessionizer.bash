@@ -30,7 +30,7 @@ select-project() {
     find "${SESSION_PICKER_DIRECTORIES[@]}" -mindepth 2 -maxdepth 2 -type d -name ".git" \
         | sed 's|/\.git$||' \
         | sed "s|^$HOME/||" \
-        | fzf
+        | fzf --tmux
 }
 
 # $1 = full path
