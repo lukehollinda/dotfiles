@@ -157,7 +157,7 @@ kgetallforreal() {
 # FZF select an ingress host to open
 kopeningress () {
 	# Grab names, split on comma, fuzzy find, and add protocol
-	kubectl get ingress --no-headers | awk '{print $3}' | sed 's/,/\
+	kubectl get ingress --no-headers "$@" | awk '{print $3}' | sed 's/,/\
 /g' | fzf --tmux | awk '{print "http://"$0}' | xargs open
 }
 
