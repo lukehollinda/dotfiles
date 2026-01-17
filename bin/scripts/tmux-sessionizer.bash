@@ -27,7 +27,7 @@ SESSION_PICKER_DIRECTORIES=(
 
 TMUX_SESSION_HISTORY="$HOME/.tmux/session_history"
 select-project() {
-    find "${SESSION_PICKER_DIRECTORIES[@]}" -mindepth 2 -maxdepth 2 -type d -name ".git" \
+    find "${SESSION_PICKER_DIRECTORIES[@]}" -mindepth 2 -maxdepth 2 -type d -name ".git" 2>/dev/null \
         | sed 's|/\.git$||' \
         | sed "s|^$HOME/||" \
         | fzf --tmux
