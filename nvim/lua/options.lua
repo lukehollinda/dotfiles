@@ -6,6 +6,13 @@ vim.o.hlsearch = true
 -- Set cursor row highlight
 vim.o.cursorline = true
 
+-- Enable cursor blink outside insert mode
+vim.o.guicursor = table.concat({
+  "n-v-c:block-Cursor/lCursor-blinkwait1000-blinkon100-blinkoff100",
+  "i-ci:ver25-Cursor",
+  "r:hor50-Cursor/lCursor-blinkwait100-blinkon100-blinkoff100"
+}, ",")
+
 -- Make line numbers default
 vim.wo.number = true
 
