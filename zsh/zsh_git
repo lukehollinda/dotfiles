@@ -9,7 +9,6 @@ alias gitupstream='git config --get remote.origin.url'
 alias gco='git checkout'
 alias gp='git pull'
 
-alias gc="git commit --verbose"
 alias gca='git commit --amend --verbose'
 alias gr='git rebase'
 alias grim='git rebase -i master'
@@ -30,6 +29,22 @@ alias git-https='git remote set-url origin "$(git remote get-url origin | sed -E
 
 # Change cwd to top of git repo
 alias cdg='cd "$(git rev-parse --show-toplevel || echo .)"'
+
+# Git Commit - Always verbose, add Jira ticket as trailer if found in branch name
+gc() {
+	local branch
+	branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null) || {
+		echo "Not in a git repository"
+		return 1
+	}
+	local ticket
+	ticket=$(echo "$branch" | grep -Eo -i '^[A-Za-z]+-[0-9]+')
+	if [[ -z $ticket ]]; then
+		git commit --verbose "$@"
+	else
+		git commit --trailer "Issue: $ticket" --trailer "Tracker: Jira" --verbose "$@"
+	fi
+}
 
 # Create a git fixup commit, selecting sha from fzf. To be used with rebase.autoSquash = true
 gfixup () {
