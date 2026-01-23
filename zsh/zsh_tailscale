@@ -1,6 +1,11 @@
-# alias tsup="tailscale up --accept-routes"
 alias tsdown="tailscale down"
 
+tsup() {
+    tailscale up --accept-routes
+    tstime
+}
+
+# Print time remaining until key expiry
 tstime() {
     ts_status=$(tailscale status --json)
     expiry_time=$(echo "$ts_status" | jq '.Self.KeyExpiry' | tr -d '"')
@@ -14,11 +19,7 @@ tstime() {
     echo Device Key Expires in: "${hours}h ${minutes}m ${seconds}s"
 }
 
-tsup() {
-    tailscale up --accept-routes
-    tstime
-}
-
+# Tailscale Reauthenticate
 tsra() {
     tailscale up --force-reauth --accept-routes
     echo Device Key Expires in: "24h 0m 0s"

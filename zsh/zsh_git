@@ -2,16 +2,14 @@ alias g="git"
 alias gs="git status"
 alias ga='git add'
 alias gaa="git add --all"
-
-# Because I forget the config option
-alias gitupstream='git config --get remote.origin.url'
-
 alias gco='git checkout'
 alias gp='git pull'
-
 alias gca='git commit --amend --verbose'
 alias gr='git rebase'
 alias grim='git rebase -i master'
+
+# Because I forget the config option
+alias gitupstream='git config --get remote.origin.url'
 
 # Copy message from previous commit to clipboard
 alias gmcp="git log -1 --pretty=%B | pbcopy"
@@ -23,7 +21,7 @@ alias glog='git log --name-only'
 alias gdiff='git diff'
 alias gdiffs='git diff --staged .'
 
-# Switch git repo between ssh and https
+# Switch git repo from ssh <-> https
 alias git-ssh='git remote set-url origin "$(git remote get-url origin | sed -E '\''s,^https://([^/]*)/(.*)$,git@\1:\2,'\'')"'
 alias git-https='git remote set-url origin "$(git remote get-url origin | sed -E '\''s,^git@([^:]*):/*(.*)$,https://\1/\2,'\'')"'
 
@@ -46,12 +44,13 @@ gc() {
 	fi
 }
 
-# Create a git fixup commit, selecting sha from fzf. To be used with rebase.autoSquash = true
+# Create fixup commit, selecting parent via fzf. To be used with rebase.autoSquash = true
 gfixup () {
+	# fzf select branch and trim to SHA
 	git commit --fixup $(git log --oneline | fzf --tmux | awk '{print $1}')
 }
 
-# Print recent branches - Adapted from https://gist.github.com/jordan-brough/48e2803c0ffa6dc2e0bd
+# fzf select and checkout recently visited branches - Adapted from https://gist.github.com/jordan-brough/48e2803c0ffa6dc2e0bd
 grecent () {
 	local branches=(
 	  $(git reflog |

@@ -24,7 +24,6 @@ alias kdebugpod='kubectl run -i --tty --rm debug --image="$DW_DEBUG_POD_IMAGE" -
 alias kgetevents="kubectl get events --sort-by='.lastTimestamp'"
 alias kgeteventsall="kubectl get events -A --sort-by='.lastTimestamp'"
 
-
 # Add -oyaml to kubectl command and pipe to nvim
 kvim() {
 	local kubectl_response=$(kubectl -oyaml "$@")
@@ -43,11 +42,11 @@ kvim() {
 }
 
 # Smart switcher for k8s context.
-# Place configs in ~/kube/configs/ with names in form kubeconfig-{{name}}.yaml
+# Configs are to be put in '~/kube/configs/' names as 'kubeconfig-{{name}}.yaml'
 #
-# With no arguments, will fuzzy find through your configs.
-# kc [name] will select by name. (Ex. kc qa -> selects kubeconfig-qa.yaml)
-# kc - Will jump back to your most recently visited cluster
+# By default: fzf select from available configs
+# kc [name] : select by name. (Ex. kc qa -> sets '~/kube/configs/kubeconfig-qa.yaml')
+# kc -      :  Will jump back to your most recently visited cluster
 kc() {
 
 	local kubeconfigs=~/.kube/configs
@@ -74,7 +73,7 @@ kc() {
 	fi
 
 	export KUBECONFIG=${kubeconfigs}/${config}
-	# Touching the file makes list by last modify timestamp useful
+	# Update modified time for toggling to last set config
 	touch "${KUBECONFIG}"
 }
 
@@ -90,7 +89,7 @@ kgetnotrunningpods () {
         kubectl get pods | grep -v Running | grep -v Completed
 }
 
-# Get all resources by greping k api-resource output
+# Get all resources by grepping output of 'kubectl api-resource'
 kgetallbyname () {
 	if [ -z "$1" ]; then
 		echo "Usage: $0 <resource-group>"
@@ -136,7 +135,6 @@ kgetnotreadyparents() {
 		}
 		'
 
-
 	echo
 	echo ~~~~~~~DaemonSet~~~~~~~
 	kubectl get ds \
@@ -158,20 +156,21 @@ kgetallforreal() {
 kopeningress () {
 	# Grab names, split on comma, fuzzy find, and add protocol
 	kubectl get ingress --no-headers "$@" | awk '{print $3}' | sed 's/,/\
-/g' | fzf --tmux | awk '{print "http://"$0}' | xargs open
+		/g' | fzf --tmux | awk '{print "http://"$0}' | xargs open
 }
 
 kdecode_secret() {
-  local secret="$1"
-  if [[ -z "$secret" ]]; then
-    echo "Usage: kdecode_secret <secret-name> [namespace]"
-    return 1
-  fi
-  local ns_flag=""
-  if [[ -n "$2" ]]; then
-    ns_flag="--namespace $2"
-  fi
-  kubectl get secret "$secret" $ns_flag -o yaml | \
-    yq '.data // {}' | \
-    yq 'to_entries | .[] | "\(.key): \(.value | @base64d)"' -r
+	local secret="$1"
+	if [[ -z "$secret" ]]; then
+		echo "Usage: kdecode_secret <secret-name> [namespace]"
+		return 1
+	fi
+
+	local ns_flag=""
+	if [[ -n "$2" ]]; then
+		ns_flag="--namespace $2"
+	fi
+	kubectl get secret "$secret" $ns_flag -o yaml | \
+		yq '.data // {}' | \
+		yq 'to_entries | .[] | "\(.key): \(.value | @base64d)"' -r
 }
