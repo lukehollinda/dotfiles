@@ -21,17 +21,23 @@ export HISTSIZE=10000000
 export SAVEHIST=10000000
 setopt HIST_IGNORE_DUPS
 
-#Autocomplete
+#~~~~~~~~~~~~~~~~~~~~~~~~
+# Autocomplete
+#~~~~~~~~~~~~~~~~~~~~~~~~
 autoload -U +X compinit && compinit
 
-# Google cloud autocomplete
+# Google cloud
 if command -v brew &>/dev/null; then
   source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
   source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 fi
 
-# ArgoCD autocomplete
+# ArgoCD
 source <(argocd completion zsh)
+
+# yq
+yq shell-completion zsh > "${fpath[1]}/_yq"
+#~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Get script path (Must use this method as the file is sourced through a symlink)
 script_path=$(readlink -f "${(%):-%x}")
