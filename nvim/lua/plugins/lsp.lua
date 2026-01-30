@@ -101,7 +101,9 @@ return {
         --  capabilities = {}, Can be used to disable certain LSP features.
         --  settings = {},
         -- }
-        bashls = {},
+        bashls = {
+          filtypes = { '.sh', '.bash', '.zsh' },
+        },
         helm_ls = {},
         pylsp = {},
         gopls = {},
