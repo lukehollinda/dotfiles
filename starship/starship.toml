@@ -52,6 +52,7 @@ contexts = [
 	{context_pattern=".*lt3.*", context_alias="lt3"},
 	{context_pattern=".*lt2.*", context_alias="lt2"},
 	{context_pattern=".*lt1.*", context_alias="lt1"},
+	{context_pattern=".*plt-dev3.*", context_alias="plt-dev3"},
 ]
 
 [cmd_duration]
