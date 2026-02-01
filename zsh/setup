@@ -1,9 +1,16 @@
+# Optionally print time taken to source all zsh files at startup
 PROFILE_STARTUP=false
-if [[ "$PROFILE_STARTUP" == true ]]; then
-    zsh_profiler_start=$(date +%s.%N)
-fi
 
-# Get script path (Must use this method as the file is sourced through a symlink)
+profile_source() {
+  local file="$1"
+  local start=$(date +%s.%N)
+  source "$file"
+  local end=$(date +%s.%N)
+  local duration=$((end-start))
+  echo "($file): $duration"
+}
+
+# Get script path (Below method is used to support sourcing this file through symlink)
 script_path=$(readlink -f "${(%):-%x}")
 script_dir=$(dirname "$script_path")
 git_root=$(cd "$script_dir" && git rev-parse --show-toplevel 2>/dev/null)
@@ -12,21 +19,8 @@ git_root=$(cd "$script_dir" && git rev-parse --show-toplevel 2>/dev/null)
 for file in $(find "${git_root}/zsh" -type f ! -name 'setup' ! -name 'README.md' | sort)
 do
   if [[ "$PROFILE_STARTUP" == true ]]; then
-      start=$(date +%s.%N)
-      echo "start: $start"
-      source $file
-      end=$(date +%s.%N)
-      echo "end: $end"
-      duration=$((end-start))
-      echo "($file): $duration"
+    profile_source "$file"
   else
-    source "${file}"
+    source "$file"
   fi
 done
-
-if [[ "$PROFILE_STARTUP" == true ]]; then
-    zsh_profiler_end=$(date +%s.%N)
-    total_duration=$((zsh_profiler_end-zsh_profiler_start))
-    echo "total_duration: $total_duration"
-fi
-
