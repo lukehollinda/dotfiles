@@ -24,6 +24,36 @@ alias kdebugpod='kubectl run -i --tty --rm debug --image="$DW_DEBUG_POD_IMAGE" -
 alias kgetevents="kubectl get events --sort-by='.lastTimestamp'"
 alias kgeteventsall="kubectl get events -A --sort-by='.lastTimestamp'"
 
+# Get all resources in namespace, via 'k api-resources'
+kgetallforreal() {
+  namespaceName=$1
+  kubectl api-resources --namespaced=true --verbs=list -o name | grep -v '^events\.events\.k8s\.io$' | grep -v '^events$' | xargs echo | tr ' ' ',' | xargs kubectl get -n "${namespaceName}"
+}
+
+# Select and open link from Ingress hosts
+kopeningress () {
+	# Grab names, split on comma, fuzzy find, and add protocol
+	kubectl get ingress --no-headers "$@" | awk '{print $3}' | sed 's/,/\
+		/g' | fzf --tmux | awk '{print "http://"$0}' | xargs open
+}
+
+# Decode secret by name
+kdecode_secret() {
+	local secret="$1"
+	if [[ -z "$secret" ]]; then
+		echo "Usage: kdecode_secret <secret-name> [namespace]"
+		return 1
+	fi
+
+	local ns_flag=""
+	if [[ -n "$2" ]]; then
+		ns_flag="--namespace $2"
+	fi
+	kubectl get secret "$secret" $ns_flag -o yaml | \
+		yq '.data // {}' | \
+		yq 'to_entries | .[] | "\(.key): \(.value | @base64d)"' -r
+}
+
 # Add -oyaml to kubectl command and pipe to nvim
 kvim() {
 	local kubectl_response=$(kubectl -oyaml "$@")
@@ -89,7 +119,7 @@ kgetnotrunningpods () {
         kubectl get pods | grep -v Running | grep -v Completed
 }
 
-# Get all resources by grepping output of 'kubectl api-resource'
+# Get all resources, selected from $1 grep of 'k api-resources'
 kgetallbyname () {
 	if [ -z "$1" ]; then
 		echo "Usage: $0 <resource-group>"
@@ -144,33 +174,4 @@ kgetnotreadyparents() {
 			if ($2 != $4) print;
 		}
 		'
-}
-
-# Get all resources in namespace by api-resources available
-kgetallforreal() {
-  namespaceName=$1
-  kubectl api-resources --namespaced=true --verbs=list -o name | grep -v '^events\.events\.k8s\.io$' | grep -v '^events$' | xargs echo | tr ' ' ',' | xargs kubectl get -n "${namespaceName}"
-}
-
-# FZF select an ingress host to open
-kopeningress () {
-	# Grab names, split on comma, fuzzy find, and add protocol
-	kubectl get ingress --no-headers "$@" | awk '{print $3}' | sed 's/,/\
-		/g' | fzf --tmux | awk '{print "http://"$0}' | xargs open
-}
-
-kdecode_secret() {
-	local secret="$1"
-	if [[ -z "$secret" ]]; then
-		echo "Usage: kdecode_secret <secret-name> [namespace]"
-		return 1
-	fi
-
-	local ns_flag=""
-	if [[ -n "$2" ]]; then
-		ns_flag="--namespace $2"
-	fi
-	kubectl get secret "$secret" $ns_flag -o yaml | \
-		yq '.data // {}' | \
-		yq 'to_entries | .[] | "\(.key): \(.value | @base64d)"' -r
 }
