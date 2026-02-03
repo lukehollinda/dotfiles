@@ -124,7 +124,7 @@ kgetallbyname () {
 	if [ -z "$1" ]; then
 		echo "Usage: $0 <resource-group>"
 		echo "Example: $0 apps"
-		exit 1
+		return 1
 	fi
 
 	# List of possible resource kinds in the specified group
