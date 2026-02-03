@@ -1,6 +1,4 @@
-# Auto Complete
 alias k=kubectl
-[[ /usr/local/bin/kubectl ]] && source <(kubectl completion zsh)
 
 # Set up krew plugin support
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"

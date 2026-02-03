@@ -38,6 +38,10 @@ command -v argocd &>/dev/null && source <(argocd completion zsh)
 
 # yq
 command -v yq &>/dev/null && yq shell-completion zsh > "${fpath[1]}/_yq"
+
+# kubectl
+command -v kubectl &>/dev/null && source <(kubectl completion zsh)
+
 #~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Dotfile executables
