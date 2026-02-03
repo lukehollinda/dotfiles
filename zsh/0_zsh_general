@@ -42,6 +42,6 @@ yq shell-completion zsh > "${fpath[1]}/_yq"
 
 # Dotfile executables
 export PATH="$PATH:$HOME/go/bin/"
-export PATH="$PATH:$git_root/bin"
-export PATH="$PATH:$git_root/bin/scripts"
+export PATH="$PATH:$DOTFIILE_PATH/bin"
+export PATH="$PATH:$DOTFILE_PATH/bin/scripts"
 
