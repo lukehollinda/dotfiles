@@ -34,10 +34,10 @@ if command -v brew &>/dev/null; then
 fi
 
 # ArgoCD
-source <(argocd completion zsh)
+command -v argocd &>/dev/null && source <(argocd completion zsh)
 
 # yq
-yq shell-completion zsh > "${fpath[1]}/_yq"
+command -v yq &>/dev/null && yq shell-completion zsh > "${fpath[1]}/_yq"
 #~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Dotfile executables
