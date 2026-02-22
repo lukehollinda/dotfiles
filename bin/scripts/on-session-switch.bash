@@ -2,6 +2,10 @@
 
 TMUX_SESSION_HISTORY="$HOME/.tmux/session_history"
 
+if [[ ! -f $TMUX_SESSION_HISTORY ]]; then
+	touch "$TMUX_SESSION_HISTORY"
+fi
+
 # Get current tmux session
 current_session=$(tmux display-message -p '#S')
 
