@@ -1,6 +1,6 @@
-**/dw_*
-**/dw-*
-**/.dw*
+**/work_*
+**/work-*
+**/.work*
 
 brew/Brewfile.lock.json
 Claude.md
