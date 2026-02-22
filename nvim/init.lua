@@ -23,5 +23,5 @@ require('options')
 require('misc-bindings')
 require('commands')
 
--- Import work specific options
-require('dw-options')
+-- Excluded from Git
+require('work')
