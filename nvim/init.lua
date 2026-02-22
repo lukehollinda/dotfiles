@@ -24,4 +24,4 @@ require('misc-bindings')
 require('commands')
 
 -- Excluded from Git
-require('work')
+require('work-options')
