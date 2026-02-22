@@ -46,6 +46,6 @@ command -v kubectl &>/dev/null && source <(kubectl completion zsh)
 
 # Dotfile executables
 export PATH="$PATH:$HOME/go/bin/"
-export PATH="$PATH:$DOTFIILE_PATH/bin"
+export PATH="$PATH:$DOTFILE_PATH/bin"
 export PATH="$PATH:$DOTFILE_PATH/bin/scripts"
 
