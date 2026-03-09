@@ -8,7 +8,7 @@ export EDITOR='nvim'
 export ZVM_VI_EDITOR="nvim-pager"
 
 # Set up fuzzy finding
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source <(fzf --zsh)
 
 # Terminal Prompt configuration (See starship/starship.toml)
 eval "$(starship init zsh)"
