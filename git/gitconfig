@@ -6,6 +6,8 @@
 
 [includeIf "gitdir:~/person/"]
 	path = ~/.gitconfig_person
+[includeIf "gitdir:~/dotfiles/"]
+	path = ~/.gitconfig_person
 [color]
 	pager=no
 [core]
