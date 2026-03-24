@@ -42,6 +42,9 @@ command -v yq &>/dev/null && yq shell-completion zsh > "${fpath[1]}/_yq"
 # kubectl
 command -v kubectl &>/dev/null && source <(kubectl completion zsh)
 
+# mise
+command -v mise &>/dev/null && eval "$(/opt/homebrew/bin/mise activate zsh)"
+
 #~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Dotfile executables
