@@ -5,7 +5,7 @@
 # to display the session name here will return the session which is opened after
 # close.
 
-TMUX_SESSION_HISTORY="$HOME/.tmux/session_history"
+TMUX_SESSION_HISTORY="${TMUX_SESSION_HISTORY:-$HOME/.tmux/session_history}"
 
 # Get current tmux session
 current_session="$1"

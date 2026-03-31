@@ -25,7 +25,7 @@ SESSION_PICKER_DIRECTORIES=(
     "$HOME/person/upstream/leetcode-resources"
 )
 
-TMUX_SESSION_HISTORY="$HOME/.tmux/session_history"
+TMUX_SESSION_HISTORY="${TMUX_SESSION_HISTORY:-$HOME/.tmux/session_history}"
 select-project() {
     find "${SESSION_PICKER_DIRECTORIES[@]}" -mindepth 2 -maxdepth 2 -type d -name ".git" 2>/dev/null \
         | sed 's|/\.git$||' \

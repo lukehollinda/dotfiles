@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-TMUX_SESSION_HISTORY="$HOME/.tmux/session_history"
+TMUX_SESSION_HISTORY="${TMUX_SESSION_HISTORY:-$HOME/.tmux/session_history}"
 
 if [[ ! -f $TMUX_SESSION_HISTORY ]]; then
 	touch "$TMUX_SESSION_HISTORY"
