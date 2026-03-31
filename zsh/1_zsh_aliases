@@ -27,5 +27,8 @@ alias s='shipwright'
 # ArgoCD
 alias argocd='argocd --grpc-web'
 
+# tmux
+alias t='tmux-launch.bash'
+
 # Apps
 alias obsidian='open /Applications/Obsidian.app'

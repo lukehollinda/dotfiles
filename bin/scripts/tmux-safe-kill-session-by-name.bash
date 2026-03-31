@@ -37,7 +37,7 @@ while read -r pane; do
 	# Have nvim count if there are unsaved buffers. Send to temp file.
 	tmux send-keys -t "$SESSION:$window_id.$pane_id" ":call writefile([len(filter(getbufinfo(), 'v:val.changed'))], '$tmpfile')" Enter
 
-	sleep 0.1
+	sleep 0.2
 
 	if [[ $(cat "$tmpfile") -gt 0 ]]; then
 		tmux display-popup "echo 'Unsaved changes in nvim in window $window_id, pane $pane_id. Aborting close of session $SESSION.'"
