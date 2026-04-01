@@ -6,7 +6,6 @@ alias gco='git checkout'
 alias gp='git pull'
 alias gca='git commit --amend --verbose'
 alias gr='git rebase'
-alias grim='git rebase -i master'
 
 # Because I forget the config option
 alias gitupstream='git config --get remote.origin.url'
@@ -27,6 +26,21 @@ alias git-https='git remote set-url origin "$(git remote get-url origin | sed -E
 
 # Change cwd to top of git repo
 alias cdg='cd "$(git rev-parse --show-toplevel || echo .)"'
+
+# Git Rebase Master / Main
+grim() {
+	local base
+	base=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||')
+	if [[ -z "$base" ]]; then
+		# Fall back to whichever of main/master exists locally
+		if git show-ref --verify --quiet refs/heads/main; then
+			base="main"
+		else
+			base="master"
+		fi
+	fi
+	git rebase -i "$base" "$@"
+}
 
 # Git Commit - Always verbose, add Jira ticket as trailer if found in branch name
 gc() {
