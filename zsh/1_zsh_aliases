@@ -30,5 +30,9 @@ alias argocd='argocd --grpc-web'
 # tmux
 alias t='tmux-launch.bash'
 
+# mise
+alias m='mise'
+alias mr='mise run'
+
 # Apps
 alias obsidian='open /Applications/Obsidian.app'
