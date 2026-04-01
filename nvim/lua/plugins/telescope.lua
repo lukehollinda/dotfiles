@@ -35,7 +35,7 @@ return {
         --  All the info you're looking for is in `:help telescope.setup()`
         --
         defaults = {
-          path_display = 'truncate',
+          path_display = { 'truncate' },
           mappings = {
             n = {
               ["l"] = require('telescope.actions').cycle_history_next,
