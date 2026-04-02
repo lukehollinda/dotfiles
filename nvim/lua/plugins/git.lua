@@ -14,6 +14,13 @@ return {
     'tpope/vim-rhubarb',
     -- Corperate Github URL defined elsewhere
   },
+  {
+    -- GBrowse handler for GitLab (gitlab.com works out of the box)
+    -- To add self-hosted instances: vim.g.fugitive_gitlab_domains = { 'https://gitlab.yourcompany.com' }
+    'shumphrey/fugitive-gitlab.vim',
+    dependencies = { 'tpope/vim-fugitive' },
+    lazy = false,
+  },
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
