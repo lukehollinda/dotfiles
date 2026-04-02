@@ -6,7 +6,7 @@ set -euo pipefail
 
 SOCKET="claude-test-$$"
 T="tmux -L $SOCKET"
-SCRIPTS="$(cd "$(dirname "$0")" && pwd)"
+SCRIPTS="$(cd "$(dirname "$0")/../bin/scripts" && pwd)"
 PASS=0
 FAIL=0
 
