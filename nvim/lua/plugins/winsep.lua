@@ -3,6 +3,9 @@ return {
   config = true,
   event = { "WinLeave" },
   opts = {
+    animate = {
+      enabled = false,
+    },
     hi = {
       bg = "#16161E",
       fg = "#1F3442",
