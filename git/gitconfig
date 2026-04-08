@@ -49,3 +49,6 @@
 	autoStash = true
 [init]
 	defaultBranch = master
+[maintenance]
+	repo = ~/work/gdk
+	repo = ~/work/gdk/gitlab
