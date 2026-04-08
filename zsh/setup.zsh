@@ -1,5 +1,5 @@
 # Optionally print time taken to source all zsh files at startup
-PROFILE_STARTUP=true
+PROFILE_STARTUP=false
 
 profile_source() {
   local file="$1"
