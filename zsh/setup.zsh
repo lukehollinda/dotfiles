@@ -1,5 +1,5 @@
 # Optionally print time taken to source all zsh files at startup
-PROFILE_STARTUP=false
+PROFILE_STARTUP=true
 
 profile_source() {
   local file="$1"
@@ -17,7 +17,7 @@ DOTFILE_PATH=$(cd "$script_dir" && git rev-parse --show-toplevel 2>/dev/null)
 tmux set-environment -g DOTFILE_PATH "$DOTFILE_PATH" 2>/dev/null
 
 # Source all other zsh files
-for file in $(find "${DOTFILE_PATH}/zsh" -type f ! -name 'setup' ! -name 'README.md' | sort)
+for file in $(find "${DOTFILE_PATH}/zsh" -type f ! -name 'setup.zsh' ! -name 'README.md' | sort)
 do
   if [[ "$PROFILE_STARTUP" == true ]]; then
     profile_source "$file"
