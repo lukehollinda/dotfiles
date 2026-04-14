@@ -16,18 +16,6 @@ return {
         end
       end
 
-      local function isLeftMost()
-        local curWin = vim.fn.winnr()
-        vim.cmd [[wincmd h]]
-        local leftWin = vim.fn.winnr()
-        if curWin == leftWin then
-          return true
-        else
-          vim.cmd [[wincmd l]]
-          return false
-        end
-      end
-
       local function isBottomMost()
         local curWin = vim.fn.winnr()
         vim.cmd [[wincmd j]]
@@ -36,18 +24,6 @@ return {
           return true
         else
           vim.cmd [[wincmd k]]
-          return false
-        end
-      end
-
-      local function isTopMost()
-        local curWin = vim.fn.winnr()
-        vim.cmd [[wincmd k]]
-        local topWin = vim.fn.winnr()
-        if curWin == topWin then
-          return true
-        else
-          vim.cmd [[wincmd j]]
           return false
         end
       end
