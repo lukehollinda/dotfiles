@@ -21,9 +21,6 @@ alias c='clear'
 alias l='eza'
 alias ll='eza -lhF'
 
-# Shipwright
-alias s='shipwright'
-
 # ArgoCD
 alias argocd='argocd --grpc-web'
 
