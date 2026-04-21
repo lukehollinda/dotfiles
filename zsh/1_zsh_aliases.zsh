@@ -18,8 +18,8 @@ alias manzsh="man zshbuiltins"
 
 # Terminal navigation
 alias c='clear'
-alias l='eza'
-alias ll='eza -lhF'
+alias l='ls -a'
+alias ll='ls -alh'
 
 # ArgoCD
 alias argocd='argocd --grpc-web'
