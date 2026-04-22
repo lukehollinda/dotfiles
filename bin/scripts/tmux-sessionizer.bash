@@ -15,14 +15,8 @@ fi
 SESSION_PICKER_DIRECTORIES=(
     "$HOME"
     "$HOME/work"
-    "$HOME/work/dev"
-    "$HOME/work/upstream"
     "$HOME/person"
-    "$HOME/person/dev"
-    "$HOME/person/upstream"
-    "$HOME/person/upstream/golang-resources"
-    "$HOME/person/upstream/system-design-resources"
-    "$HOME/person/upstream/leetcode-resources"
+    "$HOME/upstream"
 )
 
 TMUX_SESSION_HISTORY="${TMUX_SESSION_HISTORY:-$HOME/.tmux/session_history}"
