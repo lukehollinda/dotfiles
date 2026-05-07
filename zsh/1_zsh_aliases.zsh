@@ -33,3 +33,6 @@ alias mr='mise run'
 
 # Apps
 alias obsidian='open /Applications/Obsidian.app'
+
+# Docker
+alias dc='docker compose'
