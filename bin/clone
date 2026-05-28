@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -e
+set -u
+set -o pipefail
+
+usage() {
+  echo "Usage: $(basename "$0") [--trust] remote_repo path/to/directory" >&2
+}
+
+trust=false
+args=()
+
+for arg in "$@"; do
+  case "$arg" in
+    --trust) trust=true ;;
+    *) args+=("$arg") ;;
+  esac
+done
+
+if [ "${#args[@]}" -ne 2 ]; then
+  usage
+  exit 1
+fi
+
+remote="${args[0]}"
+path="${args[1]}"
+
+repo_name=$(basename "$remote" .git)
+dest="$path/$repo_name"
+
+mkdir -p "$path"
+git clone "$remote" "$dest"
+
+if [ "$trust" = true ]; then
+  mise trust "$dest"
+fi
