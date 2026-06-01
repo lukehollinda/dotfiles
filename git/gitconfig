@@ -52,3 +52,5 @@
 [maintenance]
 	repo = ~/work/gdk
 	repo = ~/work/gdk/gitlab
+	repo = ~/work/gitlab
+	repo = ~/work/labkit
