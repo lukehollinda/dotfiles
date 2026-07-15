@@ -7,6 +7,20 @@ vim.api.nvim_create_user_command(
   { nargs = 1 }
 )
 
+-- Alias Gitsigns to Gs
+vim.api.nvim_create_user_command(
+  'Gs',
+  function(opts)
+    vim.cmd('Gitsigns ' .. opts.args)
+  end,
+  {
+    nargs = '*',
+    bang = true,
+    desc = 'Alias for :Gitsigns',
+  }
+)
+
+
 -- Clear trailing whitespace when saving buffer to file
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   pattern = { "*" },
