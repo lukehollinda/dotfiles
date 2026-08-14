@@ -1,3 +1,22 @@
+-- Patterns excluded from ALL Telescope file/grep searches. Hidden files and
+-- gitignored files are otherwise included, so add large generated directories
+-- here as you hit them. These are ripgrep gitignore-style globs matched at any
+-- depth (e.g. 'node_modules', 'dist', '*.min.js').
+local search_excludes = {
+  '.git',
+  'node_modules',
+}
+
+-- Turn search_excludes into ripgrep args: {'--glob', '!.git', ...}
+local function exclude_globs()
+  local globs = {}
+  for _, pattern in ipairs(search_excludes) do
+    table.insert(globs, '--glob')
+    table.insert(globs, '!' .. pattern)
+  end
+  return globs
+end
+
 return {
 
   {
@@ -30,12 +49,34 @@ return {
 
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
+
+      -- find_files backend: use ripgrep so hidden + gitignored files are found,
+      -- sharing the same exclude list as grep below.
+      local find_command = { 'rg', '--files', '--hidden', '--no-ignore' }
+      vim.list_extend(find_command, exclude_globs())
+
+      -- grep backend (live_grep / grep_string): default ripgrep args plus
+      -- hidden + gitignored files and the shared excludes.
+      local vimgrep_arguments = {
+        'rg',
+        '--color=never',
+        '--no-heading',
+        '--with-filename',
+        '--line-number',
+        '--column',
+        '--smart-case',
+        '--hidden',
+        '--no-ignore',
+      }
+      vim.list_extend(vimgrep_arguments, exclude_globs())
+
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
         defaults = {
           path_display = { 'truncate' },
+          vimgrep_arguments = vimgrep_arguments,
           mappings = {
             n = {
               ["l"] = require('telescope.actions').cycle_history_next,
@@ -43,7 +84,11 @@ return {
             },
           },
         },
-        -- pickers = {}
+        pickers = {
+          find_files = {
+            find_command = find_command,
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
