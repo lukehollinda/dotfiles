@@ -6,6 +6,7 @@ alias gco='git checkout'
 alias gp='git pull'
 alias gca='git commit --amend --verbose'
 alias gr='git rebase'
+alias gshow='git show'
 
 # Because I forget the config option
 alias gitupstream='git config --get remote.origin.url'
