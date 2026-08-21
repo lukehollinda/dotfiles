@@ -4,11 +4,26 @@
 
 source "$(command -v claude-agents-common.bash)"
 
+# Human-readable age of an ISO-8601 UTC timestamp, e.g. 2m, 1h, 3d.
+_idle() {
+    local ts="$1" then now delta
+    [[ -z "$ts" ]] && { printf '?'; return; }
+    then=$(TZ=UTC date -j -f '%Y-%m-%dT%H:%M:%SZ' "$ts" +%s 2>/dev/null) || { printf '?'; return; }
+    now=$(date +%s)
+    delta=$(( now - then ))
+    (( delta < 0 )) && delta=0
+    if   (( delta < 60 ));    then printf '%ds' "$delta"
+    elif (( delta < 3600 ));  then printf '%dm' $(( delta / 60 ))
+    elif (( delta < 86400 )); then printf '%dh' $(( delta / 3600 ))
+    else                           printf '%dd' $(( delta / 86400 ))
+    fi
+}
+
 # Each line is "<visible display>\t<session>\t<pane>\t<transcript>"; fzf shows
 # only the first tab-delimited field and returns the whole line, so the values
 # used for navigation and the conversation preview stay hidden but recoverable.
 entries=()
-while IFS=$'\t' read -r pane session window status cwd transcript; do
+while IFS=$'\037' read -r pane session status cwd transcript updated_at; do
     case "$status" in
         waiting)    icon="⏸" ;;
         running)    icon="▶" ;;
@@ -16,13 +31,17 @@ while IFS=$'\t' read -r pane session window status cwd transcript; do
         *)          icon="?" ;;
     esac
 
+    idle=$(_idle "$updated_at")
+    branch=$(claude_agents_branch_for "$transcript")
+
     # Shorten the home prefix to ~ so paths stay readable across machines. The
     # ~ is written inside double quotes so it is not expanded back to $HOME.
     short_cwd="$cwd"
     if [[ "$short_cwd" == "$HOME" || "$short_cwd" == "$HOME"/* ]]; then
         short_cwd="~${short_cwd#"$HOME"}"
     fi
-    display=$(printf '%s  %-10s  %-5s  %s:%s  %s' "$icon" "$status" "$pane" "$session" "$window" "$short_cwd")
+
+    display=$(printf '%s  %-10s  %-4s  %-28s  %s' "$icon" "$status" "$idle" "$short_cwd" "${branch:--}")
     entries+=("$(printf '%s\t%s\t%s\t%s' "$display" "$session" "$pane" "$transcript")")
 done < <(claude_agents_each_live)
 

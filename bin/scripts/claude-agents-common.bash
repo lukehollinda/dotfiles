@@ -29,24 +29,39 @@ claude_agents_transcript_for() {
     printf '%s' "$hit"
 }
 
-# Emit one tab-separated record per live agent:
-#   pane<TAB>session<TAB>window<TAB>status<TAB>cwd<TAB>transcript
+# Print the git branch a session is on, from the transcript. Only the tail is
+# scanned (gitBranch is recorded on nearly every line), so it stays cheap.
+claude_agents_branch_for() {
+    local transcript="$1"
+    [[ -n "$transcript" && -f "$transcript" ]] || return 0
+    tail -n 100 "$transcript" 2>/dev/null \
+        | jq -r 'select(.gitBranch != null and .gitBranch != "") | .gitBranch' 2>/dev/null \
+        | tail -n 1
+}
+
+# Emit one record per live agent, fields separated by US (0x1f):
+#   pane<US>session<US>status<US>cwd<US>transcript<US>updated_at
+# US is used rather than tab because `read` collapses runs of whitespace
+# delimiters, so an empty field (e.g. a missing transcript) between two tabs
+# would be swallowed and shift every later field. A non-whitespace delimiter
+# keeps empty fields in place. Consumers split with IFS=$'\037'.
 # State files whose pane no longer exists (dead pane, or legacy files with no
 # recorded pane) are deleted as a side effect.
 claude_agents_each_live() {
     [[ -d "$CLAUDE_AGENTS_DIR" ]] || return 0
 
-    local live
+    local live us
     live=$(claude_agents_live_panes)
+    us=$'\037'
 
     # Note: avoid a variable literally named "status"; it is read-only in zsh,
     # and this file is a sourced library.
-    local f session_id record pane session window agent_status cwd transcript_path transcript
+    local f session_id record pane session agent_status cwd transcript_path transcript updated_at
     for f in "$CLAUDE_AGENTS_DIR"/*.json; do
         [[ -f "$f" ]] || continue
 
-        record=$(jq -r '[.tmux_pane, .tmux_session, .tmux_window, .status, .cwd, .transcript_path] | @tsv' "$f" 2>/dev/null) || continue
-        IFS=$'\t' read -r pane session window agent_status cwd transcript_path <<<"$record"
+        record=$(jq -r '[(.tmux_pane//""), (.tmux_session//""), (.status//""), (.cwd//""), (.transcript_path//""), (.updated_at//"")] | join("")' "$f" 2>/dev/null) || continue
+        IFS="$us" read -r pane session agent_status cwd transcript_path updated_at <<<"$record"
 
         if [[ -z "$pane" ]] || ! grep -qxF "$pane" <<<"$live"; then
             rm -f "$f"
@@ -56,7 +71,8 @@ claude_agents_each_live() {
         session_id=$(basename "$f" .json)
         transcript=$(claude_agents_transcript_for "$session_id" "$transcript_path")
 
-        printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$pane" "$session" "$window" "$agent_status" "$cwd" "$transcript"
+        printf '%s%s%s%s%s%s%s%s%s%s%s\n' \
+            "$pane" "$us" "$session" "$us" "$agent_status" "$us" "$cwd" "$us" "$transcript" "$us" "$updated_at"
     done
 }
 
