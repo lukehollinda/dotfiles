@@ -2,6 +2,11 @@
 # Hook handler for Claude Code agent state tracking.
 # Called with the event name as $1; reads hook JSON payload from stdin.
 # State files: ~/.tmux/claude-agents/{session_id}.json
+#
+# Each agent is identified by the tmux pane it runs in (tmux_pane), so multiple
+# Claude instances can share one tmux session. Every event rewrites the full
+# record, which self-heals a state file that a reader reaped after wrongly
+# judging its pane dead.
 
 set -euo pipefail
 
@@ -17,75 +22,72 @@ CWD=$(echo "$INPUT" | jq -r '.cwd // empty' 2>/dev/null)
 
 STATE_FILE="$STATE_DIR/${SESSION_ID}.json"
 
-_update_status() {
+# Populated by _write_state, reused by the notification helpers.
+TMUX_SESSION=""
+TMUX_WINDOW=""
+TMUX_PANE_ID=""
+
+_write_state() {
     local status="$1"
-    [[ -f "$STATE_FILE" ]] || return 0
-    local tmp
-    tmp=$(mktemp)
-    jq --arg s "$status" --arg t "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-        '.status = $s | .updated_at = $t' "$STATE_FILE" > "$tmp" && mv "$tmp" "$STATE_FILE"
+    TMUX_SESSION=$(tmux display-message -p '#{session_name}' 2>/dev/null || true)
+    TMUX_WINDOW=$(tmux display-message -p '#{window_index}' 2>/dev/null || true)
+    TMUX_PANE_ID="${TMUX_PANE:-}"
+
+    jq -n \
+        --arg status "$status" \
+        --arg tmux_session "$TMUX_SESSION" \
+        --arg tmux_window "$TMUX_WINDOW" \
+        --arg tmux_pane "$TMUX_PANE_ID" \
+        --arg cwd "$CWD" \
+        --arg updated_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+        '{status: $status, tmux_session: $tmux_session, tmux_window: $tmux_window, tmux_pane: $tmux_pane, cwd: $cwd, updated_at: $updated_at}' \
+        > "$STATE_FILE"
 }
 
 _notify_user() {
     osascript -e "display notification \"$1\" with title \"Claude\""
 }
 
-# Send notification only when the user is unlikely to be watching the Claude window:
-#   - Kitty is not the focused app, OR
-#   - Kitty is focused but the Claude session's window is not currently active
+# Notify unless the user is actively looking at this Claude pane: Kitty is
+# frontmost AND this pane's session is attached AND its window and pane are the
+# active ones. tmux resolves the flags for the calling (Claude) pane.
 _notify_if_unfocused() {
-    local msg="$1" session="$2" window="$3"
+    local msg="$1"
 
     local frontmost
     frontmost=$(osascript -e 'tell application "System Events" to get name of first application process whose frontmost is true' 2>/dev/null || true)
-
     if [[ "$frontmost" != "kitty" ]]; then
         _notify_user "$msg"
         return
     fi
 
-    # Kitty is focused — check if the session exists and the claude window is the active one
-    local active_window attached_count
-    active_window=$(tmux display-message -t "$session" -p '#{window_index}' 2>/dev/null || true)
-    attached_count=$(tmux list-clients -F '#{client_session}' 2>/dev/null | grep -c "^${session}$" || echo 0)
+    local flags attached wactive pactive
+    flags=$(tmux display-message -p '#{session_attached}:#{window_active}:#{pane_active}' 2>/dev/null || true)
+    IFS=: read -r attached wactive pactive <<<"$flags"
 
-    if [[ "$attached_count" -eq 0 || "$active_window" != "$window" ]]; then
-        _notify_user "$msg"
+    if [[ "${attached:-0}" -ge 1 && "$wactive" == "1" && "$pactive" == "1" ]]; then
+        return
     fi
+    _notify_user "$msg"
 }
 
 case "$EVENT" in
     SessionStart)
-        TMUX_SESSION=$(tmux display-message -p '#{session_name}' 2>/dev/null || true)
-        TMUX_WINDOW=$(tmux display-message -p '#{window_index}' 2>/dev/null || true)
-
+        _write_state "waiting"
         if [[ -n "$TMUX_SESSION" && -n "$TMUX_WINDOW" ]]; then
             tmux rename-window -t "${TMUX_SESSION}:${TMUX_WINDOW}" claude 2>/dev/null || true
         fi
-
-        jq -n \
-            --arg status "waiting" \
-            --arg tmux_session "$TMUX_SESSION" \
-            --arg tmux_window "$TMUX_WINDOW" \
-            --arg cwd "$CWD" \
-            --arg updated_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-            '{status: $status, tmux_session: $tmux_session, tmux_window: $tmux_window, cwd: $cwd, updated_at: $updated_at}' \
-            > "$STATE_FILE"
         ;;
     UserPromptSubmit)
-        _update_status "running"
+        _write_state "running"
         ;;
     Stop)
-        _update_status "waiting"
-        tmux_session=$(jq -r '.tmux_session // empty' "$STATE_FILE" 2>/dev/null)
-        tmux_window=$(jq -r '.tmux_window // empty' "$STATE_FILE" 2>/dev/null)
-        _notify_if_unfocused "${tmux_session}: Ready" "$tmux_session" "$tmux_window"
+        _write_state "waiting"
+        _notify_if_unfocused "${TMUX_SESSION}: Ready"
         ;;
     PermissionRequest)
-        _update_status "permission"
-        tmux_session=$(jq -r '.tmux_session // empty' "$STATE_FILE" 2>/dev/null)
-        tmux_window=$(jq -r '.tmux_window // empty' "$STATE_FILE" 2>/dev/null)
-        _notify_if_unfocused "${tmux_session}: Requesting Permission" "$tmux_session" "$tmux_window"
+        _write_state "permission"
+        _notify_if_unfocused "${TMUX_SESSION}: Requesting Permission"
         ;;
     SessionEnd)
         rm -f "$STATE_FILE"
