@@ -3,28 +3,49 @@ return {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     lazy = false,
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    opts = {
-      ensure_installed = {  'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'go', 'yaml' },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-    },
+    version = "main",
+    config = function ()
+    local ts = require("nvim-treesitter")
+    local ensure_installed = {
+      "bash",
+      "zsh",
+      "dockerfile",
+      "git_config",
+      "git_rebase",
+      "gitattributes",
+      "gitcommit",
+      "gitignore",
+      "go",
+      "gomod",
+      "gosum",
+      "json",
+      "toml",
+      "yaml",
+      "make",
+      "markdown",
+      "python",
+      "lua"
+    }
+
+    ts.install(ensure_installed)
+
+    vim.api.nvim_create_autocmd("FileType", {
+      group = vim.api.nvim_create_augroup("EnableTreesitterHighlighting", { clear = true }),
+      desc = "Try to enable tree-sitter syntax highlighting",
+      pattern = "*", -- run on *all* filetypes
+      callback = function()
+        pcall(function() vim.treesitter.start() end)
+      end,
+    })
+
+
+    end,
   },
+
   {
     'nvim-treesitter/nvim-treesitter-context',
     opts = {
       enable = true,
     },
   },
-
-      -- There are additional nvim-treesitter modules that you can use to interact
-      -- with nvim-treesitter. You should go explore a few and see what interests you:
-      --
-      --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-      --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-      --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 }
