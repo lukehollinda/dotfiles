@@ -19,16 +19,20 @@ _idle() {
     fi
 }
 
+# Status symbol colours (rendered because fzf runs with --ansi). green: busy,
+# yellow: done and waiting on you, red: blocked on a permission prompt.
+reset=$'\033[0m'
+
 # Each line is "<visible display>\t<session>\t<pane>\t<transcript>"; fzf shows
 # only the first tab-delimited field and returns the whole line, so the values
 # used for navigation and the conversation preview stay hidden but recoverable.
 entries=()
 while IFS=$'\037' read -r pane session status cwd transcript updated_at; do
     case "$status" in
-        waiting)    icon="⏸" ;;
-        running)    icon="▶" ;;
-        permission) icon="⚠" ;;
-        *)          icon="?" ;;
+        waiting)    icon=$'\033[1;33m'"⏸""$reset" ;;
+        running)    icon=$'\033[1;32m'"▶""$reset" ;;
+        permission) icon=$'\033[1;31m'"⚠""$reset" ;;
+        *)          icon=$'\033[2m'"?""$reset" ;;
     esac
 
     idle=$(_idle "$updated_at")
