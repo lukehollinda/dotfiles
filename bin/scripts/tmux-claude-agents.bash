@@ -16,7 +16,13 @@ while IFS=$'\t' read -r pane session window status cwd transcript; do
         *)          icon="?" ;;
     esac
 
-    display=$(printf '%s  %-10s  %-5s  %s:%s  %s' "$icon" "$status" "$pane" "$session" "$window" "$cwd")
+    # Shorten the home prefix to ~ so paths stay readable across machines. The
+    # ~ is written inside double quotes so it is not expanded back to $HOME.
+    short_cwd="$cwd"
+    if [[ "$short_cwd" == "$HOME" || "$short_cwd" == "$HOME"/* ]]; then
+        short_cwd="~${short_cwd#"$HOME"}"
+    fi
+    display=$(printf '%s  %-10s  %-5s  %s:%s  %s' "$icon" "$status" "$pane" "$session" "$window" "$short_cwd")
     entries+=("$(printf '%s\t%s\t%s\t%s' "$display" "$session" "$pane" "$transcript")")
 done < <(claude_agents_each_live)
 
