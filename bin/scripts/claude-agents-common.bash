@@ -3,7 +3,7 @@
 #
 # State files live at ~/.tmux/claude-agents/{session_id}.json, one per Claude
 # instance, and record the tmux pane hosting that instance. A pane id is
-# globally unique within a tmux server, so an agent is "live" iff its pane still
+# globally unique within a tmux server, so an agent is "live" if its pane still
 # exists. This is what lets multiple Claude instances share one tmux session and
 # lets readers reap state left behind when a pane, the tmux server, or the
 # machine goes away without SessionEnd ever firing.
@@ -39,4 +39,26 @@ claude_agents_each_live() {
 
         printf '%s\t%s\t%s\t%s\t%s\n' "$pane" "$session" "$window" "$status" "$cwd"
     done
+}
+
+# Keep tmux window names matching reality: a window is named "claude" if it
+# currently hosts a claude pane; otherwise automatic-rename is restored so tmux
+# tracks the running command again. Idempotent, so it is safe to run on a timer.
+# This is the sole owner of the "claude" window name, which is why nothing else
+# renames windows.
+claude_agents_reconcile_window_names() {
+    local claude_windows
+    claude_windows=$(tmux list-panes -a -F '#{window_id} #{pane_current_command}' 2>/dev/null \
+        | awk '$2 == "claude" { print $1 }' | sort -u)
+
+    local win name
+    while IFS=$'\t' read -r win name; do
+        [[ -z "$win" ]] && continue
+        if grep -qxF "$win" <<<"$claude_windows"; then
+            # rename-window also turns automatic-rename off, pinning the name.
+            [[ "$name" == "claude" ]] || tmux rename-window -t "$win" claude 2>/dev/null
+        elif [[ "$name" == "claude" ]]; then
+            tmux set-window-option -t "$win" automatic-rename on 2>/dev/null
+        fi
+    done < <(tmux list-windows -a -F '#{window_id}'$'\t''#{window_name}' 2>/dev/null)
 }

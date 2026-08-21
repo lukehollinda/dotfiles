@@ -73,10 +73,9 @@ _notify_if_unfocused() {
 
 case "$EVENT" in
     SessionStart)
+        # Window naming is handled by the reconcile sweep in claude-status.bash,
+        # not here, so a name is never left stuck at "claude" after Claude exits.
         _write_state "waiting"
-        if [[ -n "$TMUX_SESSION" && -n "$TMUX_WINDOW" ]]; then
-            tmux rename-window -t "${TMUX_SESSION}:${TMUX_WINDOW}" claude 2>/dev/null || true
-        fi
         ;;
     UserPromptSubmit)
         _write_state "running"
