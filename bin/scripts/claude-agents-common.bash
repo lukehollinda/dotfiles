@@ -15,8 +15,22 @@ claude_agents_live_panes() {
     tmux list-panes -a -F '#{pane_id}' 2>/dev/null
 }
 
+# Resolve a session's transcript. Prefers the path recorded by the hook, and
+# falls back to the projects dir, where the transcript is named after the
+# session id, which is also the state file's name.
+claude_agents_transcript_for() {
+    local session_id="$1" recorded="$2"
+    if [[ -n "$recorded" && -f "$recorded" ]]; then
+        printf '%s' "$recorded"
+        return
+    fi
+    local hit
+    hit=$(ls -t "$HOME"/.claude/projects/*/"$session_id".jsonl 2>/dev/null | head -n 1)
+    printf '%s' "$hit"
+}
+
 # Emit one tab-separated record per live agent:
-#   pane<TAB>session<TAB>window<TAB>status<TAB>cwd
+#   pane<TAB>session<TAB>window<TAB>status<TAB>cwd<TAB>transcript
 # State files whose pane no longer exists (dead pane, or legacy files with no
 # recorded pane) are deleted as a side effect.
 claude_agents_each_live() {
@@ -25,19 +39,24 @@ claude_agents_each_live() {
     local live
     live=$(claude_agents_live_panes)
 
-    local f record pane session window status cwd
+    # Note: avoid a variable literally named "status"; it is read-only in zsh,
+    # and this file is a sourced library.
+    local f session_id record pane session window agent_status cwd transcript_path transcript
     for f in "$CLAUDE_AGENTS_DIR"/*.json; do
         [[ -f "$f" ]] || continue
 
-        record=$(jq -r '[.tmux_pane, .tmux_session, .tmux_window, .status, .cwd] | @tsv' "$f" 2>/dev/null) || continue
-        IFS=$'\t' read -r pane session window status cwd <<<"$record"
+        record=$(jq -r '[.tmux_pane, .tmux_session, .tmux_window, .status, .cwd, .transcript_path] | @tsv' "$f" 2>/dev/null) || continue
+        IFS=$'\t' read -r pane session window agent_status cwd transcript_path <<<"$record"
 
         if [[ -z "$pane" ]] || ! grep -qxF "$pane" <<<"$live"; then
             rm -f "$f"
             continue
         fi
 
-        printf '%s\t%s\t%s\t%s\t%s\n' "$pane" "$session" "$window" "$status" "$cwd"
+        session_id=$(basename "$f" .json)
+        transcript=$(claude_agents_transcript_for "$session_id" "$transcript_path")
+
+        printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$pane" "$session" "$window" "$agent_status" "$cwd" "$transcript"
     done
 }
 

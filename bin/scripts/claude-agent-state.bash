@@ -17,6 +17,7 @@ mkdir -p "$STATE_DIR"
 INPUT=$(cat)
 SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // empty' 2>/dev/null)
 CWD=$(echo "$INPUT" | jq -r '.cwd // empty' 2>/dev/null)
+TRANSCRIPT=$(echo "$INPUT" | jq -r '.transcript_path // empty' 2>/dev/null)
 
 [[ -z "$SESSION_ID" ]] && exit 0
 
@@ -39,8 +40,9 @@ _write_state() {
         --arg tmux_window "$TMUX_WINDOW" \
         --arg tmux_pane "$TMUX_PANE_ID" \
         --arg cwd "$CWD" \
+        --arg transcript_path "$TRANSCRIPT" \
         --arg updated_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-        '{status: $status, tmux_session: $tmux_session, tmux_window: $tmux_window, tmux_pane: $tmux_pane, cwd: $cwd, updated_at: $updated_at}' \
+        '{status: $status, tmux_session: $tmux_session, tmux_window: $tmux_window, tmux_pane: $tmux_pane, cwd: $cwd, transcript_path: $transcript_path, updated_at: $updated_at}' \
         > "$STATE_FILE"
 }
 
