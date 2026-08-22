@@ -82,6 +82,12 @@ case "$EVENT" in
     UserPromptSubmit)
         _write_state "running"
         ;;
+    PostToolUse)
+        # A tool finished, so the agent is actively working. This also clears a
+        # stale "permission" once a granted prompt's tool completes, since
+        # nothing else transitions the agent out of "permission" mid-turn.
+        _write_state "running"
+        ;;
     Stop)
         _write_state "waiting"
         _notify_if_unfocused "${TMUX_SESSION}: Ready"
