@@ -16,6 +16,7 @@ SESSION_PICKER_DIRECTORIES=(
     "$HOME"
     "$HOME/work"
     "$HOME/person"
+    "$HOME/person/dev"
     "$HOME/upstream"
 )
 
