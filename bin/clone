@@ -4,15 +4,17 @@ set -u
 set -o pipefail
 
 usage() {
-  echo "Usage: $(basename "$0") [--trust] remote_repo path/to/directory" >&2
+  echo "Usage: $(basename "$0") [--trust] [--rename=name] remote_repo path/to/directory" >&2
 }
 
 trust=false
+rename=""
 args=()
 
 for arg in "$@"; do
   case "$arg" in
     --trust) trust=true ;;
+    --rename=*) rename="${arg#*=}" ;;
     *) args+=("$arg") ;;
   esac
 done
@@ -25,7 +27,11 @@ fi
 remote="${args[0]}"
 path="${args[1]}"
 
-repo_name=$(basename "$remote" .git)
+if [ -n "$rename" ]; then
+  repo_name="$rename"
+else
+  repo_name=$(basename "$remote" .git)
+fi
 dest="$path/$repo_name"
 
 mkdir -p "$path"
