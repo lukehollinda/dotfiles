@@ -1,5 +1,3 @@
-alias refresh='source ~/.zshrc'
-
 # Util
 alias weather='curl http://wttr.in'
 
@@ -36,3 +34,4 @@ alias obsidian='open /Applications/Obsidian.app'
 
 # Docker
 alias dc='docker compose'
+
