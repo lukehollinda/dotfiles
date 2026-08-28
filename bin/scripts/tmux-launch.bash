@@ -27,5 +27,5 @@ else
     # script directly as a startup command bypasses that.
     # After switch-client fires, the shell runs `exit`, the bootstrap session closes, and
     # detach-on-destroy off (tmux.conf) keeps the client on the chosen project session.
-    exec tmux new-session \; send-keys "tmux-sessionizer.bash" Enter
+    exec tmux new-session \; send-keys -l "tmux-sessionizer.bash" \; send-keys Enter
 fi
