@@ -84,7 +84,7 @@ echo ""
 # -----------------------------------------------------------------------
 # Test 1: session_switch_adds_to_history
 # -----------------------------------------------------------------------
-> "$TMUX_SESSION_HISTORY"
+: > "$TMUX_SESSION_HISTORY"
 simulate_switch "alpha"
 if [[ "$(history_top)" == "alpha" ]]; then
     pass "session_switch_adds_to_history"
@@ -95,7 +95,7 @@ fi
 # -----------------------------------------------------------------------
 # Test 2: session_switch_removes_duplicates
 # -----------------------------------------------------------------------
-> "$TMUX_SESSION_HISTORY"
+: > "$TMUX_SESSION_HISTORY"
 $T has-session -t "alpha" 2>/dev/null || $T new-session -d -s "alpha"
 $T has-session -t "beta"  2>/dev/null || $T new-session -d -s "beta"
 simulate_switch "alpha"
@@ -111,7 +111,7 @@ fi
 # -----------------------------------------------------------------------
 # Test 3: session_switch_limits_to_10
 # -----------------------------------------------------------------------
-> "$TMUX_SESSION_HISTORY"
+: > "$TMUX_SESSION_HISTORY"
 for i in $(seq 1 12); do
     $T has-session -t "s$i" 2>/dev/null || $T new-session -d -s "s$i"
     simulate_switch "s$i"
@@ -126,7 +126,7 @@ fi
 # -----------------------------------------------------------------------
 # Test 4: session_closed_removes_from_history
 # -----------------------------------------------------------------------
-> "$TMUX_SESSION_HISTORY"
+: > "$TMUX_SESSION_HISTORY"
 $T has-session -t "alpha" 2>/dev/null || $T new-session -d -s "alpha"
 $T has-session -t "beta"  2>/dev/null || $T new-session -d -s "beta"
 simulate_switch "alpha"
@@ -141,7 +141,7 @@ fi
 # -----------------------------------------------------------------------
 # Test 5: session_closed_leaves_remaining_entries
 # -----------------------------------------------------------------------
-> "$TMUX_SESSION_HISTORY"
+: > "$TMUX_SESSION_HISTORY"
 $T has-session -t "alpha" 2>/dev/null || $T new-session -d -s "alpha"
 $T has-session -t "beta"  2>/dev/null || $T new-session -d -s "beta"
 $T has-session -t "gamma" 2>/dev/null || $T new-session -d -s "gamma"
