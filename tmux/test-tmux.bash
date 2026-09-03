@@ -75,7 +75,7 @@ echo "Starting isolated tmux server (socket: $SOCKET)..."
 # -f /dev/null prevents the test server from loading ~/.tmux.conf and its hooks,
 # which would otherwise fire on-session-switch.bash during test operations and
 # pollute the history file with unexpected writes.
-tmux -L "$SOCKET" -f /dev/null new-session -d -s seed
+$T -f /dev/null new-session -d -s seed
 
 echo ""
 echo "Running tests..."
