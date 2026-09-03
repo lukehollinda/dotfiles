@@ -5,12 +5,9 @@
 # Uses fzf to show you all git directories within a defined list of directories.
 # Switches you to the selected session, creating if necessary.
 # Session history is tracked by tmux hook scripts in this same folder
-
-tmux_running=$(pgrep tmux)
-if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-    echo "Please run from inside tmux"
-    exit 0
-fi
+#
+# Runs both inside and outside tmux. Outside tmux it renders fzf in the terminal
+# and attaches to the chosen session, so no throwaway bootstrap session is needed.
 
 SESSION_PICKER_DIRECTORIES=(
     "$HOME"
@@ -22,10 +19,23 @@ SESSION_PICKER_DIRECTORIES=(
 
 TMUX_SESSION_HISTORY="${TMUX_SESSION_HISTORY:-$HOME/.tmux/session_history}"
 select-project() {
+    # --tmux renders fzf in a popup, which requires a surrounding tmux client
+    local fzf_args=()
+    [[ -n $TMUX ]] && fzf_args+=(--tmux)
+
     find "${SESSION_PICKER_DIRECTORIES[@]}" -mindepth 2 -maxdepth 2 -type d -name ".git" 2>/dev/null \
         | sed 's|/\.git$||' \
         | sed "s|^$HOME/||" \
-        | fzf --tmux
+        | fzf "${fzf_args[@]}"
+}
+
+# $1 = session name
+goto-session() {
+    if [[ -n $TMUX ]]; then
+        tmux switch-client -t "$1"
+    else
+        exec tmux attach-session -t "$1"
+    fi
 }
 
 # $1 = full path
@@ -35,7 +45,7 @@ switch-session() {
     if ! tmux has-session -t="$selected_name" 2> /dev/null; then
         create-new-session "$selected_name" "$1"
     fi
-    tmux switch-client -t "$selected_name"
+    goto-session "$selected_name"
 }
 
 # $1 = name, $2 = full path
@@ -61,7 +71,7 @@ elif [[ "$1" == "previous" ]]; then # Switch to previous session
     if [[ -z $previous_session ]]; then
         exit 1
     fi
-    tmux switch-client -t "$previous_session"
+    goto-session "$previous_session"
 
 elif [[ -d "$1" ]]; then # Switch to session by name
 
