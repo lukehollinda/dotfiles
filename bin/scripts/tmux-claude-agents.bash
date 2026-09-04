@@ -60,8 +60,7 @@ selected=$(printf '%s\n' "${entries[@]}" | fzf --tmux 90%,80% \
     --preview-window='right:60%:wrap')
 [[ -z "$selected" ]] && exit 0
 
-target_session=$(printf '%s' "$selected" | awk -F'\t' '{print $2}')
-target_pane=$(printf '%s' "$selected" | awk -F'\t' '{print $3}')
+IFS=$'\t' read -r _ target_session target_pane _ <<< "$selected"
 [[ -z "$target_pane" ]] && exit 0
 
 tmux switch-client -t "$target_session" 2>/dev/null
