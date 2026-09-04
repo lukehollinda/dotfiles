@@ -12,10 +12,12 @@ FAIL=0
 
 export TMUX_SESSION_HISTORY
 TMUX_SESSION_HISTORY=$(mktemp)
+PROJECT_ROOT=$(mktemp -d)
 
 cleanup() {
     $T kill-server 2>/dev/null || true
     rm -f "$TMUX_SESSION_HISTORY"
+    rm -rf "$PROJECT_ROOT"
 }
 trap cleanup EXIT
 
@@ -37,21 +39,25 @@ wait_for() {
     return 1
 }
 
+# Run a command in a window of $1 so it inherits $TMUX for the test server, and
+# wait for it to finish. The scripts dir is on PATH so they can find each other.
+run_in_session() {
+    local session="$1"; shift
+    local sentinel
+    sentinel=$(mktemp); rm -f "$sentinel"
+    $T new-window -d -t "$session" \
+        "PATH='$SCRIPTS':\$PATH TMUX_SESSION_HISTORY='$TMUX_SESSION_HISTORY' $*; touch '$sentinel'"
+    wait_for "$sentinel" || echo "  WARN: sentinel timeout for run_in_session($session)"
+}
+
 # Simulate the client-session-changed hook for $session.
 # Runs on-session-switch.bash inside a new-window of the test server so that
 # $TMUX is set to the test socket and `tmux display-message -p '#S'` returns
 # the correct session name — no interactive shell init race.
 simulate_switch() {
     local session="$1"
-    local sentinel
-    sentinel=$(mktemp); rm -f "$sentinel"
-
     $T has-session -t "$session" 2>/dev/null || $T new-session -d -s "$session"
-
-    $T new-window -d -t "$session" \
-        "TMUX_SESSION_HISTORY='$TMUX_SESSION_HISTORY' bash '$SCRIPTS/on-session-switch.bash'; touch '$sentinel'"
-
-    wait_for "$sentinel" || echo "  WARN: sentinel timeout for simulate_switch($session)"
+    run_in_session "$session" "bash '$SCRIPTS/on-session-switch.bash'"
 }
 
 # Run on-session-closed.bash for a session that has already been killed.
@@ -162,14 +168,43 @@ fi
 # doesn't terminate our own window mid-script.
 # -----------------------------------------------------------------------
 $T has-session -t "killtest" 2>/dev/null || $T new-session -d -s "killtest"
-sentinel=$(mktemp); rm -f "$sentinel"
-$T new-window -d -t "seed" \
-    "bash '$SCRIPTS/tmux-safe-kill-session-by-name.bash' 'killtest' 2>/dev/null; touch '$sentinel'"
-wait_for "$sentinel" || true
+run_in_session "seed" "bash '$SCRIPTS/tmux-safe-kill-session-by-name.bash' 'killtest' 2>/dev/null"
 if ! $T has-session -t "killtest" 2>/dev/null; then
     pass "safe_kill_no_nvim"
 else
     fail "safe_kill_no_nvim" "killtest session still exists"
+fi
+
+# -----------------------------------------------------------------------
+# Test 7: sessionizer_creates_project_session
+# A project gets an editor window plus a "term" window; "scratch" gets a bare shell.
+# -----------------------------------------------------------------------
+mkdir -p "$PROJECT_ROOT/proj/.git" "$PROJECT_ROOT/scratch/.git"
+run_in_session "seed" "bash '$SCRIPTS/tmux-sessionizer.bash' '$PROJECT_ROOT/proj'"
+run_in_session "seed" "bash '$SCRIPTS/tmux-sessionizer.bash' '$PROJECT_ROOT/scratch'"
+proj_windows=$($T list-windows -t proj -F '#{window_name}' 2>/dev/null | tr '\n' ',')
+scratch_windows=$($T list-windows -t scratch -F '#{window_name}' 2>/dev/null | grep -c '.' || echo 0)
+if [[ "$proj_windows" == *term,* ]] && [[ "$scratch_windows" -eq 1 ]]; then
+    pass "sessionizer_creates_project_session"
+else
+    fail "sessionizer_creates_project_session" \
+        "proj windows='$proj_windows', scratch window count=$scratch_windows"
+fi
+
+# -----------------------------------------------------------------------
+# Test 8: kill_all_spares_protected_sessions
+# Runs last: it kills every session except dotfiles and scratch. Driven from the
+# dotfiles session so the running window is not killed out from under itself.
+# -----------------------------------------------------------------------
+$T has-session -t "dotfiles" 2>/dev/null || $T new-session -d -s "dotfiles"
+$T has-session -t "victim"   2>/dev/null || $T new-session -d -s "victim"
+run_in_session "dotfiles" "bash '$SCRIPTS/tmux-kill-all.bash'"
+if $T has-session -t=dotfiles 2>/dev/null && $T has-session -t=scratch 2>/dev/null \
+    && ! $T has-session -t=victim 2>/dev/null; then
+    pass "kill_all_spares_protected_sessions"
+else
+    fail "kill_all_spares_protected_sessions" \
+        "remaining: $($T list-sessions -F '#{session_name}' 2>/dev/null | tr '\n' ',')"
 fi
 
 # -----------------------------------------------------------------------
