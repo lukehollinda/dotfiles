@@ -2,15 +2,16 @@
 # fzf popup picker for navigating between running Claude Code agents, with a
 # preview of each agent's conversation. Bound to <prefix> a in tmux.conf.
 
+# shellcheck source=SCRIPTDIR/claude-agents-common.bash
 source "$(command -v claude-agents-common.bash)"
 
 # Human-readable age of an ISO-8601 UTC timestamp, e.g. 2m, 1h, 3d.
 _idle() {
-    local ts="$1" then now delta
+    local ts="$1" started now delta
     [[ -z "$ts" ]] && { printf '?'; return; }
-    then=$(TZ=UTC date -j -f '%Y-%m-%dT%H:%M:%SZ' "$ts" +%s 2>/dev/null) || { printf '?'; return; }
+    started=$(TZ=UTC date -j -f '%Y-%m-%dT%H:%M:%SZ' "$ts" +%s 2>/dev/null) || { printf '?'; return; }
     now=$(date +%s)
-    delta=$(( now - then ))
+    delta=$(( now - started ))
     (( delta < 0 )) && delta=0
     if   (( delta < 60 ));    then printf '%ds' "$delta"
     elif (( delta < 3600 ));  then printf '%dm' $(( delta / 60 ))

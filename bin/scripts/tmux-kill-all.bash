@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Close every tmux session except "dotfiles", "scratch", and the attached one.
 
+# shellcheck source=SCRIPTDIR/tmux-common.bash
 source "$(command -v tmux-common.bash)"
 tmux_require_server
 
