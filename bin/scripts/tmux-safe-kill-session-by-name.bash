@@ -22,13 +22,16 @@ fi
 ## nvim panes session
 nvim_panes=$(tmux list-panes -s -t "$SESSION" -F "#{window_id} #{pane_id} #{pane_current_command}" | grep nvim)
 
+tmpfile=$(mktemp)
+trap 'rm -f "$tmpfile"' EXIT
+
 ## Check if any nvim instances have unsaved changes
 while read -r pane; do
 	window_id=$(echo "$pane" | awk '{print $1}')
 	pane_id=$(echo "$pane" | awk '{print $2}')
 
-	tmpfile=$(mktemp)
-	trap 'rm -f "$tmpfile"' RETURN
+	# Clear the previous pane's count so it cannot be read as this pane's
+	: > "$tmpfile"
 
 	# Make sure we're in normal mode
 	tmux send-keys -t "$SESSION:$window_id.$pane_id" Escape
@@ -53,7 +56,11 @@ while read -r pane; do
 	tmux send-keys -t "$SESSION:$window_id.$pane_id" ":qa" Enter
 done <<< "$nvim_panes"
 
-# Close the tmux session
-tmux kill-session -t "$SESSION"
+# Close the tmux session. Quitting nvim can close the last pane, and the session
+# with it, so a failed kill only matters if the session is still there.
+tmux kill-session -t "$SESSION" 2> /dev/null
 
-exit 0
+if tmux has-session -t="$SESSION" 2> /dev/null; then
+	echo "Failed to close session '$SESSION'." >&2
+	exit 1
+fi
