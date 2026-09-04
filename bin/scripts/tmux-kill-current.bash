@@ -1,11 +1,7 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
+# Close the attached tmux session.
 
-session=$(tmux display-message -p '#S')
+source "$(command -v tmux-common.bash)"
+tmux_require_server
 
-tmux_running=$(pgrep tmux)
-if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-    echo Must run in tmux
-    exit 0
-fi
-
-tmux-safe-kill-session-by-name.bash "$session"
+tmux-safe-kill-session-by-name.bash "$(tmux display-message -p '#S')"

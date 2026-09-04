@@ -1,15 +1,10 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
+# Pick a tmux session with fzf and close it.
 
-tmux_running=$(pgrep tmux)
-if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-    echo Must run in tmux
-    exit 0
-fi
+source "$(command -v tmux-common.bash)"
+tmux_require_server
 
-selected=$(tmux list-sessions | awk '{print $1}' | sed 's/://' | fzf)
-
-if [[ -z $selected ]]; then
-    exit 0
-fi
+selected=$(tmux_session_names | fzf)
+[[ -z "$selected" ]] && exit 0
 
 tmux-safe-kill-session-by-name.bash "$selected"

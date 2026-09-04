@@ -1,20 +1,12 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
+# Close every tmux session except "dotfiles", "scratch", and the attached one.
 
-# Safely closes all tmux sessions, excluding "dotfiles", "scratch", and the
-# currently attached session.
-
-tmux_running=$(pgrep tmux)
-if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-    echo Must run in tmux
-    exit 0
-fi
-
-# All sessions, excluding the one currently attached
-sessions=$(tmux list-sessions | grep -v "attached" | awk '{print $1}' | sed 's/://')
+source "$(command -v tmux-common.bash)"
+tmux_require_server
 
 while IFS= read -r session; do
-    if [[ $session == "dotfiles" || $session == "scratch" ]]; then
-		continue
-    fi
+    case "$session" in
+        dotfiles | scratch) continue ;;
+    esac
     tmux-safe-kill-session-by-name.bash "$session"
-done <<< "$sessions"
+done < <(tmux_detached_session_names)
