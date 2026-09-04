@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Smart tmux launcher. Use instead of bare `tmux` to avoid unnamed bootstrap sessions.
+# Smart tmux launcher, used instead of bare `tmux`.
 #
 # - If already inside tmux: exits with a message.
 # - If server is running: reattaches to the most recently used session from history.

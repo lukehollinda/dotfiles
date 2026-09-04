@@ -1,12 +1,11 @@
 #! /usr/bin/env bash
 
 
-# Safely close tmux session by session name.
-
-# This was written because closing tmux sessions or windows with nvim running
-# was leading to build up of orphaned LSP processes.
-
-# $1 = session name
+# Close the tmux session named $1, quitting nvim first.
+#
+# Killing a session out from under nvim leaves its LSP servers running as
+# orphans, so each nvim is asked to quit. A session holding unsaved buffers is
+# left open.
 if [[ -z "$1" ]]; then
 	echo "Expected session name as script argument"
 	exit 1

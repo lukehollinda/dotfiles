@@ -19,8 +19,6 @@ _idle() {
     fi
 }
 
-# Status symbol colours (rendered because fzf runs with --ansi). green: busy,
-# yellow: done and waiting on you, red: blocked on a permission prompt.
 reset=$'\033[0m'
 
 # Each line is "<visible display>\t<session>\t<pane>\t<transcript>"; fzf shows
@@ -28,6 +26,8 @@ reset=$'\033[0m'
 # used for navigation and the conversation preview stay hidden but recoverable.
 entries=()
 while IFS=$'\037' read -r pane session status cwd transcript updated_at; do
+    # Colours render because fzf runs with --ansi. Green: busy, yellow: done and
+    # waiting on you, red: blocked on a permission prompt.
     case "$status" in
         waiting)    icon=$'\033[1;33m'"⏸""$reset" ;;
         running)    icon=$'\033[1;32m'"▶""$reset" ;;
@@ -38,8 +38,7 @@ while IFS=$'\037' read -r pane session status cwd transcript updated_at; do
     idle=$(_idle "$updated_at")
     branch=$(claude_agents_branch_for "$transcript")
 
-    # Shorten the home prefix to ~ so paths stay readable across machines. The
-    # ~ is written inside double quotes so it is not expanded back to $HOME.
+    # The ~ is written inside double quotes so it is not expanded back to $HOME.
     short_cwd="$cwd"
     if [[ "$short_cwd" == "$HOME" || "$short_cwd" == "$HOME"/* ]]; then
         short_cwd="~${short_cwd#"$HOME"}"

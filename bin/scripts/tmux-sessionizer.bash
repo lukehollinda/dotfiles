@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 
-# Interactive tmux session picker for quickly switching between project directories.
-
-# Uses fzf to show you all git directories within a defined list of directories.
-# Switches you to the selected session, creating if necessary.
-# Session history is tracked by tmux hook scripts in this same folder
+# Interactive tmux session picker for switching between project directories.
+#
+# With no argument, fzf lists every git repo under SESSION_PICKER_DIRECTORIES and
+# switches to that project's session, creating it if necessary. With "previous",
+# switches back to the session used before the current one. With a directory
+# path, switches straight to that project's session.
 #
 # Runs both inside and outside tmux. Outside tmux it renders fzf in the terminal
 # and attaches to the chosen session, so no throwaway bootstrap session is needed.
+#
+# Session history is tracked by the on-session-* hook scripts in this folder.
 
 SESSION_PICKER_DIRECTORIES=(
     "$HOME"
@@ -50,7 +53,7 @@ switch-session() {
 
 # $1 = name, $2 = full path
 create-new-session() {
-    # Only open terminal for scratch session
+    # scratch is a bare shell; other projects open an editor plus a terminal window.
     if [[ $1 == "scratch" ]]; then
         tmux new-session -ds "$1" -c "$2"
         return
@@ -73,7 +76,7 @@ elif [[ "$1" == "previous" ]]; then # Switch to previous session
     fi
     goto-session "$previous_session"
 
-elif [[ -d "$1" ]]; then # Switch to session by name
+elif [[ -d "$1" ]]; then # Switch to the session for a project path
 
     switch-session "$1"
 fi
