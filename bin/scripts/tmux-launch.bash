@@ -7,7 +7,7 @@
 #   session. No tmux server is started until a project is picked, so cancelling the
 #   picker leaves nothing behind.
 
-TMUX_SESSION_HISTORY="$HOME/.tmux/session_history"
+TMUX_SESSION_HISTORY="${TMUX_SESSION_HISTORY:-$HOME/.tmux/session_history}"
 
 if [[ -n "$TMUX" ]]; then
     echo "Already inside a tmux session." >&2
@@ -15,15 +15,13 @@ if [[ -n "$TMUX" ]]; then
 fi
 
 if tmux has-session 2>/dev/null; then
-    # Server running - reattach to the most recently used session
     last=$(head -n1 "$TMUX_SESSION_HISTORY" 2>/dev/null)
     if [[ -n "$last" ]] && tmux has-session -t "$last" 2>/dev/null; then
         exec tmux attach-session -t "$last"
-    else
-        exec tmux attach-session
     fi
-else
-    # No server - the sessionizer detects it is outside tmux, picks a project with a
-    # plain (non-popup) fzf, creates that session and attaches to it directly.
-    exec tmux-sessionizer.bash
+    exec tmux attach-session
 fi
+
+# No server - the sessionizer detects it is outside tmux, picks a project with a
+# plain (non-popup) fzf, creates that session and attaches to it directly.
+exec tmux-sessionizer.bash
