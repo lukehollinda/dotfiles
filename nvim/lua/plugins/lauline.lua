@@ -6,6 +6,8 @@ return {
       -- Default config here: https://github.com/nvim-lualine/lualine.nvim?tab=readme-ov-file#default-configuration
       options = {
         theme = "auto",
+      },
+      sections = {
         lualine_z = {
           -- Custom location. line number : total lines
           function ()
