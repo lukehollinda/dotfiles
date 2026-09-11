@@ -27,6 +27,17 @@ fi
 remote="${args[0]}"
 path="${args[1]}"
 
+if [ -z "$path" ]; then
+  usage
+  exit 1
+fi
+
+# Accept the target directory with or without trailing slashes. "/" strips to
+# the empty string, which still joins into an absolute path below.
+while [ "$path" != "${path%/}" ]; do
+  path="${path%/}"
+done
+
 if [ -n "$rename" ]; then
   repo_name="$rename"
 else
@@ -34,7 +45,7 @@ else
 fi
 dest="$path/$repo_name"
 
-mkdir -p "$path"
+mkdir -p "${path:-/}"
 git clone "$remote" "$dest"
 
 if [ "$trust" = true ]; then
