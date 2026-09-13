@@ -61,11 +61,13 @@ grim() {
 
 # Git Commit - Always verbose, add Jira ticket as trailer if found in branch name
 gc() {
-	local branch
-	branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null) || {
+	git rev-parse --git-dir >/dev/null 2>&1 || {
 		echo "Not in a git repository"
 		return 1
 	}
+	# Empty on detached HEAD; set before the first commit
+	local branch
+	branch=$(git symbolic-ref --quiet --short HEAD)
 	local ticket
 	ticket=$(echo "$branch" | grep -Eo -i '^[A-Za-z]+-[0-9]+')
 	if [[ -z $ticket ]]; then
