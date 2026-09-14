@@ -1,5 +1,5 @@
 alias g="git"
-alias gs="git status"
+alias gs="git status --short --branch"
 alias ga='git add'
 alias gaa="git add --all"
 alias gaac="git add --all; gc"
