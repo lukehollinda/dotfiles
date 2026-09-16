@@ -7,7 +7,7 @@ export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 alias ky="kubectl -oyaml"
 
 alias kl="kubectl logs"
-alias klog="kubectl log"
+alias klog="kubectl logs"
 
 alias kn="kubens"
 alias wk="watch kubectl "
