@@ -44,7 +44,7 @@ command -v kubectl &>/dev/null && source <(kubectl completion zsh)
 
 # mise
 if command -v mise &>/dev/null; then
-  eval "$(/opt/homebrew/bin/mise activate zsh)"
+  eval "$(mise activate zsh)"
   source <(mise completion zsh)
 fi
 
