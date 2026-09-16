@@ -5,10 +5,6 @@ alias weather='curl http://wttr.in'
 alias vim="nvim"
 alias v="nvim"
 
-# Directories
-alias dev="cd ~/dev"
-alias dotfiles="cd ~/person/dotfiles"
-
 # Paging
 alias ybat="bat -l yaml"
 alias yvim="nvim-pager -R -c 'set syntax=yaml' -c 'set nowrap'"
