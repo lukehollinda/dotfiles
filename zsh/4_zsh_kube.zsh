@@ -69,34 +69,31 @@ kvim() {
 }
 
 # Smart switcher for k8s context.
-# Configs are to be put in '~/kube/configs/' names as 'kubeconfig-{{name}}.yaml'
+# Configs are to be put in '~/.kube/configs/' named as 'kubeconfig-{{name}}.yaml'
 #
 # By default: fzf select from available configs
-# kc [name] : select by name. (Ex. kc qa -> sets '~/kube/configs/kubeconfig-qa.yaml')
-# kc -      :  Will jump back to your most recently visited cluster
+# kc [name] : select by name. (Ex. kc qa -> sets '~/.kube/configs/kubeconfig-qa.yaml')
+# kc -      : Will jump back to your most recently visited cluster
 kc() {
-
 	local kubeconfigs=~/.kube/configs
 	local config
-	# fzf select filename
-	if [[ -z "$1" ]] ; then
-		config=$(ls -1 ${kubeconfigs} | grep 'kube' | fzf --tmux)
+
+	if [[ -z "$1" ]]; then
+		config=$(ls -1 "${kubeconfigs}" | grep 'kubeconfig' | fzf --tmux)
 
 		# Do nothing if fzf is exited
-		if [ -z "$config" ]; then
+		if [[ -z "$config" ]]; then
 			echo "No context selected"
 			return
 		fi
-	fi
-
-	# Use previous config
-	if [[ "$1" = "-" ]] ; then
-		config=$(ls -1t ${kubeconfigs} | grep 'kubeconfig' | head -n2 | tail -n1 )
-	fi
-
-	# Support selecting as an argument
-	if [[ -f "${kubeconfigs}/kubeconfig-${1}.yaml" ]]; then
+	elif [[ "$1" = "-" ]]; then
+		# Second most recently touched config is the previously active one
+		config=$(ls -1t "${kubeconfigs}" | grep 'kubeconfig' | head -n2 | tail -n1)
+	elif [[ -f "${kubeconfigs}/kubeconfig-${1}.yaml" ]]; then
 		config="kubeconfig-${1}.yaml"
+	else
+		echo "kc: no such config '${kubeconfigs}/kubeconfig-${1}.yaml'" >&2
+		return 1
 	fi
 
 	export KUBECONFIG=${kubeconfigs}/${config}
