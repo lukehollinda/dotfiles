@@ -29,8 +29,8 @@ alias git-https='git remote set-url origin "$(git remote get-url origin | sed -E
 # Change cwd to top of git repo
 alias cdg='cd "$(git rev-parse --show-toplevel || echo .)"'
 
-# Git Checkout Master / Main
-gcom() {
+# Name of the repo's default branch
+git-base-branch() {
 	local base
 	base=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||')
 	if [[ -z "$base" ]]; then
@@ -41,22 +41,17 @@ gcom() {
 			base="master"
 		fi
 	fi
-	git checkout "$base" "$@"
+	echo "$base"
+}
+
+# Git Checkout Master / Main
+gcom() {
+	git checkout "$(git-base-branch)" "$@"
 }
 
 # Git Rebase Master / Main
 grim() {
-	local base
-	base=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||')
-	if [[ -z "$base" ]]; then
-		# Fall back to whichever of main/master exists locally
-		if git show-ref --verify --quiet refs/heads/main; then
-			base="main"
-		else
-			base="master"
-		fi
-	fi
-	git rebase -i "$base" "$@"
+	git rebase -i "$(git-base-branch)" "$@"
 }
 
 # Git Commit - Always verbose, add Jira ticket as trailer if found in branch name
