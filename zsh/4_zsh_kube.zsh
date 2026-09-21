@@ -43,20 +43,19 @@ kdecode_secret() {
 		return 1
 	fi
 
-	local ns_flag=""
+	local -a ns_flag
 	if [[ -n "$2" ]]; then
-		ns_flag="--namespace $2"
+		ns_flag=(--namespace "$2")
 	fi
-	kubectl get secret "$secret" $ns_flag -o yaml | \
+	kubectl get secret "$secret" "${ns_flag[@]}" -o yaml | \
 		yq '.data // {}' | \
 		yq 'to_entries | .[] | "\(.key): \(.value | @base64d)"' -r
 }
 
 # Add -oyaml to kubectl command and pipe to nvim
 kvim() {
-	local kubectl_response=$(kubectl -oyaml "$@")
-
-	if [[ $? -ne 0 ]]; then
+	local kubectl_response
+	if ! kubectl_response=$(kubectl -oyaml "$@"); then
 		echo "kubectl command failed: $kubectl_response"
 		return 1
 	fi
