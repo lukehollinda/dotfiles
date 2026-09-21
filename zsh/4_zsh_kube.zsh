@@ -24,8 +24,8 @@ alias kgeteventsall="kubectl get events -A --sort-by='.lastTimestamp'"
 
 # Get all resources in namespace, via 'k api-resources'
 kgetallforreal() {
-  namespaceName=$1
-  kubectl api-resources --namespaced=true --verbs=list -o name | grep -v '^events\.events\.k8s\.io$' | grep -v '^events$' | xargs echo | tr ' ' ',' | xargs kubectl get -n "${namespaceName}"
+	namespaceName=$1
+	kubectl api-resources --namespaced=true --verbs=list -o name | grep -v '^events\.events\.k8s\.io$' | grep -v '^events$' | xargs echo | tr ' ' ',' | xargs kubectl get -n "${namespaceName}"
 }
 
 # Select and open link from Ingress hosts
