@@ -8,6 +8,7 @@ alias gp='git pull'
 alias gca='git commit --amend --verbose'
 alias gr='git rebase'
 alias gshow='git show'
+alias gplease='git push --force-with-lease'
 
 # Because I forget the config option
 alias gitupstream='git config --get remote.origin.url'
