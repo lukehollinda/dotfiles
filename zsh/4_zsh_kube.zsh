@@ -102,15 +102,15 @@ kc() {
 }
 
 kgetpodsonnode () {
-        kubectl get pods -A --field-selector spec.nodeName="$1"
+	kubectl get pods -A --field-selector spec.nodeName="$1"
 }
 
 kgetpodsonnodewide () {
-        kubectl get pods -A -owide --field-selector spec.nodeName="$1"
+	kubectl get pods -A -owide --field-selector spec.nodeName="$1"
 }
 
 kgetnotrunningpods () {
-        kubectl get pods | grep -v Running | grep -v Completed
+	kubectl get pods | grep -v Running | grep -v Completed
 }
 
 # Get all resources, selected from $1 grep of 'k api-resources'
