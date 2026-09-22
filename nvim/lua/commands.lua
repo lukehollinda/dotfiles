@@ -32,7 +32,7 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
       return
     end
 
-    -- First elemenet in getpos(".") result is unneeded buffer number
+    -- First element in getpos(".") result is unneeded buffer number
     local position = vim.fn.getpos(".")
     table.remove(position, 1)
 
