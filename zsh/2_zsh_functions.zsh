@@ -83,26 +83,26 @@ ret3 () { cat /tmp/capture3.out; }
 # Helpful with kubectl output
 # TODO: Does not properly handle mixed units (ex: 3h12m)
 sort_by_age() {
-    local col="$1"
-    if [[ -z "$col" ]]; then
-        echo "Usage: sort_by_age <column_number>" >&2
-        return 1
-    fi
+	local col="$1"
+	if [[ -z "$col" ]]; then
+		echo "Usage: sort_by_age <column_number>" >&2
+		return 1
+	fi
 
-    awk -v col="$col" '
-    function to_sec(val) {
-        n = substr(val, 1, length(val)-1)
-        u = substr(val, length(val), 1)
-        if (u == "d") return n * 86400
-        if (u == "h") return n * 3600
-        if (u == "m") return n * 60
-        if (u == "s") return n
-        return 0
-    }
+	awk -v col="$col" '
+	function to_sec(val) {
+		n = substr(val, 1, length(val)-1)
+		u = substr(val, length(val), 1)
+		if (u == "d") return n * 86400
+		if (u == "h") return n * 3600
+		if (u == "m") return n * 60
+		if (u == "s") return n
+		return 0
+	}
 
-    {
-        age = $col
-        print to_sec(age), $0
-    }
-    ' | sort -n | cut -d' ' -f2-
+	{
+		age = $col
+		print to_sec(age), $0
+	}
+	' | sort -n | cut -d' ' -f2-
 }
