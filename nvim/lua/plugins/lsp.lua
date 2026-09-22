@@ -89,9 +89,11 @@ return {
         end,
       })
 
-      -- Broadcast nvim capabilities to LSPs
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+      -- Nvim merges make_client_capabilities() under this, so only the cmp
+      -- additions need declaring.
+      vim.lsp.config('*', {
+        capabilities = require('cmp_nvim_lsp').default_capabilities(),
+      })
 
       local servers = {
         -- See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -132,10 +134,7 @@ return {
       require('mason-lspconfig').setup {
         handlers = {
           function(server_name)
-            local server = servers[server_name] or {}
-
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            vim.lsp.config(server_name, server)
+            vim.lsp.config(server_name, servers[server_name] or {})
 
             -- TODO: Possibly add a second param here to only enable specific
             -- servers by default
