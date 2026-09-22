@@ -18,9 +18,11 @@ script_dir=$(dirname "$script_path")
 DOTFILE_PATH=$(cd "$script_dir" && git rev-parse --show-toplevel 2>/dev/null)
 tmux set-environment -g DOTFILE_PATH "$DOTFILE_PATH" 2>/dev/null
 
-# Source all other zsh files
-for file in $(find "${DOTFILE_PATH}/zsh" -type f ! -name 'setup.zsh' ! -name 'README.md' | sort)
-do
+# Source all other zsh files. Globs expand in sorted order, which is what the
+# numeric filename prefixes rely on.
+for file in "${DOTFILE_PATH}"/zsh/*.zsh; do
+  [[ "$file" == */setup.zsh ]] && continue
+
   if [[ "$PROFILE_STARTUP" == true ]]; then
     profile_source "$file"
   else
