@@ -1,14 +1,16 @@
 # Optionally print time taken to source all zsh files at startup
 PROFILE_STARTUP=false
 
-profile_source() {
-  local file="$1"
-  local start=$(date +%s.%N)
-  source "$file"
-  local end=$(date +%s.%N)
-  local duration=$((end-start))
-  echo "($file): $duration"
-}
+if [[ "$PROFILE_STARTUP" == true ]]; then
+  # EPOCHREALTIME avoids depending on a date(1) that understands %N
+  zmodload zsh/datetime
+  profile_source() {
+    local file="$1"
+    local start=$EPOCHREALTIME
+    source "$file"
+    printf '(%s): %.3fs\n' "$file" $((EPOCHREALTIME - start))
+  }
+fi
 
 # Get script path (Below method is used to support sourcing this file through symlink)
 script_path=$(readlink -f "${(%):-%x}")
