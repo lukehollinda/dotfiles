@@ -135,9 +135,7 @@ return {
             local server = servers[server_name] or {}
 
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            vim.lsp.config[server_name].settings = server.settings
-            vim.lsp.config[server_name].capabilities = server.capabilities
-            vim.lsp.config[server_name].filetypes = server.filetypes
+            vim.lsp.config(server_name, server)
 
             -- TODO: Possibly add a second param here to only enable specific
             -- servers by default
