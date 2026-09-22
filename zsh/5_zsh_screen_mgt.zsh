@@ -12,5 +12,5 @@ tmuxtovim () {
 }
 
 # Bind the above function to Ctr-v
-zle -N tmuxtovim{,}
+zle -N tmuxtovim
 bindkey ^v tmuxtovim
