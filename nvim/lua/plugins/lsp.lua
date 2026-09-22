@@ -102,7 +102,7 @@ return {
         --  settings = {},
         -- }
         bashls = {
-          filtypes = { '.sh', '.bash', '.zsh' },
+          filetypes = { 'bash', 'sh', 'zsh' },
         },
         helm_ls = {},
         pylsp = {},
