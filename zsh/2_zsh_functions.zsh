@@ -42,18 +42,22 @@ yqget () {
 	yq '.. | select(has("'"$1"'")) | .'"$1"
 }
 
-openssl.cert() {
+# Print the certificates in a PEM bundle read from stdin. crl2pkcs7 needs a
+# file, so stdin is spooled to one first.
+_openssl_print_certs() {
+	local tmpfile
 	tmpfile=$(mktemp)
-	cat > ${tmpfile} # put stdin into temp file
-	openssl crl2pkcs7 -nocrl -certfile "$tmpfile" | openssl pkcs7 -print_certs -text -noout
-	rm ${tmpfile}
+	cat > "$tmpfile"
+	openssl crl2pkcs7 -nocrl -certfile "$tmpfile" | openssl pkcs7 -print_certs "$@"
+	rm "$tmpfile"
+}
+
+openssl.cert() {
+	_openssl_print_certs -text -noout
 }
 
 openssl.summary() {
-	tmpfile=$(mktemp)
-	cat > ${tmpfile} # put stdin into temp file
-	openssl crl2pkcs7 -nocrl -certfile "$tmpfile" | openssl pkcs7 -print_certs -noout
-	rm ${tmpfile}
+	_openssl_print_certs -noout
 }
 
 # Colour highlight occurrences of $1 in input
