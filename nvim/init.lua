@@ -16,7 +16,10 @@ end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
 -- Import all plugins
-require('lazy').setup('plugins')
+require('lazy').setup('plugins', {
+  -- No plugin in this config resolves to a luarocks build
+  rocks = { enabled = false },
+})
 
 -- Import vim options and bindings
 require('options')
