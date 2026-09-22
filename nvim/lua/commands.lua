@@ -21,10 +21,17 @@ vim.api.nvim_create_user_command(
 )
 
 
+-- Two trailing spaces are a hard line break in markdown
+local keeps_trailing_whitespace = { markdown = true }
+
 -- Clear trailing whitespace when saving buffer to file
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   pattern = { "*" },
-  callback = function()
+  callback = function(event)
+    if not vim.bo[event.buf].modifiable or keeps_trailing_whitespace[vim.bo[event.buf].filetype] then
+      return
+    end
+
     -- First elemenet in getpos(".") result is unneeded buffer number
     local position = vim.fn.getpos(".")
     table.remove(position, 1)
