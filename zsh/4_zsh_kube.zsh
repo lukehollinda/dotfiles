@@ -126,8 +126,8 @@ kgetallbyname () {
 	RESOURCES=$(kubectl api-resources --no-headers | grep "$1" | awk '{print $1}')
 
 	if [ -z "$RESOURCES" ]; then
-		echo "No resources found: $RESOURCES"
-		exit 1
+		echo "No resources found matching: $1"
+		return 1
 	fi
 
 	echo "$RESOURCES" | while IFS= read -r RESOURCE; do
