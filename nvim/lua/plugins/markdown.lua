@@ -1,29 +1,29 @@
 return {
-    {
-        --- Inline Markdown rendering
-        ft = 'markdown',
-        'MeanderingProgrammer/render-markdown.nvim',
-        dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' },
+  {
+    --- Inline Markdown rendering
+    ft = 'markdown',
+    'MeanderingProgrammer/render-markdown.nvim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' },
 
-        ---@module 'render-markdown'
-        ---@type render.md.UserConfig
-        opts = {
-            code = {
-                enabled = true,
-            },
-        },
-        config = function ()
-            -- Code block rendering
-            vim.g.markdown_fenced_languages = {
-                "bash", "sh", "lua", "json", "yaml", "diff", "python", "go"
-            }
-
-        end,
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {
+      code = {
+        enabled = true,
+      },
     },
-    {
-        --- Markdown Preview
-        'davidgranstrom/nvim-markdown-preview',
-        config = function ()
-        end,
-    }
+    config = function ()
+      -- Code block rendering
+      vim.g.markdown_fenced_languages = {
+        "bash", "sh", "lua", "json", "yaml", "diff", "python", "go"
+      }
+
+    end,
+  },
+  {
+    --- Markdown Preview
+    'davidgranstrom/nvim-markdown-preview',
+    config = function ()
+    end,
+  }
 }
