@@ -1,5 +1,3 @@
-vim.cmd([[set number relativenumber]])
-
 -- Set highlight on search
 vim.o.hlsearch = true
 
@@ -14,7 +12,8 @@ vim.o.guicursor = table.concat({
 }, ",")
 
 -- Make line numbers default
-vim.wo.number = true
+vim.o.number = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
