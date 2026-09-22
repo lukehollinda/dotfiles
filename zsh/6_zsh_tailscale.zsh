@@ -7,8 +7,7 @@ tsup() {
 
 # Print time remaining until key expiry
 tstime() {
-    local ts_status=$(tailscale status --json)
-    local expiry_time=$(echo "$ts_status" | jq '.Self.KeyExpiry' | tr -d '"')
+    local expiry_time=$(tailscale status --json | jq -r '.Self.KeyExpiry')
     local expiry_time_utc=$(date -ujf '%Y-%m-%dT%H:%M:%SZ' "$expiry_time" "+%s" )
     local current_time_utc=$(date "+%s")
 
