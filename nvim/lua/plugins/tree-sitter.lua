@@ -3,8 +3,8 @@ return {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     lazy = false,
-    branch = "main",
-    config = function ()
+    branch = 'main',
+    config = function()
       local ts = require("nvim-treesitter")
       local ensure_installed = {
         "bash",
