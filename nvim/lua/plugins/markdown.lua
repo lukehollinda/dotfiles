@@ -23,7 +23,5 @@ return {
   {
     --- Markdown Preview
     'davidgranstrom/nvim-markdown-preview',
-    config = function ()
-    end,
   }
 }
