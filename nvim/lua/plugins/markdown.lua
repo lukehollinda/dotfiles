@@ -12,12 +12,12 @@ return {
         enabled = true,
       },
     },
-    config = function ()
-      -- Code block rendering
+    -- Read by the markdown syntax file, so it has to be set before any markdown
+    -- buffer loads rather than when this plugin does
+    init = function()
       vim.g.markdown_fenced_languages = {
         "bash", "sh", "lua", "json", "yaml", "diff", "python", "go"
       }
-
     end,
   },
   {
