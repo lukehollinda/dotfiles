@@ -17,8 +17,8 @@ return {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
     dependencies = {
-      { 'williamboman/mason.nvim', version = "^1.0.0", config = true }, -- NOTE: Must be loaded before dependants
-      {'williamboman/mason-lspconfig.nvim', version = "^1.0.0"},
+      { 'mason-org/mason.nvim', version = '^2.0.0', config = true }, -- NOTE: Must be loaded before dependants
+      { 'mason-org/mason-lspconfig.nvim', version = '^2.0.0' },
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- UI for LSP progress message
@@ -131,17 +131,11 @@ return {
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-      require('mason-lspconfig').setup {
-        handlers = {
-          function(server_name)
-            vim.lsp.config(server_name, servers[server_name] or {})
+      for server, config in pairs(servers) do
+        vim.lsp.config(server, config)
+      end
 
-            -- TODO: Possibly add a second param here to only enable specific
-            -- servers by default
-            vim.lsp.enable(server_name)
-          end,
-        },
-      }
+      require('mason-lspconfig').setup()
     end,
   },
 
