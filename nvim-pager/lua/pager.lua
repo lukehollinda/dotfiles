@@ -39,6 +39,10 @@ function M.render_ansi()
     return vim.api.nvim_buf_line_count(0) >= expected
   end, 20)
 
+  -- Terminal buffers force these off; this is a history view, not a shell
+  vim.wo[0][0].number = true
+  vim.wo[0][0].relativenumber = true
+
   map_command_motions(0)
 
   -- The pane's blank rows are captured too, so after `clear` the end of the
