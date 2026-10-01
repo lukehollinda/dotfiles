@@ -31,7 +31,13 @@ function M.render_ansi()
   vim.wait(5000, function()
     return vim.api.nvim_buf_line_count(0) >= expected
   end, 20)
+  -- The pane's blank rows are captured too, so after `clear` the end of the
+  -- buffer is empty padding. Land on the last line with content instead.
   vim.cmd('normal! G')
+  if vim.fn.search([[\S]], 'bcW') == 0 then
+    vim.cmd('normal! G')
+  end
+  vim.cmd('normal! zb')
 end
 
 return M
