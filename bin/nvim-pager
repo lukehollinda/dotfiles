@@ -1,3 +1,3 @@
 #! /usr/bin/env bash
 
-NVIM_APPNAME=nvim-pager nvim "$@"
+NVIM_APPNAME=nvim-pager exec nvim "$@"
