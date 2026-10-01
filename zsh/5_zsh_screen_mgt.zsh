@@ -18,9 +18,10 @@ tmuxcolourtovim () {
 	| nvim-pager -R "+lua require('pager').render_ansi()"
 }
 
-# Bind the above function to Ctr-v
-zle -N tmuxtovim
-bindkey ^v tmuxtovim
-
+# Colour is the primary view; the uncoloured one is the fallback when the
+# terminal rendering misbehaves.
 zle -N tmuxcolourtovim
-bindkey ^g tmuxcolourtovim
+bindkey ^v tmuxcolourtovim
+
+zle -N tmuxtovim
+bindkey ^g tmuxtovim
