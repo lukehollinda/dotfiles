@@ -1,8 +1,8 @@
-# Dump tmux pane, stripping trailing whitespace
+# Dump tmux pane. -J pads wrapped lines with trailing whitespace, so strip it;
+# runs of blank lines collapse to one.
 tmuxcapturepane () {
-	tmux capture-pane -p -JS -5000 \
-	| awk '{ if (NF || !trailing) print $0; if (NF) trailing = 0; else trailing = 1 }'
-
+	tmux capture-pane -p -JS - \
+	| awk '{ sub(/[[:space:]]+$/, ""); if (NF || !blank) print; blank = (NF == 0) }'
 }
 
 # Dump tmux pane to nvim pager
