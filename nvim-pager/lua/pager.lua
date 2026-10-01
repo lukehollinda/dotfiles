@@ -43,6 +43,11 @@ function M.render_ansi()
   vim.wo[0][0].number = true
   vim.wo[0][0].relativenumber = true
 
+  -- Allow tidying a line before yanking it. TermOpen also sets undolevels to
+  -- -1, which would leave those edits unundoable.
+  vim.bo.modifiable = true
+  vim.bo.undolevels = vim.go.undolevels
+
   -- Tint the window so it reads as neither the terminal (near black) nor an
   -- editor instance (rose-pine purple). Cells the capture painted keep their
   -- own background; ordinary output sets foreground only and picks this up.
