@@ -43,6 +43,20 @@ function M.render_ansi()
   vim.wo[0][0].number = true
   vim.wo[0][0].relativenumber = true
 
+  -- Tint the window so it reads as neither the terminal (near black) nor an
+  -- editor instance (rose-pine purple). Cells the capture painted keep their
+  -- own background; ordinary output sets foreground only and picks this up.
+  vim.api.nvim_set_hl(0, 'PagerHistoryNormal', { bg = '#102a33' })
+  vim.api.nvim_set_hl(0, 'PagerHistoryStatus', { fg = '#191724', bg = '#9ccfd8', bold = true })
+
+  -- Set wholesale: TermOpen already remapped StatusLine to StatusLineTerm.
+  vim.wo[0][0].winhighlight = table.concat({
+    'Normal:PagerHistoryNormal',
+    'NormalNC:PagerHistoryNormal',
+    'StatusLine:PagerHistoryStatus',
+    'StatusLineNC:PagerHistoryStatus',
+  }, ',')
+
   map_command_motions(0)
 
   -- The pane's blank rows are captured too, so after `clear` the end of the
