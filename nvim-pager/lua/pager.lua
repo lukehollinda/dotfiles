@@ -12,11 +12,11 @@ local prompt = [[^\[\d\d:\d\d:\d\d\] > ]]
 -- marks, which a tmux capture does not emit, so these must be re-set on the
 -- buffer there to take precedence.
 local function map_command_motions(buf)
-  map('n', ']]', function()
+  map({ 'n', 'x', 'o' }, ']]', function()
     vim.fn.search(prompt, 'W')
   end, { buffer = buf, desc = 'Next command' })
 
-  map('n', '[[', function()
+  map({ 'n', 'x', 'o' }, '[[', function()
     vim.fn.search(prompt, 'bW')
   end, { buffer = buf, desc = 'Previous command' })
 end
