@@ -8,13 +8,20 @@ map('n', '<C-q>', '<C-w>q')
 -- command's output and the next.
 local prompt = [[^\[\d\d:\d\d:\d\d\] > ]]
 
-map('n', ']]', function()
-  vim.fn.search(prompt, 'W')
-end, { desc = 'Next command' })
+-- Terminal buffers carry their own buffer-local [[ and ]] for OSC 133 prompt
+-- marks, which a tmux capture does not emit, so these must be re-set on the
+-- buffer there to take precedence.
+local function map_command_motions(buf)
+  map('n', ']]', function()
+    vim.fn.search(prompt, 'W')
+  end, { buffer = buf, desc = 'Next command' })
 
-map('n', '[[', function()
-  vim.fn.search(prompt, 'bW')
-end, { desc = 'Previous command' })
+  map('n', '[[', function()
+    vim.fn.search(prompt, 'bW')
+  end, { buffer = buf, desc = 'Previous command' })
+end
+
+map_command_motions()
 
 local M = {}
 
@@ -31,6 +38,9 @@ function M.render_ansi()
   vim.wait(5000, function()
     return vim.api.nvim_buf_line_count(0) >= expected
   end, 20)
+
+  map_command_motions(0)
+
   -- The pane's blank rows are captured too, so after `clear` the end of the
   -- buffer is empty padding. Land on the last line with content instead.
   vim.cmd('normal! G')
