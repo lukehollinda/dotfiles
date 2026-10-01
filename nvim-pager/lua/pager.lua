@@ -16,3 +16,22 @@ map('n', '[[', function()
   vim.fn.search(prompt, 'bW')
 end, { desc = 'Previous command' })
 
+local M = {}
+
+-- Render a `capture-pane -e` dump through a terminal: the escape sequences are
+-- consumed as highlights and the buffer text is left clean, so yanked text
+-- carries no colour codes. Content reflows to the window width.
+function M.render_ansi()
+  local expected = vim.api.nvim_buf_line_count(0)
+  -- nvim_open_term writes into the buffer, which -R forbids
+  vim.bo.readonly = false
+  vim.bo.modifiable = true
+  vim.bo.scrollback = 100000
+  vim.api.nvim_open_term(0, {})
+  vim.wait(5000, function()
+    return vim.api.nvim_buf_line_count(0) >= expected
+  end, 20)
+  vim.cmd('normal! G')
+end
+
+return M
