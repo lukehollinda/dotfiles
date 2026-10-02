@@ -15,45 +15,10 @@ title=$(grep -F '"type":"ai-title"' "$TF" 2>/dev/null | tail -n 1 | jq -r '.aiTi
 [[ -n "$title" ]] && printf '\033[1m%s\033[0m\n\n' "$title"
 
 # Only the tail is parsed, for responsiveness on long transcripts (each JSONL
-# line is self-contained, so tail-then-parse is safe). Assistant content is
-# stored one block per line, so consecutive same-role messages are merged to
-# give each turn a single header; only the last few turns are shown, and long
-# messages are capped so no single turn dominates the pane.
-tail -n 400 "$TF" | jq -rs '
-  [ .[]
-    | select((.isMeta // false) == false)
-    | select((.isSidechain // false) == false)
-    | select(.type == "user" or .type == "assistant")
-    | .message as $m
-    | if $m.role == "user" then
-        { role: "user",
-          text: (if ($m.content | type) == "string" then $m.content else "" end) }
-      else
-        { role: "assistant",
-          text: (($m.content // [])
-                 | map(if .type == "text" then .text
-                       elif .type == "tool_use" then "  ⚙ " + .name
-                       else empty end)
-                 | join("\n")) }
-      end
-    | select((.text | length) > 0)
-    | select(.role == "assistant"
-             or (.text | test("^<(command-|local-command|system-reminder|bash-|user-|new-session)") | not))
-  ]
-  | reduce .[] as $x (
-      [];
-      if (length > 0 and .[-1].role == $x.role)
-      then .[0:-1] + [{ role: $x.role, text: (.[-1].text + "\n" + $x.text) }]
-      else . + [$x] end)
-  | .[-8:]
-  | .[]
-  | (.text | split("\n")) as $lines
-  | (if ($lines | length) > 12
-     then ($lines[0:12] | join("\n"))
-          + "\n  [2m[+" + (($lines | length) - 12 | tostring) + " more lines][0m"
-     else .text end) as $body
-  | (if .role == "user"
-     then "[1;36m❯ you[0m"
-     else "[1;35m✻ claude[0m" end)
-    + "\n" + $body + "\n"
-' 2>/dev/null
+# line is self-contained, so tail-then-parse is safe). The turn-rendering
+# filter is shared with the full-session view; the limits passed here keep the
+# preview small enough that no single turn dominates the fzf pane.
+script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+
+tail -n 400 "$TF" | jq -rs --argjson max_turns 8 --argjson max_lines 12 \
+    -f "$script_dir/claude-transcript.jq" 2>/dev/null
