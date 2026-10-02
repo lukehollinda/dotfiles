@@ -18,6 +18,10 @@ claude_agents_live_panes() {
 # Resolve a session's transcript. Prefers the path recorded by the hook, and
 # falls back to the projects dir, where the transcript is named after the
 # session id, which is also the state file's name.
+#
+# find rather than a glob: this file is sourced, and under zsh's default
+# nomatch an unmatched glob is an expansion error that no redirection on the
+# command can suppress, so a session with no transcript printed a warning.
 claude_agents_transcript_for() {
     local session_id="$1" recorded="$2"
     if [[ -n "$recorded" && -f "$recorded" ]]; then
@@ -25,7 +29,8 @@ claude_agents_transcript_for() {
         return
     fi
     local hit
-    hit=$(ls -t "$HOME"/.claude/projects/*/"$session_id".jsonl 2>/dev/null | head -n 1)
+    hit=$(find "$HOME/.claude/projects" -maxdepth 2 -name "$session_id.jsonl" -type f \
+        -exec ls -t {} + 2>/dev/null | head -n 1)
     printf '%s' "$hit"
 }
 
