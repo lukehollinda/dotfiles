@@ -20,5 +20,5 @@ title=$(grep -F '"type":"ai-title"' "$TF" 2>/dev/null | tail -n 1 | jq -r '.aiTi
 # preview small enough that no single turn dominates the fzf pane.
 script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 
-tail -n 400 "$TF" | jq -rs --argjson max_turns 8 --argjson max_lines 12 \
+tail -n 400 "$TF" | jq -rs --argjson max_turns 8 --arg style ansi --argjson max_lines 12 \
     -f "$script_dir/claude-transcript.jq" 2>/dev/null

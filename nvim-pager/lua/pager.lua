@@ -9,7 +9,7 @@ map('n', '<C-q>', '<C-w>q')
 -- is the turn headers written by claude-transcript.jq.
 local anchors = {
   terminal = [[^\[\d\d:\d\d:\d\d\] > ]],
-  session = [[^❯ you\|^✻ claude]],
+  session = [[^# ❯ you\|^# ✻ claude]],
 }
 
 -- Terminal buffers carry their own buffer-local [[ and ]] for OSC 133 prompt
@@ -26,6 +26,26 @@ local function map_command_motions(buf, anchor)
 end
 
 map_command_motions(nil, anchors.terminal)
+
+-- Chrome shared by both views: numbers, the tint that marks this as neither the
+-- terminal nor an editor instance, and motions for whatever anchors this
+-- capture carries. Set winhighlight wholesale, since on a capture TermOpen has
+-- already remapped StatusLine to StatusLineTerm.
+local function decorate(anchor)
+  vim.wo[0][0].number = true
+  vim.wo[0][0].relativenumber = true
+
+  vim.api.nvim_set_hl(0, 'PagerHistoryNormal', { bg = '#102a33' })
+  vim.api.nvim_set_hl(0, 'PagerHistoryStatus', { fg = '#191724', bg = '#9ccfd8', bold = true })
+  vim.wo[0][0].winhighlight = table.concat({
+    'Normal:PagerHistoryNormal',
+    'NormalNC:PagerHistoryNormal',
+    'StatusLine:PagerHistoryStatus',
+    'StatusLineNC:PagerHistoryStatus',
+  }, ',')
+
+  map_command_motions(0, anchor)
+end
 
 local M = {}
 
@@ -45,30 +65,12 @@ function M.render_ansi(opts)
     return vim.api.nvim_buf_line_count(0) >= expected
   end, 20)
 
-  -- Terminal buffers force these off; this is a history view, not a shell
-  vim.wo[0][0].number = true
-  vim.wo[0][0].relativenumber = true
-
   -- Allow tidying a line before yanking it. TermOpen also sets undolevels to
   -- -1, which would leave those edits unundoable.
   vim.bo.modifiable = true
   vim.bo.undolevels = vim.go.undolevels
 
-  -- Tint the window so it reads as neither the terminal (near black) nor an
-  -- editor instance (rose-pine purple). Cells the capture painted keep their
-  -- own background; ordinary output sets foreground only and picks this up.
-  vim.api.nvim_set_hl(0, 'PagerHistoryNormal', { bg = '#102a33' })
-  vim.api.nvim_set_hl(0, 'PagerHistoryStatus', { fg = '#191724', bg = '#9ccfd8', bold = true })
-
-  -- Set wholesale: TermOpen already remapped StatusLine to StatusLineTerm.
-  vim.wo[0][0].winhighlight = table.concat({
-    'Normal:PagerHistoryNormal',
-    'NormalNC:PagerHistoryNormal',
-    'StatusLine:PagerHistoryStatus',
-    'StatusLineNC:PagerHistoryStatus',
-  }, ',')
-
-  map_command_motions(0, anchor)
+  decorate(anchor)
 
   -- The pane's blank rows are captured too, so after `clear` the end of the
   -- buffer is empty padding. Land on the last line with content instead.
@@ -76,6 +78,20 @@ function M.render_ansi(opts)
   if vim.fn.search([[\S]], 'bcW') == 0 then
     vim.cmd('normal! G')
   end
+  vim.cmd('normal! zb')
+end
+
+-- A rendered Claude session is markdown, not terminal output, so it gets a real
+-- markdown buffer where treesitter and render-markdown apply. Avoiding a
+-- terminal also means no reflow, so long lines survive.
+function M.render_session()
+  vim.bo.readonly = false
+  vim.bo.modifiable = true
+  vim.bo.filetype = 'markdown'
+
+  decorate(anchors.session)
+
+  vim.cmd('normal! G')
   vim.cmd('normal! zb')
 end
 

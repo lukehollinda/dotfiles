@@ -39,6 +39,6 @@ fi
         | jq -r '.aiTitle // empty' 2>/dev/null || true)
     [[ -n "$title" ]] && printf '\033[1m%s\033[0m\n\n' "$title"
 
-    jq -rs --argjson max_turns -1 --argjson max_lines -1 \
+    jq -rs --argjson max_turns -1 --arg style markdown --argjson max_lines -1 \
         -f "$script_dir/claude-transcript.jq" "$transcript" 2>/dev/null
-} | nvim-pager -R "+lua require('pager').render_ansi({anchor='session'})"
+} | nvim-pager -R "+lua require('pager').render_session()"

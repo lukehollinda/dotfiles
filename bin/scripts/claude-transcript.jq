@@ -30,7 +30,12 @@
      then ($lines[0:$max_lines] | join("\n"))
           + "\n  [2m[+" + (($lines | length) - $max_lines | tostring) + " more lines][0m"
      else .text end) as $body
-  | (if .role == "user"
-     then "[1;36m❯ you[0m"
-     else "[1;35m✻ claude[0m" end)
+  # $style "markdown" renders turn headers as level-1 headings so the pager can
+  # treat the conversation as the markdown it mostly is. Claude writes only ##
+  # and ###, so # stays unambiguous. "ansi" keeps the coloured form for fzf.
+  | (if $style == "markdown"
+     then (if .role == "user" then "# ❯ you" else "# ✻ claude" end)
+     else (if .role == "user"
+           then "[1;36m❯ you[0m"
+           else "[1;35m✻ claude[0m" end) end)
     + "\n" + $body + "\n"
