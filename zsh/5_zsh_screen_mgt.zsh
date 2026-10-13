@@ -11,10 +11,11 @@ tmuxtovim () {
 	| nvim-pager -R "+set nowrap" "+norm G"
 }
 
-# Dump tmux pane in colour. -J is omitted because nvim_open_term reflows to the
-# window width anyway, and without it tmux strips trailing whitespace itself.
+# Dump tmux pane in colour. -J joins the wrapped lines, which is the only place
+# the logical line boundaries survive; render_ansi sizes its grid to them and
+# strips the trailing whitespace -J leaves behind.
 tmuxcolourtovim () {
-	tmux capture-pane -e -p -S - \
+	tmux capture-pane -e -p -JS - \
 	| nvim-pager -R "+lua require('pager').render_ansi()"
 }
 

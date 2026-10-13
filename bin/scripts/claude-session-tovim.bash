@@ -35,9 +35,11 @@ fi
 # Negative limits mean no truncation: unlike the fzf preview this renders the
 # whole conversation, and the pager needs every turn to be navigable.
 {
+    # A heading, not ANSI bold: nothing consumes escape sequences in a markdown
+    # buffer, so they would sit in the text and come out in yanks.
     title=$(grep -F '"type":"ai-title"' "$transcript" 2>/dev/null | tail -n 1 \
         | jq -r '.aiTitle // empty' 2>/dev/null || true)
-    [[ -n "$title" ]] && printf '\033[1m%s\033[0m\n\n' "$title"
+    [[ -n "$title" ]] && printf '# %s\n\n' "$title"
 
     jq -rs --argjson max_turns -1 --arg style markdown --argjson max_lines -1 \
         -f "$script_dir/claude-transcript.jq" "$transcript" 2>/dev/null
