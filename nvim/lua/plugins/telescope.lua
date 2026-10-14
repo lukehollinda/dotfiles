@@ -5,6 +5,7 @@
 local search_excludes = {
   '.git',
   'node_modules',
+  'target/',
 }
 
 -- Turn search_excludes into ripgrep args: {'--glob', '!.git', ...}
