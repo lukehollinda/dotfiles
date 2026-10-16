@@ -21,14 +21,40 @@ SESSION_PICKER_DIRECTORIES=(
 
 TMUX_SESSION_HISTORY="${TMUX_SESSION_HISTORY:-$HOME/.tmux/session_history}"
 
+# Order project paths so those with a live tmux session come first, most recently
+# attached first. The input line number breaks ties, keeping the session-less
+# majority in the order find produced.
+order-by-recent-session() {
+    # The session list is read inside awk because macOS awk rejects a -v value
+    # containing newlines.
+    awk -v cmd="tmux list-sessions -F '#{session_last_attached} #{session_name}' 2>/dev/null" '
+        BEGIN {
+            while ((cmd | getline line) > 0) {
+                split(line, field, " ")
+                attached[field[2]] = field[1]
+            }
+            close(cmd)
+        }
+        {
+            # Must match the name switch-session derives from the same path.
+            name = $0
+            sub(/.*\//, "", name)
+            gsub(/\./, "_", name)
+            print (name in attached ? attached[name] : 0) "\t" NR "\t" $0
+        }
+    ' | sort -t$'\t' -k1,1nr -k2,2n | cut -f3-
+}
+
 # Print the picked project, as a path relative to $HOME.
 select-project() {
     # --tmux renders fzf in a popup, which requires a surrounding tmux client
-    local fzf_args=()
+    # --tiebreak=index keeps the recency order among equally-scoring matches
+    local fzf_args=(--tiebreak=index)
     [[ -n $TMUX ]] && fzf_args+=(--tmux)
 
     find "${SESSION_PICKER_DIRECTORIES[@]}" -mindepth 2 -maxdepth 2 -type d -name ".git" 2>/dev/null \
         | sed -e 's|/\.git$||' -e "s|^$HOME/||" \
+        | order-by-recent-session \
         | fzf "${fzf_args[@]}"
 }
 
