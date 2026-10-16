@@ -26,6 +26,8 @@ reset=$'\033[0m'
 # only the first tab-delimited field and returns the whole line, so the values
 # used for navigation and the conversation preview stay hidden but recoverable.
 entries=()
+# Sorted newest first: updated_at is ISO-8601 UTC, so the reverse lexicographic
+# sort is chronological, and agents with no timestamp sink to the bottom.
 while IFS=$'\037' read -r pane session status cwd transcript updated_at; do
     # Colours render because fzf runs with --ansi. Green: busy, yellow: done and
     # waiting on you, red: blocked on a permission prompt.
@@ -47,7 +49,7 @@ while IFS=$'\037' read -r pane session status cwd transcript updated_at; do
 
     display=$(printf '%s  %-10s  %-4s  %-28s  %s' "$icon" "$status" "$idle" "$short_cwd" "${branch:--}")
     entries+=("$(printf '%s\t%s\t%s\t%s' "$display" "$session" "$pane" "$transcript")")
-done < <(claude_agents_each_live)
+done < <(claude_agents_each_live | sort -t$'\037' -k6,6r)
 
 if [[ ${#entries[@]} -eq 0 ]]; then
     tmux display-message "No Claude agents running"
