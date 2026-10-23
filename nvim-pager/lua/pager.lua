@@ -6,10 +6,12 @@ map('n', '<C-q>', '<C-w>q')
 -- What separates one unit of output from the next, per kind of capture. For a
 -- terminal that is the starship prompt, which ends with the time and the
 -- character from [character].success_symbol. For a rendered Claude session it
--- is the turn headers written by claude-transcript.jq.
+-- is the turn headers written by claude-transcript.jq. For a diff it is the
+-- header git writes above each file.
 local anchors = {
   terminal = [[^\[\d\d:\d\d:\d\d\] > ]],
   session = [[^# ❯ you\|^# ✻ claude]],
+  diff = [[^diff --git ]],
 }
 
 -- Terminal buffers carry their own buffer-local [[ and ]] for OSC 133 prompt
@@ -132,6 +134,21 @@ function M.render_ansi(opts)
     vim.cmd('normal! G')
   end
   vim.cmd('normal! zb')
+end
+
+-- delta colours a diff without restructuring it, so reading its escapes off the
+-- lines leaves the text exactly as git wrote it and a yank gives a real diff
+-- line back.
+function M.render_diff()
+  vim.bo.readonly = false
+  vim.bo.modifiable = true
+
+  require('sgr').render(0)
+
+  vim.bo.modified = false
+  vim.wo[0][0].number = true
+  vim.wo[0][0].relativenumber = true
+  map_command_motions(0, anchors.diff)
 end
 
 -- A rendered Claude session is markdown, not terminal output, so it gets a real
