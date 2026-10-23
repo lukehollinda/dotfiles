@@ -1,0 +1,13 @@
+#! /usr/bin/env bash
+
+# git's pager for diffs. --color-only leaves the text exactly as git wrote it,
+# so a yank gives back a real diff line, and an empty hunk label keeps the
+# marker [delta].navigate adds out of that text. Deletions arrive with a
+# background and no syntax colour unless minus-style asks for one.
+delta --color-only \
+	--hunk-label='' \
+	--minus-style='syntax auto' \
+	--minus-emph-style='syntax auto' \
+	--file-style='bold' \
+	--hunk-header-style='bold' \
+| nvim-pager -R "+lua require('pager').render_diff()"
