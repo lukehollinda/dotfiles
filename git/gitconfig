@@ -57,3 +57,5 @@
 	repo = ~/work/gdk/gitlab
 	repo = ~/work/gitlab
 	repo = ~/work/labkit
+[branch]
+	autoSetupMerge = simple
