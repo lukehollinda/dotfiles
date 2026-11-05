@@ -62,4 +62,5 @@ fi
 export PATH="$PATH:$HOME/go/bin/"
 export PATH="$PATH:$DOTFILE_PATH/bin"
 export PATH="$PATH:$DOTFILE_PATH/bin/scripts"
+export PATH="$PATH:$HOME/scratch/bin"
 export PATH="$HOME/.local/bin:$PATH"
