@@ -19,6 +19,9 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup('plugins', {
   -- No plugin in this config resolves to a luarocks build
   rocks = { enabled = false },
+  -- Three lines overflows 'cmdheight', leaving unattended instances parked on
+  -- a hit-enter prompt that nothing answers.
+  change_detection = { notify = false },
 })
 
 -- Import vim options and bindings
