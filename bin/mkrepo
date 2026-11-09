@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -e
+set -u
+set -o pipefail
+
+if [ "$#" -ne 1 ] || [ -z "$1" ]; then
+  echo "Usage: $(basename "$0") path/to/repo-to-be-created" >&2
+  exit 1
+fi
+
+mkdir -p "$1"
+git init "$1"
