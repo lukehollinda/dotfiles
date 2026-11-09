@@ -23,3 +23,16 @@ read or edit.
 I use Vimium in Chrome and Tridactyl in Firefox, which I use to run the
 bookmarklet from the keyboard by name instead of clicking into the bookmarks bar.
 
+
+## gitlab-reference-link
+
+Same install and layout as `gitlab-markdown-link`, but the link text is the
+short GitLab reference instead of the title:
+
+```
+[!123](https://gitlab.com/group/project/-/merge_requests/123)
+```
+
+Issues give `#123` and epics give `&123`. The reference comes from the URL, not
+the page title, because GitLab titles epic pages with `#123`. On any other page
+it shows an error instead of copying.
