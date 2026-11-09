@@ -57,5 +57,8 @@ disabled = true
 [golang]
 disabled = true
 
+[ruby]
+disabled = true
+
 [python]
 disabled = false
