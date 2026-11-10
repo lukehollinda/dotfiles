@@ -9,6 +9,7 @@ repo_root=$(git rev-parse --show-toplevel)
 links=(
   "tridactyl/tridactylrc|$HOME/.tridactylrc"
   "tmux/tmux.conf|$HOME/.tmux.conf"
+  "rex|$HOME/.config/rex"
   "git/gitconfig|$HOME/.gitconfig"
   "nvim|$HOME/.config/nvim"
   "nvim-pager|$HOME/.config/nvim-pager"

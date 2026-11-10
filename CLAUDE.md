@@ -10,6 +10,7 @@ step and no staging buffer:
 | `nvim/` | `~/.config/nvim` |
 | `nvim-pager/` | `~/.config/nvim-pager` |
 | `tmux/tmux.conf` | `~/.tmux.conf` |
+| `rex/` | `~/.config/rex` |
 | `git/gitconfig` | `~/.gitconfig` |
 
 Editing a file here changes the running tool immediately. The user works in Neovim
