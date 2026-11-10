@@ -3,6 +3,7 @@
 # needed. A new session opens a "main" tab with nvim beside a shell, except
 # "scratch", which gets a bare shell.
 #   $1 = the client to switch, as passed by the open_project action
+#   $2 = the session history file, most recent session first
 
 PROJECT_DIRECTORIES=(
     "$HOME"
@@ -15,9 +16,18 @@ PROJECT_DIRECTORIES=(
 client_args=()
 [[ -n "${1:-}" ]] && client_args=(-C "$1")
 
+# Each session label's place in the history; open sessions missing from it rank
+# after those in it, and repos without a session after both.
+ranks=$(rex ls --json | jq -c --rawfile history <(cat "${2:-}" 2>/dev/null) '
+    ($history | split("\n")) as $ids
+    | [.sessions[] | .session_id as $id | {key: .label, value: ($ids | index($id) // 1e6)}]
+    | from_entries')
+
+# --tiebreak=index keeps that order among equally good matches.
 selected=$(find "${PROJECT_DIRECTORIES[@]}" -mindepth 2 -maxdepth 2 -type d -name ".git" 2>/dev/null \
     | sed -e 's|/\.git$||' -e "s|^$HOME/||" \
-    | fzf)
+    | jq -R -n -r --argjson ranks "$ranks" '[inputs] | sort_by($ranks[split("/") | last] // 2e6) | .[]' \
+    | fzf --tiebreak=index)
 [[ -z "$selected" ]] && exit 0
 
 dir="$HOME/$selected"

@@ -86,7 +86,7 @@ rex.action{
   title = "Open Project…",
   run = function(ctx)
     remember(ctx.session_id)
-    float{ scripts .. "rex-open-project.bash", ctx.client_id or "" }
+    float{ scripts .. "rex-open-project.bash", ctx.client_id or "", history_path }
   end,
 }
 rex.bind("ctrl+a>o", "open_project")
