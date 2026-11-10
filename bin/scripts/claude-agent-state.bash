@@ -75,6 +75,9 @@ _notify_if_unfocused() {
 
 case "$EVENT" in
     SessionStart)
+        # A /clear hides the agent until its next prompt: SessionEnd already
+        # removed the old session's file, and UserPromptSubmit writes the new one.
+        [[ "$(jq -r '.source // empty' <<<"$INPUT")" == "clear" ]] && exit 0
         # Window naming is handled by the reconcile sweep in claude-status.bash,
         # not here, so a name is never left stuck at "claude" after Claude exits.
         _write_state "waiting"
