@@ -33,12 +33,6 @@ fpath=("$ZSH_COMPLETION_DIR" $fpath)
 
 autoload -U +X compinit && compinit
 
-# Google cloud
-if command -v brew &>/dev/null && command -v gcloud &>/dev/null; then
-  source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
-  source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
-fi
-
 # ArgoCD
 command -v argocd &>/dev/null && source <(argocd completion zsh)
 
@@ -54,6 +48,12 @@ command -v kubectl &>/dev/null && source <(kubectl completion zsh)
 if command -v mise &>/dev/null; then
   eval "$(mise activate zsh)"
   source <(mise completion zsh)
+fi
+
+# Google Cloud, after mise since mise installs gcloud. The completion file is in
+# the SDK root, two levels above the real gcloud binary.
+if (( $+commands[gcloud] )); then
+  source "${commands[gcloud]:A:h:h}/completion.zsh.inc"
 fi
 
 #~~~~~~~~~~~~~~~~~~~~~~~~
