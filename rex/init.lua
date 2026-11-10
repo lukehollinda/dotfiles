@@ -10,6 +10,7 @@ rex.bind("ctrl+a>v", "pane.split", { direction = "right" })
 rex.bind("ctrl+a>s", "pane.split", { direction = "down" })
 rex.bind("ctrl+a>c", "client.tab.new")
 rex.bind("ctrl+a>=", "pane.balance")
+rex.bind("ctrl+a>z", "pane.zoom")
 
 local scripts = os.getenv("HOME") .. "/dotfiles/bin/scripts/"
 
