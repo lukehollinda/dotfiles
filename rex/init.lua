@@ -10,3 +10,27 @@ rex.bind("ctrl+a>v", "pane.split", { direction = "right" })
 rex.bind("ctrl+a>s", "pane.split", { direction = "down" })
 rex.bind("ctrl+a>c", "client.tab.new")
 rex.bind("ctrl+a>=", "pane.balance")
+
+local scripts = os.getenv("HOME") .. "/dotfiles/bin/scripts/"
+
+-- Runs an interactive script over the active tab; the pane closes when it exits.
+local function float(argv)
+  local _, err = rex.session.new_layer{
+    bounds = { 0.1, 0.1, 0.8, 0.8 },
+    focus = true,
+    layout = rex.layout.block{
+      flavor = "com.superlogical.terminal.shell",
+      options = { command = argv },
+    },
+  }
+  if err ~= nil then error(err, 0) end
+end
+
+rex.action{
+  name = "open_project",
+  title = "Open Project…",
+  run = function(ctx)
+    float{ scripts .. "rex-open-project.bash", ctx.client_id or "" }
+  end,
+}
+rex.bind("ctrl+a>o", "open_project")
