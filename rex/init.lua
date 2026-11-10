@@ -42,6 +42,20 @@ local function foreground(block_id)
   return process and process.foreground or {}
 end
 
+local function tab_blocks(view, block_id)
+  for _, window in ipairs(view.windows) do
+    local ids, found = {}, false
+    for _, layer in ipairs(window.layers) do
+      for _, block in ipairs(layer.blocks) do
+        table.insert(ids, block.block_id)
+        found = found or block.block_id == block_id
+      end
+    end
+    if found then return ids end
+  end
+  return {}
+end
+
 rex.action{
   name = "new_agent",
   title = "New Agent",
@@ -64,3 +78,31 @@ rex.action{
   end,
 }
 rex.bind("ctrl+a>n", "new_agent")
+
+rex.action{
+  name = "open_nvim",
+  title = "Open nvim on This Checkout",
+  run = function(ctx)
+    local view, err = rex.session.view{}
+    if err ~= nil then error(err, 0) end
+    for _, id in ipairs(tab_blocks(view, ctx.block_id)) do
+      if foreground(id).name == "nvim" then
+        rex.session.focus_block{ block_id = id }
+        return
+      end
+    end
+    local _, split_err = rex.session.new_split{
+      anchor_id = ctx.block_id,
+      direction = "horizontal",
+      side = "after",
+      ratio = 0.4,
+      focus = true,
+      layout = rex.layout.block{
+        flavor = terminal .. ".shell",
+        options = { command = { "nvim", "." }, cwd = foreground(ctx.block_id).cwd },
+      },
+    }
+    if split_err ~= nil then error(split_err, 0) end
+  end,
+}
+rex.bind("ctrl+a>e", "open_nvim")
