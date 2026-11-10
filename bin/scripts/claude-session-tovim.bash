@@ -1,14 +1,11 @@
 #!/usr/bin/env bash
-# Open the Claude Code session running in a tmux pane in the nvim pager, so the
-# conversation can be navigated, searched and copied with normal vim motions.
+# Open the Claude Code session running in a tmux pane in the nvim pager.
 # Bound to <prefix> C in tmux.conf.
 #   $1 = pane id to read the session from; defaults to the active pane.
 set -uo pipefail
 
 # shellcheck source=SCRIPTDIR/claude-agents-common.bash
 source "$(command -v claude-agents-common.bash)"
-
-script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 
 pane="${1:-$(tmux display-message -p '#{pane_id}')}"
 
@@ -32,15 +29,4 @@ if [[ -z "$transcript" || ! -f "$transcript" ]]; then
     exit 1
 fi
 
-# Negative limits mean no truncation: unlike the fzf preview this renders the
-# whole conversation, and the pager needs every turn to be navigable.
-{
-    # A heading, not ANSI bold: nothing consumes escape sequences in a markdown
-    # buffer, so they would sit in the text and come out in yanks.
-    title=$(grep -F '"type":"ai-title"' "$transcript" 2>/dev/null | tail -n 1 \
-        | jq -r '.aiTitle // empty' 2>/dev/null || true)
-    [[ -n "$title" ]] && printf '# %s\n\n' "$title"
-
-    jq -rs --argjson max_turns -1 --arg style markdown --argjson max_lines -1 \
-        -f "$script_dir/claude-transcript.jq" "$transcript" 2>/dev/null
-} | nvim-pager -R "+lua require('pager').render_session()"
+exec claude-transcript-tovim.bash "$transcript"
