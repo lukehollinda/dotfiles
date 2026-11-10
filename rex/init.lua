@@ -34,3 +34,33 @@ rex.action{
   end,
 }
 rex.bind("ctrl+a>o", "open_project")
+
+local terminal = "com.superlogical.terminal"
+
+local function foreground(block_id)
+  local process = rex.block.call(terminal, "process", { block_id = block_id })
+  return process and process.foreground or {}
+end
+
+rex.action{
+  name = "new_agent",
+  title = "New Agent",
+  run = function(ctx)
+    local cwd = foreground(ctx.block_id).cwd
+    local _, err = rex.session.new_window{
+      window_label = "agent",
+      focus = true,
+      layout = rex.layout.block{
+        flavor = terminal .. ".shell",
+        -- Kept open so an error, such as an untrusted repo, stays readable.
+        options = {
+          command = { scripts .. "rex-new-agent.bash", cwd },
+          cwd = cwd,
+          exit = { on_completion = false },
+        },
+      },
+    }
+    if err ~= nil then error(err, 0) end
+  end,
+}
+rex.bind("ctrl+a>n", "new_agent")
