@@ -56,6 +56,9 @@ _notify_user() {
 _notify_if_unfocused() {
     local msg="$1"
 
+    # Rex sends its own notifications for agents.
+    [[ -n "${REX_SESSION:-}" ]] && return
+
     local frontmost
     frontmost=$(osascript -e 'tell application "System Events" to get name of first application process whose frontmost is true' 2>/dev/null || true)
     if [[ "$frontmost" != "kitty" ]]; then
