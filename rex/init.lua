@@ -106,3 +106,12 @@ rex.action{
   end,
 }
 rex.bind("ctrl+a>e", "open_nvim")
+
+rex.action{
+  name = "close_work",
+  title = "Close Agent Tab or Session",
+  run = function(ctx)
+    float{ scripts .. "rex-close.bash", ctx.session_id, ctx.block_id }
+  end,
+}
+rex.bind("ctrl+a>shift+x", "close_work")
