@@ -127,7 +127,7 @@ rex.action{
   title = "New Agent",
   run = function(ctx)
     local cwd = foreground(ctx.block_id).cwd
-    local _, err = rex.session.new_window{
+    local window, err = rex.session.new_window{
       window_label = "agent",
       focus = true,
       layout = rex.layout.block{
@@ -143,9 +143,11 @@ rex.action{
       },
     }
     if err ~= nil then error(err, 0) end
+    -- The session's active window is not what the app shows, so ask the app.
+    rex.client.queue("session.select", { session_id = ctx.session_id, window_id = window.window_id })
   end,
 }
-rex.bind("ctrl+a>n", "new_agent")
+rex.bind("ctrl+a>shift+n", "new_agent")
 
 rex.action{
   name = "open_nvim",
