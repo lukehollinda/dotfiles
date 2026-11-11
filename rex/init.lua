@@ -76,10 +76,12 @@ rex.action{
   end,
 }
 
--- Runs an interactive script over the active tab; the pane closes when it exits.
-local function float(argv)
+-- Runs an interactive script over the active tab, or over the part of a tab
+-- given by bounds and window_id; the pane closes when it exits.
+local function float(argv, bounds, window_id)
   local _, err = rex.session.new_layer{
-    bounds = { 0.1, 0.1, 0.8, 0.8 },
+    window_id = window_id,
+    bounds = bounds or { 0.1, 0.1, 0.8, 0.8 },
     focus = true,
     layout = rex.layout.block{
       flavor = "com.superlogical.terminal.shell",
@@ -252,6 +254,32 @@ for key, direction in pairs{ h = "left", j = "down", k = "up", l = "right" } do
   rex.bind("resize/shift+" .. key, "resize_pane", { direction = direction })
 end
 rex.bind("resize/enter", "client.mode.exit")
+
+local function find_node(node, block_id)
+  if node.block_id then return node.block_id == block_id and node or nil end
+  return find_node(node.split.before, block_id) or find_node(node.split.after, block_id)
+end
+
+-- The pager floats over the Claude pane alone, so the rest of the tab stays
+-- in view.
+rex.action{
+  name = "open_transcript",
+  title = "Open Claude Transcript in nvim",
+  run = function(ctx)
+    local view, err = rex.session.view{}
+    if err ~= nil then error(err, 0) end
+    for _, window in ipairs(view.windows) do
+      for _, layer in ipairs(window.layers) do
+        local node = layer.kind == "tiled" and find_node(layer.layout, ctx.block_id)
+        if node then
+          float({ scripts .. "rex-transcript-tovim.bash", ctx.block_id }, node.rect, window.window_id)
+          return
+        end
+      end
+    end
+  end,
+}
+rex.bind("ctrl+a>shift+a", "open_transcript")
 
 rex.action{
   name = "close_work",
