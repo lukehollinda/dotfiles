@@ -14,6 +14,13 @@ rex.bind("ctrl+a>z", "pane.zoom")
 
 local scripts = os.getenv("HOME") .. "/dotfiles/bin/scripts/"
 
+-- Terminals started from here get the login environment, which lacks the
+-- folders ~/.zshrc adds to PATH.
+local dotfiles_path = {
+  os.getenv("HOME") .. "/dotfiles/bin",
+  os.getenv("HOME") .. "/dotfiles/bin/scripts",
+}
+
 -- Rex reports no session switches, so each keyboard switch records the session
 -- it leaves, most recent first. Switches made with the mouse are not recorded.
 local history_dir = os.getenv("HOME") .. "/.local/state/rex"
@@ -76,7 +83,7 @@ local function float(argv)
     focus = true,
     layout = rex.layout.block{
       flavor = "com.superlogical.terminal.shell",
-      options = { command = argv },
+      options = { command = argv, path_prepend = dotfiles_path },
     },
   }
   if err ~= nil then error(err, 0) end
@@ -124,9 +131,11 @@ rex.action{
       layout = rex.layout.block{
         flavor = terminal .. ".shell",
         -- Kept open so an error, such as an untrusted repo, stays readable.
+        -- Interactive, so the agent and its hooks see what a terminal does.
         options = {
           command = { scripts .. "rex-new-agent.bash", cwd },
           cwd = cwd,
+          interactive = true,
           exit = { on_completion = false },
         },
       },
