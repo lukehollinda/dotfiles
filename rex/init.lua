@@ -21,7 +21,7 @@ for key, direction in pairs{ h = "left", j = "down", k = "up", l = "right" } do
 end
 
 -- Sessions. Every key that can leave a session records it for prefix -.
-rex.bind("ctrl+a>o", "open_project")
+rex.bind("ctrl+a>p", "open_project")
 rex.bind("ctrl+a>-", "previous_session")
 rex.bind("ctrl+a>w", "switch_tracked", { action = "session.switch" })
 rex.bind("cmd+k", "switch_tracked", { action = "session.switch" })
