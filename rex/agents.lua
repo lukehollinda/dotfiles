@@ -3,13 +3,14 @@ local util = require("util")
 rex.action{
   name = "new_agent",
   title = "New Agent",
-  args = { prompt = "string?", focus = "boolean?" },
+  args = { prompt = "string?", focus = "boolean?", name = "string?" },
   run = function(ctx, args)
     local cwd = util.foreground(ctx.block_id).cwd
     -- An agent that spawns another passes focus=false to keep its own tab in front.
     local show = args.focus ~= false
     local window, err = rex.session.new_window{
-      window_label = "agent",
+      -- The agent names a tab still labelled "agent" itself.
+      window_label = args.name or "agent",
       focus = show,
       layout = rex.layout.block{
         flavor = util.terminal .. ".shell",
