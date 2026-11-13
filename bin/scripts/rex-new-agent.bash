@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Start Claude in a new worktree of the repo a directory belongs to. Claude Code
-# creates the worktree under <repo>/.claude/worktrees/ from the default branch,
-# and refuses to unless the repo is trusted. The agent renames the worktree's
-# placeholder branch and its Rex tab once it knows the task.
+# creates the worktree under <repo>/.claude/worktrees/ from the base the repo's
+# worktree.baseRef setting selects (origin's default branch unless the repo sets
+# head), and refuses to unless the repo is trusted. The agent renames the
+# worktree's placeholder branch and its Rex tab once it knows the task.
 #
 # The agent starts in Unsupervised mode, so it can commit on its own branch in
 # its own worktree. /unsupervised is its first message, which loads the rules
