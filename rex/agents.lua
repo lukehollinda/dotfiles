@@ -3,12 +3,11 @@ local util = require("util")
 rex.action{
   name = "new_agent",
   title = "New Agent",
-  args = { prompt = "string?" },
+  args = { prompt = "string?", focus = "boolean?" },
   run = function(ctx, args)
     local cwd = util.foreground(ctx.block_id).cwd
-    -- An agent that spawns another with `rex do` keeps its own tab in front.
-    -- `rex do` reports the origin as api, whatever its --origin default says.
-    local show = ctx.origin == "key" or ctx.origin == "palette"
+    -- An agent that spawns another passes focus=false to keep its own tab in front.
+    local show = args.focus ~= false
     local window, err = rex.session.new_window{
       window_label = "agent",
       focus = show,
