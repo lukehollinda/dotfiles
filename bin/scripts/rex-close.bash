@@ -5,16 +5,21 @@
 #
 # Killing nvim leaves its LSP servers running as orphans, so each nvim is asked
 # to quit first. Nothing closes while an nvim holds unsaved buffers, the worktree
-# has changes or commits that are not pushed, or, for a session, any pane runs
-# Claude.
+# has changes or commits that are neither pushed nor on the local default
+# branch, or, for a session, any pane runs Claude. A branch merged into the
+# local default branch is deleted with its worktree.
+#
+# Run without a terminal on stdin, as an agent does, it closes agent tabs only
+# and reports a refusal on stderr with exit status 1.
 #   $1 = session, $2 = the pane to close from
 
 session="$1"
 block="$2"
 
 refuse() {
-    echo "$1"
-    read -r -s -n 1 -p "Press any key to close."
+    echo "$1" >&2
+    # The float closes on exit, so it waits for the message to be read.
+    [[ -t 0 ]] && read -r -s -n 1 -p "Press any key to close."
     exit 1
 }
 
@@ -33,11 +38,15 @@ if [[ -n "$worktree" ]]; then
     blocks=$(jq -r --arg w "$window" '.blocks[] | select(.window_id == $w) | .block_id' <<<"$blocks_json")
 
     [[ -n "$(git -C "$worktree" status --porcelain)" ]] && refuse "Uncommitted changes in $worktree."
-    base=$(git -C "$worktree" rev-parse --abbrev-ref '@{u}' 2>/dev/null) \
-        || base=$(git -C "$worktree" symbolic-ref --short refs/remotes/origin/HEAD)
-    unpushed=$(git -C "$worktree" rev-list --count "$base..HEAD")
-    (( unpushed > 0 )) && refuse "$unpushed commits in $worktree are not on $base."
+    default=$(git -C "$worktree" symbolic-ref --short refs/remotes/origin/HEAD)
+    base=$(git -C "$worktree" rev-parse --abbrev-ref '@{u}' 2>/dev/null) || base=$default
+    # The local default branch, which may hold merges that are not pushed.
+    main=${default#origin/}
+    git -C "$worktree" rev-parse --verify --quiet "refs/heads/$main" >/dev/null || main=$base
+    unpushed=$(git -C "$worktree" rev-list --count HEAD --not "$base" "$main")
+    (( unpushed > 0 )) && refuse "$unpushed commits in $worktree are not on $base or $main."
 else
+    [[ -t 0 ]] || refuse "${cwd:-$block} is not in an agent worktree."
     blocks=$(jq -r '.blocks[].block_id' <<<"$blocks_json")
     for b in $blocks; do
         [[ "$(foreground "$b" name)" == "claude" ]] && refuse "Claude is running in this session; quit it first."
@@ -74,8 +83,13 @@ done
 # This script runs in a floating pane inside what it closes, so closing is last.
 if [[ -n "$worktree" ]]; then
     # Claude Code locks the worktree while it runs; the checks above stand in for the lock.
+    repo=$(dirname "$(git -C "$worktree" rev-parse --path-format=absolute --git-common-dir)")
+    branch=$(git -C "$worktree" branch --show-current)
     git -C "$worktree" worktree unlock "$worktree"
-    git -C "$worktree" worktree remove "$worktree"
+    git -C "$worktree" worktree remove "$worktree" || refuse "Could not remove $worktree."
+    if [[ -n "$branch" ]] && git -C "$repo" merge-base --is-ancestor "$branch" "$main"; then
+        git -C "$repo" branch -d "$branch"
+    fi
     rex window close -s "$session" "$window"
 else
     rex kill "$session"

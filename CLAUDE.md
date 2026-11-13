@@ -101,6 +101,22 @@ No app is connected to the private server, so client actions
 and nothing shows what a key press draws. Those need the user, after the merge.
 The private server still shares `~/.local/state/rex` with the live one.
 
+## Closing an agent's tab and worktree
+
+To close another agent's tab, remove its worktree and delete its branch, run
+the script behind `ctrl+a X` with the agent's session and any pane in its tab:
+
+```sh
+bin/scripts/rex-close.bash SESSION BLOCK
+```
+
+It exits 1 with the reason on stderr, and closes nothing, when the worktree has
+uncommitted changes, commits that are on neither its upstream (or
+`origin/HEAD`) nor the local default branch, or an nvim with unsaved buffers.
+There is no force flag. The branch is deleted with `git branch -d` only when it
+is merged into the local default branch. Without a terminal on stdin it never
+closes a whole session.
+
 ## Benchmarking on this machine
 
 Timings are noisy; a single A/B run routinely reverses on repeat. Interleave the
