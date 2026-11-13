@@ -27,7 +27,15 @@ rex.action{
     if err ~= nil then error(err, 0) end
     -- The session's active window is not what the app shows, so ask the app.
     if show then
-      rex.client.queue("session.select", { session_id = ctx.session_id, window_id = window.window_id })
+      local select = { session_id = ctx.session_id, window_id = window.window_id }
+      if ctx.origin == "api" then
+        rex.client.queue("session.select", select)
+      else
+        -- After a key press the app runs a queued action before it has heard
+        -- of the new window, and ignores it, so it is asked directly.
+        local _, perr = rex.call("client.perform", { client_id = ctx.client_id, action = "session.select", args = select })
+        if perr ~= nil then error(perr, 0) end
+      end
     end
     return { window_id = window.window_id, block_id = window.block_ids[1] }
   end,
