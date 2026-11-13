@@ -75,6 +75,32 @@ vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(']]', true, false, true), '
 This matters because Neovim sets buffer-local mappings on terminal buffers
 (`runtime/lua/vim/_core/defaults.lua`) that override global ones.
 
+## Verifying Rex changes
+
+In a worktree, `rex/` and `bin/scripts/` are not the copies the live server
+loads, and a plain `rex` command reaches the live server and the user's
+sessions. Use `bin/scripts/rex-test.bash` wherever you would type `rex`. It
+starts a private server, one per checkout, that loads `rex/init.lua` and
+`bin/scripts/` from the checkout it is called in, and runs its arguments
+against that server:
+
+```sh
+bin/scripts/rex-test.bash new probe
+bin/scripts/rex-test.bash keymap --json
+bin/scripts/rex-test.bash do -s probe -b <block> confirm_close_pane
+bin/scripts/rex-test.bash capture -s probe --trim
+bin/scripts/rex-test.bash config reload   # after editing rex/*.lua
+bin/scripts/rex-test.bash server stop     # when finished
+```
+
+Never run `rex server stop` or `rex kill` without the wrapper: they end the
+user's sessions.
+
+No app is connected to the private server, so client actions
+(`client.tab.new`, `session.select`) fail with `no app client is connected`,
+and nothing shows what a key press draws. Those need the user, after the merge.
+The private server still shares `~/.local/state/rex` with the live one.
+
 ## Benchmarking on this machine
 
 Timings are noisy; a single A/B run routinely reverses on repeat. Interleave the

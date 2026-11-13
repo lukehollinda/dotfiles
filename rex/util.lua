@@ -1,13 +1,15 @@
 local M = {}
 
 local home = os.getenv("HOME")
-M.scripts = home .. "/dotfiles/bin/scripts/"
+-- rex-test.bash sets DOTFILES to the checkout under test.
+local dotfiles = os.getenv("DOTFILES") or home .. "/dotfiles"
+M.scripts = dotfiles .. "/bin/scripts/"
 M.state_dir = home .. "/.local/state/rex"
 M.terminal = "com.superlogical.terminal"
 
 -- Terminals started from here get the login environment, which lacks the
 -- folders ~/.zshrc adds to PATH.
-local dotfiles_path = { home .. "/dotfiles/bin", home .. "/dotfiles/bin/scripts" }
+local dotfiles_path = { dotfiles .. "/bin", dotfiles .. "/bin/scripts" }
 
 function M.foreground(block_id)
   local process = rex.block.call(M.terminal, "process", { block_id = block_id })
