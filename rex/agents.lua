@@ -3,17 +3,21 @@ local util = require("util")
 rex.action{
   name = "new_agent",
   title = "New Agent",
-  run = function(ctx)
+  args = { prompt = "string?" },
+  run = function(ctx, args)
     local cwd = util.foreground(ctx.block_id).cwd
+    -- An agent that spawns another with `rex do` keeps its own tab in front.
+    -- `rex do` reports the origin as api, whatever its --origin default says.
+    local show = ctx.origin == "key" or ctx.origin == "palette"
     local window, err = rex.session.new_window{
       window_label = "agent",
-      focus = true,
+      focus = show,
       layout = rex.layout.block{
         flavor = util.terminal .. ".shell",
         -- Kept open so an error, such as an untrusted repo, stays readable.
         -- Interactive, so the agent and its hooks see what a terminal does.
         options = {
-          command = { util.scripts .. "rex-new-agent.bash", cwd },
+          command = { util.scripts .. "rex-new-agent.bash", cwd, args.prompt },
           cwd = cwd,
           interactive = true,
           exit = { on_completion = false },
@@ -22,7 +26,10 @@ rex.action{
     }
     if err ~= nil then error(err, 0) end
     -- The session's active window is not what the app shows, so ask the app.
-    rex.client.queue("session.select", { session_id = ctx.session_id, window_id = window.window_id })
+    if show then
+      rex.client.queue("session.select", { session_id = ctx.session_id, window_id = window.window_id })
+    end
+    return { window_id = window.window_id, block_id = window.block_ids[1] }
   end,
 }
 

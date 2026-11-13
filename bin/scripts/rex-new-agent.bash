@@ -4,6 +4,7 @@
 # and refuses to unless the repo is trusted. The agent renames the worktree's
 # placeholder branch and its Rex tab once it knows the task.
 #   $1 = a directory in the project
+#   $2 = the agent's first user message (optional)
 
 common=$(git -C "$1" rev-parse --path-format=absolute --git-common-dir) || exit 1
 repo=$(dirname "$common")
@@ -18,4 +19,4 @@ rex window rename -s "$REX_SESSION" "$(rex block inspect "$REX_BLOCK" --json | j
 EOF
 
 # exec keeps claude the pane's foreground process, which rex-close.bash reads.
-cd "$repo" && exec claude --worktree --append-system-prompt "$prompt"
+cd "$repo" && exec claude --worktree --append-system-prompt "$prompt" ${2:+-- "$2"}
