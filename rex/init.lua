@@ -16,6 +16,7 @@ rex.bind("ctrl+a>s", "pane.split", { direction = "down" })
 rex.bind("ctrl+a>c", "client.tab.new")
 rex.bind("ctrl+a>=", "pane.balance")
 rex.bind("ctrl+a>z", "pane.zoom")
+rex.bind("ctrl+a>x", "confirm_close_pane")
 for key, direction in pairs{ h = "left", j = "down", k = "up", l = "right" } do
   rex.bind("ctrl+a>shift+" .. key, "resize_pane_and_repeat", { direction = direction })
 end

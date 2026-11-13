@@ -72,6 +72,24 @@ rex.action{
   end,
 }
 
+-- The prompt floats along the pane's bottom edge, like tmux's status line.
+rex.action{
+  name = "confirm_close_pane",
+  title = "Close Pane After Confirming",
+  run = function(ctx)
+    local view, err = rex.session.view{}
+    if err ~= nil then error(err, 0) end
+    local window = util.window_of(view, ctx.block_id)
+    local node = window and util.tiled_node(window, ctx.block_id)
+    if node then
+      local rect = node.rect
+      local strip = math.min(rect[4], 0.05)
+      util.float({ util.scripts .. "rex-confirm-kill.bash", ctx.session_id, ctx.block_id },
+        { rect[1], rect[2] + rect[4] - strip, rect[3], strip }, window.window_id)
+    end
+  end,
+}
+
 rex.action{
   name = "close_work",
   title = "Close Agent Tab or Session",
